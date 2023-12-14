@@ -1,7 +1,7 @@
-import HelloWorld from './HelloWorld.js';
+import CyberIQ from './CyberIQ.js';
 
-const greeting: HelloWorld = new HelloWorld();
-console.log(greeting.greet());
+const game: CyberIQ = new CyberIQ(document.getElementById('game') as HTMLCanvasElement);
+
 window.addEventListener('load', () => {
-  document.getElementById('content').innerText = greeting.greet();
+  game.start();
 });
