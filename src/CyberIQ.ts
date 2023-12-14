@@ -4,6 +4,7 @@ import CanvasRenderer from './CanvasRenderer.js';
 import Scene from './Scene.js';
 import StartScene from './startScene.js';
 import MouseListener from './MouseListener.js';
+import Level from './Level.js';
 
 export default class CyberIQ extends Game {
   private canvas: HTMLCanvasElement;
@@ -38,14 +39,14 @@ export default class CyberIQ extends Game {
   public update(elapsed: number): boolean {
     this.currentScene.update(elapsed);
     const nextScene: Scene = this.currentScene.getNextScene();
-    // if (nextScene !== null) {
-    //   if (nextScene instanceof Level) {
-    //     this.canvas.style.cursor = 'none';
-    //   } else {
-    //     this.canvas.style.cursor = 'default';
-    //   }
-    //   this.currentScene = nextScene;
-    // }
+    if (nextScene !== null) {
+      if (nextScene instanceof Level) {
+        this.canvas.style.cursor = 'none';
+      } else {
+        this.canvas.style.cursor = 'default';
+      }
+      this.currentScene = nextScene;
+    }
     return true;
   }
 
