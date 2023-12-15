@@ -46,6 +46,7 @@ export default class homeScene extends Scene {
    * @param canvas canvas to render to
    */
   public render(canvas: HTMLCanvasElement): void {
-    CanvasRenderer.drawImage(canvas, this.pcBackground, canvas.width / 2 - this.pcBackground.width / 2, canvas.height / 2 - this.pcBackground.height / 2);
+    document.body.style.backgroundImage = `url(${this.pcBackground.src})`;
+    // CanvasRenderer.drawImage(canvas, this.pcBackground, canvas.width / 2 - this.pcBackground.width / 2, canvas.height / 2 - this.pcBackground.height / 2);
   }
 }
