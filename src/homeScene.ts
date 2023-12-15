@@ -4,14 +4,21 @@ import Scene from "./Scene.js";
 import Level from "./Level.js";
 
 export default class homeScene extends Scene {
-  private starting: boolean;
-
   private pcBackground: HTMLImageElement;
-  private startButton: HTMLImageElement;
+  private shoppingCart: HTMLImageElement;
+  private defender: HTMLImageElement;
+  private terminal: HTMLImageElement;
+  private mail: HTMLImageElement;
+  private vpn: HTMLImageElement;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
     this.pcBackground = CanvasRenderer.loadNewImage("./assets/pcbackground.png");
+    this.shoppingCart = CanvasRenderer.loadNewImage("./assets/shopping-cart.png");
+    this.defender = CanvasRenderer.loadNewImage("./assets/defender.png");
+    // this.terminal = CanvasRenderer.loadNewImage("./assets/terminal.png");
+    this.mail = CanvasRenderer.loadNewImage("./assets/mail.png");
+    this.vpn = CanvasRenderer.loadNewImage("./assets/vpn.png");
   }
 
   /**
@@ -47,6 +54,7 @@ export default class homeScene extends Scene {
    */
   public render(canvas: HTMLCanvasElement): void {
     document.body.style.backgroundImage = `url(${this.pcBackground.src})`;
-    // CanvasRenderer.drawImage(canvas, this.pcBackground, canvas.width / 2 - this.pcBackground.width / 2, canvas.height / 2 - this.pcBackground.height / 2);
+    CanvasRenderer.drawImage(canvas, this.shoppingCart, canvas.width / 2 - this.shoppingCart.width - 700, canvas.height / 2 - this.shoppingCart.height - 225);
+    CanvasRenderer.drawImage(canvas, this.mail, canvas.width / 2 - this.mail.width - 700, canvas.height / 2 - this.mail.height - 225);
   }
 }

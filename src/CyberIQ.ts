@@ -5,6 +5,8 @@ import Scene from './Scene.js';
 import StartScene from './startScene.js';
 import MouseListener from './MouseListener.js';
 import Level from './Level.js';
+import HomeScene from './homeScene.js';
+import homeScene from './homeScene.js';
 
 export default class CyberIQ extends Game {
   private canvas: HTMLCanvasElement;
@@ -20,7 +22,7 @@ export default class CyberIQ extends Game {
     this.canvas.width = window.innerWidth;
     this.mouseListener = new MouseListener(this.canvas);
 
-    this.currentScene = new StartScene(this.canvas.width, this.canvas.height);
+    this.currentScene = new homeScene(this.canvas.width, this.canvas.height);
   }
 
   /**

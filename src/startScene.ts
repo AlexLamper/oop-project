@@ -55,7 +55,7 @@ export default class SceneStart extends Scene {
   public render(canvas: HTMLCanvasElement): void {
     document.body.style.backgroundImage = `url(${this.background.src})`;
     // CanvasRenderer.fillCanvas(canvas, "#e7cea2");
-    CanvasRenderer.drawImage(canvas, this.startButton, canvas.width / 2 - this.startButton.width / 2, canvas.height / 2 - this.startButton.height / 3);
+    CanvasRenderer.drawImage(canvas, this.startButton, canvas.width / 2 - this.startButton.width / 2, canvas.height / 2 - this.startButton.height / 3 + 100);
     CanvasRenderer.writeText(canvas, 'Click to start!', canvas.width / 2, canvas.height / 2 + 375, 'center', 'Pixelated', 75, 'White');
   }
 }
