@@ -1,7 +1,6 @@
 import CanvasRenderer from "./CanvasRenderer.js";
 import MouseListener from "./MouseListener.js";
 import Scene from "./Scene.js";
-import Level from "./Level.js";
 import homeScene from "./homeScene.js";
 
 export default class SceneStart extends Scene {
@@ -53,9 +52,9 @@ export default class SceneStart extends Scene {
    * @param canvas canvas to render to
    */
   public render(canvas: HTMLCanvasElement): void {
-    CanvasRenderer.fillCanvas(canvas, "#e7cea2");
-    CanvasRenderer.drawImage(canvas, this.background, canvas.width / 2 - this.background.width / 2, canvas.height / 2 - this.background.height / 2);
-    CanvasRenderer.drawImage(canvas, this.startButton, canvas.width / 2 - this.startButton.width / 2, canvas.height / 2 - this.startButton.height / 3);
-    // CanvasRenderer.writeText(canvas, 'Click to start!', canvas.width / 2, canvas.height / 2 + 300, 'center', 'Arial', 50, 'White');
+    document.body.style.backgroundImage = `url(${this.background.src})`;
+    // CanvasRenderer.fillCanvas(canvas, "#e7cea2");
+    CanvasRenderer.drawImage(canvas, this.startButton, canvas.width / 2 - this.startButton.width / 2, canvas.height / 2 - this.startButton.height / 3 + 100);
+    CanvasRenderer.writeText(canvas, 'Click to start!', canvas.width / 2, canvas.height / 2 + 375, 'center', 'Pixelated', 75, 'White');
   }
 }
