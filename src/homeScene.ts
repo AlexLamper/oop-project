@@ -29,10 +29,10 @@ export default class homeScene extends Scene {
     this.shoppingCart = CanvasRenderer.loadNewImage("./assets/shopping-cart.png");
     this.defender = CanvasRenderer.loadNewImage("./assets/defender.png");
     this.terminal = CanvasRenderer.loadNewImage("./assets/terminal.png");
-    this.mail = CanvasRenderer.loadNewImage("./assets/mail.png");
+    this.mail = CanvasRenderer.loadNewImage("./assets/mail-bigger.png");
     this.vpn = CanvasRenderer.loadNewImage("./assets/vpn.png");
 
-    this.mailButton = this.createButton("./assets/mail.png", 20, 20);
+    this.mailButton = this.createButton("./assets/mail-bigger.png", 20, 20);
     this.defenderButton = this.createButton("./assets/defender.png", 140, 20);
     this.terminalButton = this.createButton("./assets/terminal.png", 20, 140);
     this.vpnButton = this.createButton("./assets/vpn.png", 140, 140);
@@ -102,12 +102,12 @@ export default class homeScene extends Scene {
     }
   }
 
-   /**
+    /**
    *
    * @returns the next scene to be rendered. null if no change
    */
   public getNextScene(): Scene | null {
-    if (this.nextScene instanceof mailScene) { 
+    if (this.nextScene instanceof mailScene) {
       return new mailScene(this.maxX, this.maxY);
     } else if (this.nextScene instanceof DefenderScene) {
       return new DefenderScene(this.maxX, this.maxY);
@@ -132,10 +132,7 @@ export default class homeScene extends Scene {
    * Render the scene to the canvas
    * @param canvas canvas to render to
   */
-
   public render(canvas: HTMLCanvasElement): void {
     document.body.style.backgroundImage = `url(${this.pcBackground.src})`;
   }
-
-
 }
