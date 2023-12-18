@@ -127,11 +127,6 @@ export default class homeScene extends Scene {
 
   public render(canvas: HTMLCanvasElement): void {
     document.body.style.backgroundImage = `url(${this.pcBackground.src})`;
-    // CanvasRenderer.drawImage(canvas, this.shoppingCart, canvas.width / 2 - this.shoppingCart.width - 625, canvas.height / 2 - this.shoppingCart.height - 200);
-    // CanvasRenderer.drawImage(canvas, this.mail, canvas.width / 2 - this.mail.width - 625, canvas.height / 2 - this.mail.height + 75);
-    // CanvasRenderer.drawImage(canvas, this.defender, canvas.width / 2 - this.defender.width - 225, canvas.height / 2 - this.defender.height - 150);
-    // CanvasRenderer.drawImage(canvas, this.vpn, canvas.width / 2 - this.vpn.width - 200, canvas.height / 2 - this.vpn.height + 125);
-    // CanvasRenderer.drawImage(canvas, this.terminal, canvas.width / 2 - this.terminal.width -100, canvas.height / 2 - this.terminal.height + 600);
   }
 
 
