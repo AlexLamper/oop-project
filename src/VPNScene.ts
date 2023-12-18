@@ -3,13 +3,13 @@ import MouseListener from "./MouseListener.js";
 import Scene from "./Scene.js";
 import Level from "./Level.js";
 
-export default class mailScene extends Scene {
-  private mailBackground: HTMLImageElement;
+export default class VPNScene extends Scene {
+  private VPNBackground: HTMLImageElement;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
     // Ff tijdelijke achtergrond voor de mail scene, deze moet nog worden aangepast
-    this.mailBackground = CanvasRenderer.loadNewImage("./assets/MainMenuGame.jpg");
+    this.VPNBackground = CanvasRenderer.loadNewImage("./assets/MainMenuGame.jpg");
   }
 
   /**
@@ -40,8 +40,8 @@ export default class mailScene extends Scene {
     document.querySelectorAll("button").forEach((button) => {
       button.remove();
     });    //alle buttons verwijderen van vorige pagina
-    document.body.style.backgroundImage = `url(${this.mailBackground.src})`;
-    CanvasRenderer.writeText(canvas, 'Mail Scene', canvas.width / 2, canvas.height / 2, 'center', 'Pixelated', 75, 'White');
+    document.body.style.backgroundImage = `url(${this.VPNBackground.src})`;
+    CanvasRenderer.writeText(canvas, 'VPN Scene', canvas.width / 2, canvas.height / 2, 'center', 'Pixelated', 75, 'White');
 
   }
 }

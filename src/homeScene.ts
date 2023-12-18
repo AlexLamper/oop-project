@@ -3,6 +3,10 @@ import MouseListener from "./MouseListener.js";
 import Scene from "./Scene.js";
 import Level from "./Level.js";
 import mailScene from "./mailScene.js";
+import TerminalScene from "./TerminalScene.js";
+import DefenderScene from "./DefenderScene.js";
+import VPNScene from "./VPNScene.js";
+import ShoppingScene from "./ShoppingScene.js";
 
 export default class homeScene extends Scene {
   private pcBackground: HTMLImageElement;
@@ -17,6 +21,7 @@ export default class homeScene extends Scene {
   private terminalButton: HTMLButtonElement;
   private vpnButton: HTMLButtonElement;
   private shoppingButton: HTMLButtonElement;
+  private nextScene: Scene | null;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -62,32 +67,28 @@ export default class homeScene extends Scene {
   }
 
   private onMailButtonClick(event: MouseEvent): void {
-    // Handle the click event for the mailButton
     console.log('Mail button clicked!');
+    this.nextScene = new mailScene(this.maxX, this.maxY);
   }
 
   private onDefenderButtonClick(event: MouseEvent): void {
-    // Handle the click event for the defenderButton
     console.log('Defender button clicked!');
-    // Add your logic here for when the defenderButton is clicked
+    this.nextScene = new DefenderScene(this.maxX, this.maxY);
   }
 
   private onTerminalButtonClick(event: MouseEvent): void {
-    // Handle the click event for the terminalButton
     console.log('Terminal button clicked!');
-    // Add your logic here for when the terminalButton is clicked
-  }
+    this.nextScene = new TerminalScene(this.maxX, this.maxY);
 
+  }
   private onVpnButtonClick(event: MouseEvent): void {
-    // Handle the click event for the vpnButton
     console.log('VPN button clicked!');
-    // Add your logic here for when the vpnButton is clicked
-  }
+    this.nextScene = new VPNScene(this.maxX, this.maxY);
 
+  }
   private onShoppingButtonClick(event: MouseEvent): void {
-    // Handle the click event for the shoppingButton
     console.log('Shopping button clicked!');
-    // Add your logic here for when the shoppingButton is clicked
+    this.nextScene = new ShoppingScene(this.maxX, this.maxY);
   }
 
 
@@ -105,13 +106,20 @@ export default class homeScene extends Scene {
    *
    * @returns the next scene to be rendered. null if no change
    */
-   public getNextScene(): Scene | null {
-    // if (op drukken ofzo) {
-    //   return new mailScene(this.maxX, this.maxY);
-    // } else {
-    //   return null;
-    // }
-    return null;
+  public getNextScene(): Scene | null {
+    if (this.nextScene instanceof mailScene) { 
+      return new mailScene(this.maxX, this.maxY);
+    } else if (this.nextScene instanceof DefenderScene) {
+      return new DefenderScene(this.maxX, this.maxY);
+    } else if (this.nextScene instanceof TerminalScene) {
+      return new TerminalScene(this.maxX, this.maxY);
+    } else if (this.nextScene instanceof VPNScene) {
+      return new VPNScene(this.maxX, this.maxY);
+    } else if (this.nextScene instanceof ShoppingScene) {
+      return new ShoppingScene(this.maxX, this.maxY);
+    } else {
+      return null;
+    }
   }
 
   /**
