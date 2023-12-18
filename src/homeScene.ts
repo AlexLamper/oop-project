@@ -1,7 +1,6 @@
 import CanvasRenderer from "./CanvasRenderer.js";
 import MouseListener from "./MouseListener.js";
 import Scene from "./Scene.js";
-import Level from "./Level.js";
 import mailScene from "./mailScene.js";
 import TerminalScene from "./TerminalScene.js";
 import DefenderScene from "./DefenderScene.js";
