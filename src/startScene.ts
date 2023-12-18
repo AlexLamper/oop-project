@@ -1,7 +1,6 @@
 import CanvasRenderer from "./CanvasRenderer.js";
 import MouseListener from "./MouseListener.js";
 import Scene from "./Scene.js";
-import Level from "./Level.js";
 import homeScene from "./homeScene.js";
 
 export default class SceneStart extends Scene {
