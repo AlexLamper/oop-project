@@ -4,11 +4,14 @@ import Scene from "./Scene.js";
 
 export default class mailScene extends Scene {
   private mailBackground: HTMLImageElement;
+  private newsarticle: HTMLImageElement;
+  private newsarticleUpdated: boolean = false;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
     // Ff tijdelijke achtergrond voor de mail scene, deze moet nog worden aangepast
-    this.mailBackground = CanvasRenderer.loadNewImage("./assets/MainMenuGame.jpg");
+    this.mailBackground = CanvasRenderer.loadNewImage("./assets/pcbackground.png");
+    this.newsarticle = CanvasRenderer.loadNewImage("./assets/newsarticle.png");
   }
 
   /**
@@ -36,11 +39,40 @@ export default class mailScene extends Scene {
    * @param canvas canvas to render to
    */
   public render(canvas: HTMLCanvasElement): void {
-    document.querySelectorAll("button").forEach((button) => {
-      button.remove();
-    });    //alle buttons verwijderen van vorige pagina
-    document.body.style.backgroundImage = `url(${this.mailBackground.src})`;
-    CanvasRenderer.writeText(canvas, 'Mail Scene', canvas.width / 2, canvas.height / 2, 'center', 'Pixelated', 75, 'White');
+    if (this.newsarticleUpdated == false) {
+    const container = document.createElement("div");
+    container.style.position = "absolute";
+    container.style.width = `${this.newsarticle.width}px`;
+    container.style.height = `${this.newsarticle.height}px`;
+    container.style.left = `${canvas.width / 2 - this.newsarticle.width / 2}px`;
+    container.style.top = `${canvas.height / 2 - this.newsarticle.height / 2}px`;
+    container.style.transition = "all 0.5s ease-in-out"; // Updated transition property
 
+    const image = document.createElement("img");
+    image.src = this.newsarticle.src;
+    image.style.width = "100%";
+    image.style.height = "100%";
+    image.style.objectFit = "cover";
+
+    container.appendChild(image);
+    document.body.appendChild(container); // Append container to document body
+
+    container.style.opacity = "0";
+    container.style.transform = "scale(0)";
+    
+    // Trigger reflow to apply initial styles
+    void container.offsetWidth;
+    
+    container.style.transition = "all 0.5s ease-in-out"; // Updated transition property
+    
+    container.style.opacity = "1";
+    container.style.transform = "scale(1)";
+    // Wait for the transition to complete
+    setTimeout(() => {
+      container.style.opacity = "0";
+      container.style.transform = "scale(0)";
+    }, 10000);
+    this.newsarticleUpdated = true;
+  }
   }
 }
