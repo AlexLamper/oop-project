@@ -101,12 +101,12 @@ export default class homeScene extends Scene {
     }
   }
 
-   /**
+    /**
    *
    * @returns the next scene to be rendered. null if no change
    */
   public getNextScene(): Scene | null {
-    if (this.nextScene instanceof mailScene) { 
+    if (this.nextScene instanceof mailScene) {
       return new mailScene(this.maxX, this.maxY);
     } else if (this.nextScene instanceof DefenderScene) {
       return new DefenderScene(this.maxX, this.maxY);
@@ -131,10 +131,7 @@ export default class homeScene extends Scene {
    * Render the scene to the canvas
    * @param canvas canvas to render to
   */
-
   public render(canvas: HTMLCanvasElement): void {
     document.body.style.backgroundImage = `url(${this.pcBackground.src})`;
   }
-
-
 }
