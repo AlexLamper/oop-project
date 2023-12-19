@@ -1,9 +1,12 @@
 import CanvasRenderer from "./CanvasRenderer.js";
 import MouseListener from "./MouseListener.js";
 import Scene from "./Scene.js";
+import homeScene from "./homeScene.js";
 
 export default class DefenderScene extends Scene {
   private DefenderBackground: HTMLImageElement;
+  private nextScene: Scene | null;
+  private timeLimit: number = 3000;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -22,6 +25,9 @@ export default class DefenderScene extends Scene {
   }
 
   public getNextScene(): Scene | null {
+    if (this.timeLimit <= 0) {
+      return new homeScene(this.maxX, this.maxY);
+    }
     return null;
   }
 
@@ -29,7 +35,15 @@ export default class DefenderScene extends Scene {
    *
    * @param elapsed elapsed ms since last update
    */
-  public update(elapsed: number): void {}
+  public update(elapsed: number): void {
+    if (this.timeLimit > 0) {
+      this.timeLimit -= elapsed;
+      console.log(this.timeLimit);
+    } else {
+      console.log("Defender scene ended");
+      this.getNextScene();
+    }
+  }
 
   /**
    * Render the scene to the canvas
@@ -38,9 +52,8 @@ export default class DefenderScene extends Scene {
   public render(canvas: HTMLCanvasElement): void {
     document.querySelectorAll("button").forEach((button) => {
       button.remove();
-    });    //alle buttons verwijderen van vorige pagina
+    }); //alle buttons verwijderen van vorige pagina
     document.body.style.backgroundImage = `url(${this.DefenderBackground.src})`;
-    CanvasRenderer.writeText(canvas, 'Defender Scene', canvas.width / 2, canvas.height / 2, 'center', 'Pixelated', 75, 'White');
-
+    CanvasRenderer.writeText(canvas, "Defender Scene", canvas.width / 2, canvas.height / 2, "center", "Pixelated", 75, "White");
   }
 }
