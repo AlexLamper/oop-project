@@ -28,10 +28,10 @@ export default class homeScene extends Scene {
     this.shoppingCart = CanvasRenderer.loadNewImage("./assets/shopping-cart.png");
     this.defender = CanvasRenderer.loadNewImage("./assets/defender.png");
     this.terminal = CanvasRenderer.loadNewImage("./assets/terminal.png");
-    this.mail = CanvasRenderer.loadNewImage("./assets/mail-bigger.png");
+    this.mail = CanvasRenderer.loadNewImage("./assets/mail.png");
     this.vpn = CanvasRenderer.loadNewImage("./assets/vpn.png");
 
-    this.mailButton = this.createButton("./assets/mail-bigger.png", 20, 20);
+    this.mailButton = this.createButton("./assets/mail.png", 20, 20);
     this.defenderButton = this.createButton("./assets/defender.png", 140, 20);
     this.terminalButton = this.createButton("./assets/terminal.png", 20, 140);
     this.vpnButton = this.createButton("./assets/vpn.png", 140, 140);
