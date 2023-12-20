@@ -12,7 +12,7 @@ export default class DefenderScene extends Scene {
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
     // Ff tijdelijke achtergrond voor de mail scene, deze moet nog worden aangepast
-    this.DefenderBackground = CanvasRenderer.loadNewImage("./assets/MainMenuGame.jpg");
+    this.DefenderBackground = CanvasRenderer.loadNewImage("./assets/final-background.png");
   }
 
   /**
