@@ -10,7 +10,7 @@ export default class winScene extends Scene {
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
     // Ff tijdelijke achtergrond voor de mail scene, deze moet nog worden aangepast
-    this.winBackground = CanvasRenderer.loadNewImage("./assets/win_background.png");
+    this.winBackground = CanvasRenderer.loadNewImage("./assets/win_background.jpg");
   }
 
   /**
