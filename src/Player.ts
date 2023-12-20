@@ -24,22 +24,22 @@ export default class Player {
 
   // Move Functions For The Player
   moveLeft(): void {
-    this.x -= 5;
+    this.x -= 3;
     this.rotation = -90;
   }
 
   moveRight(): void {
-    this.x += 5;
+    this.x += 3;
     this.rotation = 90;
   }
 
   moveUp(): void {
-    this.y -= 5;
+    this.y -= 3;
     this.rotation = 0;
   }
 
   moveDown(): void {
-    this.y += 5;
+    this.y += 3;
     this.rotation = 180;
   }
 

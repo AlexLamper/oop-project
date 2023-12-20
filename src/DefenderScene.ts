@@ -133,6 +133,8 @@ export default class DefenderScene extends Scene {
       this.player.render(canvas, ctx);
       // Render the time score on the canvas
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.05, "center", "Pixelated", 75, "White");
+      CanvasRenderer.writeText(canvas, "Score: 24", canvas.width * 0.15, canvas.height * 0.05, "center", "Pixelated", 75, "White");
+      CanvasRenderer.writeText(canvas, "Lives: X X X", canvas.width * 0.85, canvas.height * 0.05, "center", "Pixelated", 75, "White");
     }
   }
 }
