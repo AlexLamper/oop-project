@@ -7,12 +7,12 @@ import winScene from "./winScene.js";
 export default class DefenderScene extends Scene {
   private DefenderBackground: HTMLImageElement;
   private nextScene: Scene | null;
-  private timeLimit: number = 3000;
+  private timeLimit: number = 10000000;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
     // Ff tijdelijke achtergrond voor de mail scene, deze moet nog worden aangepast
-    this.DefenderBackground = CanvasRenderer.loadNewImage("./assets/MainMenuGame.jpg");
+    this.DefenderBackground = CanvasRenderer.loadNewImage("./assets/defender-background.png");
   }
 
   /**
@@ -55,6 +55,6 @@ export default class DefenderScene extends Scene {
       button.remove();
     }); //alle buttons verwijderen van vorige pagina
     document.body.style.backgroundImage = `url(${this.DefenderBackground.src})`;
-    CanvasRenderer.writeText(canvas, "Defender Scene", canvas.width / 2, canvas.height / 2, "center", "Pixelated", 75, "White");
+    CanvasRenderer.writeText(canvas, "Defender Scene", canvas.width / 2, 60, "center", "Pixelated", 75, "White");
   }
 }
