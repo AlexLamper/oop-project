@@ -22,7 +22,7 @@ export default class CyberIQ extends Game {
     this.canvas.width = window.innerWidth;
     this.mouseListener = new MouseListener(this.canvas);
 
-    this.currentScene = new homeScene(this.canvas.width, this.canvas.height);
+    this.currentScene = new StartScene(this.canvas.width, this.canvas.height);
   }
 
   /**
