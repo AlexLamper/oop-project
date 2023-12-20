@@ -4,14 +4,16 @@ import Scene from "./Scene.js";
 import homeScene from "./homeScene.js";
 import winScene from "./winScene.js";
 import Player from "./Player.js";
+import Projectile from "./attributes/projectiles.js";
 
 export default class DefenderScene extends Scene {
-
   private keyMap: { [key: string]: boolean };
   private currentDirection: string | null;
   private DefenderBackground: HTMLImageElement;
   private nextScene: Scene | null;
   private player: Player;
+  private projectile: Projectile;
+  private projectiles: Projectile[] = [];
 
   // Amount of time the player has to complete the game in milliseconds
   private timeLimit: number = 300000;
@@ -40,8 +42,9 @@ export default class DefenderScene extends Scene {
     this.player = new Player(maxX / 2, maxY / 2, 100, 100, "./assets/player.png");
 
     // Add event listener for keydown events
-    document.addEventListener('keydown', this.handleKeyDown.bind(this));
-    document.addEventListener('keyup', this.handleKeyUp.bind(this));
+    document.addEventListener("keydown", this.handleKeyDown.bind(this));
+    document.addEventListener("keyup", this.handleKeyUp.bind(this));
+    document.addEventListener("click", this.handleClick.bind(this));
   }
 
   private handleKeyDown(event: KeyboardEvent): void {
@@ -58,6 +61,32 @@ export default class DefenderScene extends Scene {
       this.keyMap[event.key] = false;
       this.updateDirection();
     }
+  }
+
+  private fixPositionX(): number {
+    if (this.player.rotation === 0) {
+      return this.player.x + 24;
+    } else if (this.player.rotation === 180) {
+      return this.player.x + 26;
+    } else if (this.player.rotation === 90) {
+      return this.player.x + 48;
+    }
+    return this.player.x;
+  }
+
+  private fixPositionY(): number {
+    if (this.player.rotation === 180) {
+      return this.player.y + 48;
+    } else if (this.player.rotation === 90) {
+      return this.player.y + 24;
+    } else if (this.player.rotation === -90) {
+      return this.player.y + 26;
+    }
+    return this.player.y;
+  }
+
+  private handleClick(event: MouseEvent): void {
+    this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 50, 50, "./assets/bullet-green.png", this.player.rotation));
   }
 
   private updateDirection(): void {
@@ -94,7 +123,6 @@ export default class DefenderScene extends Scene {
    * @param elapsed elapsed ms since last update
    */
   public update(elapsed: number): void {
-
     // Update the time limit
     if (this.timeLimit > 0) {
       this.timeLimit -= elapsed;
@@ -103,15 +131,18 @@ export default class DefenderScene extends Scene {
       console.log("Defender scene ended");
       this.getNextScene();
     }
+    this.projectiles.forEach((projectile) => {
+      projectile.update();
+    });
 
     // Update the player's position
-    if (this.currentDirection === 'ArrowLeft') {
+    if (this.currentDirection === "ArrowLeft") {
       this.player.moveLeft();
-    } else if (this.currentDirection === 'ArrowRight') {
+    } else if (this.currentDirection === "ArrowRight") {
       this.player.moveRight();
-    } else if (this.currentDirection === 'ArrowUp') {
+    } else if (this.currentDirection === "ArrowUp") {
       this.player.moveUp();
-    } else if (this.currentDirection === 'ArrowDown') {
+    } else if (this.currentDirection === "ArrowDown") {
       this.player.moveDown();
     }
   }
@@ -131,6 +162,9 @@ export default class DefenderScene extends Scene {
     if (ctx) {
       // Render the player on the canvas
       this.player.render(canvas, ctx);
+      this.projectiles.forEach((projectile) => {
+        projectile.render(canvas, ctx);
+      });
       // Render the time score on the canvas
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.05, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, "Score: 24", canvas.width * 0.15, canvas.height * 0.05, "center", "Pixelated", 75, "White");
