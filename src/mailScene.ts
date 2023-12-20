@@ -11,7 +11,6 @@ export default class mailScene extends Scene {
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
-    // Ff tijdelijke achtergrond voor de mail scene, deze moet nog worden aangepast
     this.mailBackground = CanvasRenderer.loadNewImage("./assets/pcbackground.png");
     this.newsarticle = CanvasRenderer.loadNewImage("./assets/newsarticle.png");
     this.pcBackgroundDarkened = CanvasRenderer.loadNewImage("./assets/pcbackgrounddarkend.png");
@@ -54,8 +53,8 @@ export default class mailScene extends Scene {
         container.style.height = `${this.newsarticle.height}px`;
         container.style.left = `${canvas.width / 2 - this.newsarticle.width / 2}px`;
         container.style.top = `${canvas.height / 2 - this.newsarticle.height / 2}px`;
-        container.style.transition = "all 0.5s ease-in-out"; // Updated transition property
-        document.body.style.transition = "all 0.5s ease-in-out"; // Updated transition property
+        container.style.transition = "all 0.5s ease-in-out"; 
+        document.body.style.transition = "all 0.5s ease-in-out"; 
       
 
       image.style.width = "100%";
@@ -63,21 +62,19 @@ export default class mailScene extends Scene {
       image.style.objectFit = "cover";
 
       container.appendChild(image);
-      document.body.appendChild(container); // Append container to document body
+      document.body.appendChild(container); 
 
       container.style.opacity = "0";
       container.style.transform = "scale(0)";
 
-      // Trigger reflow to apply initial styles
       void container.offsetWidth;
 
       container.style.opacity = "1";
       container.style.transform = "scale(1)";
-      // Wait for the transition to complete
       this.canClickAway = false;
       setTimeout(() => {
         this.canClickAway = true;
-      }, 5000); // Set delay here, 5000ms = 5 seconds
+      }, 5000);
 
       document.addEventListener('click', () => {
         if (this.canClickAway == true) {
