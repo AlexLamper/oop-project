@@ -1,6 +1,7 @@
 import CanvasRenderer from "./CanvasRenderer.js";
 import MouseListener from "./MouseListener.js";
 import Scene from "./Scene.js";
+import homeScene from "./homeScene.js";
 
 export default class mailScene extends Scene {
   private mailBackground: HTMLImageElement;
@@ -8,12 +9,19 @@ export default class mailScene extends Scene {
   private newsarticleUpdated: boolean = false;
   private pcBackgroundDarkened: HTMLImageElement;
   private canClickAway: boolean = false;
+  private nextScene: boolean = false;
+  public MailSceneUsed: boolean = false;
+  private homeSceneInstance: homeScene;
+  
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
     this.mailBackground = CanvasRenderer.loadNewImage("./assets/pcbackground.png");
     this.newsarticle = CanvasRenderer.loadNewImage("./assets/newsarticle.png");
     this.pcBackgroundDarkened = CanvasRenderer.loadNewImage("./assets/pcbackgrounddarkend.png");
+    this.MailSceneUsed = false;
+    this.homeSceneInstance = this.homeSceneInstance;
+
   }
 
   /**
@@ -27,7 +35,12 @@ export default class mailScene extends Scene {
   }
 
   public getNextScene(): Scene | null {
-    return null;
+    if (this.nextScene == true) {
+      return this.homeSceneInstance;
+    }
+    else {
+      return null;
+    }  
   }
 
   /**
@@ -43,8 +56,11 @@ export default class mailScene extends Scene {
 
   public render(canvas: HTMLCanvasElement): void {
     if (this.newsarticleUpdated == false) {
+      this.newsarticleUpdated = true;
+
       const image = document.createElement("img");
       setTimeout(() => {
+        
         image.src = this.newsarticle.src;
         document.body.style.backgroundImage = `url(${this.pcBackgroundDarkened.src})`;
         const container = document.createElement("div");
@@ -81,11 +97,15 @@ export default class mailScene extends Scene {
           container.style.opacity = "0";
           container.style.transform = "scale(0)";
           document.body.style.backgroundImage = `url(${this.mailBackground.src})`;
+          this.nextScene = true;
+          this.MailSceneUsed = true;
         }
       });
-
+      
     }, 50);
-      this.newsarticleUpdated = true;
+
+      
     }
+    
   }
 }

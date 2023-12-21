@@ -7,6 +7,7 @@ import DefenderScene from "./DefenderScene.js";
 import VPNScene from "./VPNScene.js";
 import ShoppingScene from "./ShoppingScene.js";
 
+
 export default class homeScene extends Scene {
   private pcBackground: HTMLImageElement;
   private shoppingCart: HTMLImageElement;
@@ -21,6 +22,7 @@ export default class homeScene extends Scene {
   private vpnButton: HTMLButtonElement;
   private shoppingButton: HTMLButtonElement;
   private nextScene: Scene | null;
+  private usedMailScene: boolean = false;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -67,7 +69,12 @@ export default class homeScene extends Scene {
 
   private onMailButtonClick(event: MouseEvent): void {
     console.log('Mail button clicked!');
+    if (this.usedMailScene == false) {
+      this.usedMailScene = true;
     this.nextScene = new mailScene(this.maxX, this.maxY);
+    } else {
+      alert("Mail scene already used");
+    }
   }
 
   private onDefenderButtonClick(event: MouseEvent): void {
