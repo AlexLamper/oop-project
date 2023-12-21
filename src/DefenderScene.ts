@@ -202,6 +202,7 @@ export default class DefenderScene extends Scene {
         ) {
           // Remove the enemy from the array when hit by the projectile
           this.enemies.splice(j, 1);
+          this.projectiles.splice(i, 1);
           // Decrement j to account for the removed enemy
           j--;
         }
