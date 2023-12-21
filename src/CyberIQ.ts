@@ -5,6 +5,8 @@ import Scene from './Scene.js';
 import StartScene from './startScene.js';
 import MouseListener from './MouseListener.js';
 import Level from './Level.js';
+import mailScene from './mailScene.js';
+import homeScene from './homeScene.js';
 
 export default class CyberIQ extends Game {
   private canvas: HTMLCanvasElement;

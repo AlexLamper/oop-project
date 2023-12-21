@@ -7,6 +7,7 @@ import DefenderScene from "./DefenderScene.js";
 import VPNScene from "./VPNScene.js";
 import ShoppingScene from "./ShoppingScene.js";
 
+
 export default class homeScene extends Scene {
   private pcBackground: HTMLImageElement;
   private shoppingCart: HTMLImageElement;
@@ -16,11 +17,13 @@ export default class homeScene extends Scene {
   private vpn: HTMLImageElement;
 
   private mailButton: HTMLButtonElement;
+  private mailButtonClicked: HTMLButtonElement;
   private defenderButton: HTMLButtonElement;
   private terminalButton: HTMLButtonElement;
   private vpnButton: HTMLButtonElement;
   private shoppingButton: HTMLButtonElement;
   private nextScene: Scene | null;
+  // private usedMailScene: boolean = false;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -36,6 +39,7 @@ export default class homeScene extends Scene {
     this.terminalButton = this.createButton("./assets/terminal.png", 20, 140);
     this.vpnButton = this.createButton("./assets/vpn.png", 140, 140);
     this.shoppingButton = this.createButton("./assets/shopping-cart.png", 20, 260);
+    this.mailButtonClicked = this.createButton("./assets/mail-no-notification.png", 20, 20);
 
     // Append the buttons to the document body or a container element
     document.body.appendChild(this.mailButton);
@@ -43,6 +47,8 @@ export default class homeScene extends Scene {
     document.body.appendChild(this.terminalButton);
     document.body.appendChild(this.vpnButton);
     document.body.appendChild(this.shoppingButton);
+    document.body.appendChild(this.mailButtonClicked);
+    this.mailButtonClicked.style.display = 'none'; // Hide the mailButtonClicked
 
     // Add click event listeners to buttons
     this.mailButton.addEventListener('click', this.onMailButtonClick.bind(this));
@@ -53,6 +59,9 @@ export default class homeScene extends Scene {
   }
 
   private createButton(imagePath: string, x: number, y: number): HTMLButtonElement {
+    document.querySelectorAll("button").forEach((button) => {
+      button.remove();
+    });  
     const button = document.createElement('button');
     button.style.width = '100px';
     button.style.height = '100px';
@@ -67,7 +76,18 @@ export default class homeScene extends Scene {
 
   private onMailButtonClick(event: MouseEvent): void {
     console.log('Mail button clicked!');
-    this.nextScene = new mailScene(this.maxX, this.maxY);
+    if (mailScene.usedMailScene == false) {
+      mailScene.usedMailScene = true;
+      this.nextScene = new mailScene(this.maxX, this.maxY);
+      setTimeout(() => {
+        this.mailButton.style.display = 'none'; // Hide the mailButton
+        this.mailButtonClicked.style.display = 'block'; // Show the mailButtonClicked
+      }, 1000);
+
+      console.log('Mail button clicked2222!');
+    } else {
+      alert("Mail scene already used");
+    }
   }
 
   private onDefenderButtonClick(event: MouseEvent): void {
@@ -105,21 +125,21 @@ export default class homeScene extends Scene {
    *
    * @returns the next scene to be rendered. null if no change
    */
-  public getNextScene(): Scene | null {
-    if (this.nextScene instanceof mailScene) {
-      return new mailScene(this.maxX, this.maxY);
-    } else if (this.nextScene instanceof DefenderScene) {
-      return new DefenderScene(this.maxX, this.maxY);
-    } else if (this.nextScene instanceof TerminalScene) {
-      return new TerminalScene(this.maxX, this.maxY);
-    } else if (this.nextScene instanceof VPNScene) {
-      return new VPNScene(this.maxX, this.maxY);
-    } else if (this.nextScene instanceof ShoppingScene) {
-      return new ShoppingScene(this.maxX, this.maxY);
-    } else {
-      return null;
+    public getNextScene(): Scene | null {
+      if (this.nextScene instanceof mailScene) {
+        return this.nextScene;
+      } else if (this.nextScene instanceof DefenderScene) {
+        return new DefenderScene(this.maxX, this.maxY);
+      } else if (this.nextScene instanceof TerminalScene) {
+        return new TerminalScene(this.maxX, this.maxY);
+      } else if (this.nextScene instanceof VPNScene) {
+        return new VPNScene(this.maxX, this.maxY);
+      } else if (this.nextScene instanceof ShoppingScene) {
+        return new ShoppingScene(this.maxX, this.maxY);
+      } else {
+        return null;
+      }
     }
-  }
 
   /**
    *
