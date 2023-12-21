@@ -4,6 +4,7 @@ import Scene from "./Scene.js";
 import homeScene from "./homeScene.js";
 
 export default class mailScene extends Scene {
+  public static usedMailScene: boolean = false;
   private mailBackground: HTMLImageElement;
   private newsarticle: HTMLImageElement;
   private newsarticleUpdated: boolean = false;
@@ -20,7 +21,7 @@ export default class mailScene extends Scene {
     this.newsarticle = CanvasRenderer.loadNewImage("./assets/newsarticle.png");
     this.pcBackgroundDarkened = CanvasRenderer.loadNewImage("./assets/pcbackgrounddarkend.png");
     this.MailSceneUsed = false;
-    this.homeSceneInstance = this.homeSceneInstance;
+    this.homeSceneInstance = new homeScene(maxX, maxY);
 
   }
 
@@ -35,13 +36,13 @@ export default class mailScene extends Scene {
   }
 
   public getNextScene(): Scene | null {
-    if (this.nextScene == true) {
+    if (this.nextScene) {
       return this.homeSceneInstance;
-    }
-    else {
+    } else {
       return null;
-    }  
+    }
   }
+  
 
   /**
    *
@@ -57,6 +58,7 @@ export default class mailScene extends Scene {
   public render(canvas: HTMLCanvasElement): void {
     if (this.newsarticleUpdated == false) {
       this.newsarticleUpdated = true;
+      
 
       const image = document.createElement("img");
       setTimeout(() => {
