@@ -5,8 +5,10 @@ import homeScene from "./homeScene.js";
 import winScene from "./winScene.js";
 import Player from "./Player.js";
 import Projectile from "./attributes/projectiles.js";
+import Enemy from "./Enemies.js";
 
 export default class DefenderScene extends Scene {
+
   private keyMap: { [key: string]: boolean };
   private currentDirection: string | null;
   private DefenderBackground: HTMLImageElement;
@@ -14,9 +16,16 @@ export default class DefenderScene extends Scene {
   private player: Player;
   private projectile: Projectile;
   private projectiles: Projectile[] = [];
+  private enemies: Enemy[] = [];
 
   // Amount of time the player has to complete the game in milliseconds
   private timeLimit: number = 300000;
+
+  // Create spawn point coordinates, width and height for the enemies
+  private spawnPointX = 100;
+  private spawnPointY = 100;
+  private spawnPointWidth = 150;
+  private spawnPointHeight = 135;
 
   // Function to calculate the time score
   private timeScoreMinutesandSeconds(): string {
@@ -27,6 +36,7 @@ export default class DefenderScene extends Scene {
     return minutesString + ":" + secondsString;
   }
 
+  // Constructor for the Defender Scene
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
 
@@ -38,15 +48,19 @@ export default class DefenderScene extends Scene {
     };
     this.currentDirection = null;
 
-    this.DefenderBackground = CanvasRenderer.loadNewImage("./assets/defender-background.png");
+    this.DefenderBackground = CanvasRenderer.loadNewImage("./assets/test-defender-background.png");
     this.player = new Player(maxX / 2, maxY / 2, 100, 100, "./assets/player.png");
 
     // Add event listener for keydown events
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     document.addEventListener("click", this.handleClick.bind(this));
+
+    // Spawn 10 enemies with a delay of 3 seconds (3000 milliseconds) at the spawn point
+    this.spawnEnemiesFromSpawnPoint(10, this.spawnPointX, this.spawnPointY, 3000);
   }
 
+  // Handle keydown events
   private handleKeyDown(event: KeyboardEvent): void {
     if (this.keyMap.hasOwnProperty(event.key)) {
       event.preventDefault();
@@ -55,6 +69,7 @@ export default class DefenderScene extends Scene {
     }
   }
 
+  // Handle keyup events
   private handleKeyUp(event: KeyboardEvent): void {
     if (this.keyMap.hasOwnProperty(event.key)) {
       event.preventDefault();
@@ -63,32 +78,36 @@ export default class DefenderScene extends Scene {
     }
   }
 
+  // Function to fix the position of the projectile
   private fixPositionX(): number {
     if (this.player.rotation === 0) {
-      return this.player.x + 24;
+      return this.player.x + 34;
     } else if (this.player.rotation === 180) {
-      return this.player.x + 26;
+      return this.player.x + 36;
     } else if (this.player.rotation === 90) {
-      return this.player.x + 48;
+      return this.player.x + 58;
     }
     return this.player.x;
   }
 
+  // Function to fix the position of the projectile
   private fixPositionY(): number {
     if (this.player.rotation === 180) {
-      return this.player.y + 48;
+      return this.player.y + 58;
     } else if (this.player.rotation === 90) {
-      return this.player.y + 24;
+      return this.player.y + 34;
     } else if (this.player.rotation === -90) {
-      return this.player.y + 26;
+      return this.player.y + 36;
     }
     return this.player.y;
   }
 
+  // Function to handle the click event
   private handleClick(event: MouseEvent): void {
-    this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 50, 50, "./assets/bullet-green.png", this.player.rotation));
+    this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
   }
 
+  // Function to update the direction of the player
   private updateDirection(): void {
     const keys = Object.keys(this.keyMap).filter((key) => this.keyMap[key]);
     if (keys.length === 0) {
@@ -145,6 +164,71 @@ export default class DefenderScene extends Scene {
     } else if (this.currentDirection === "ArrowDown") {
       this.player.moveDown();
     }
+
+    // Update enemies
+    const playerX = this.player.x;
+    const playerY = this.player.y;
+    this.enemies.forEach((enemy) => {
+      enemy.update(playerX, playerY);
+    });
+
+    // Collision detection between projectiles and enemies
+    for (let i = 0; i < this.projectiles.length; i++) {
+      const projectile = this.projectiles[i];
+      for (let j = 0; j < this.enemies.length; j++) {
+        const enemy = this.enemies[j];
+
+        // Calculate bounding box coordinates for projectile and enemy
+        const projectileBox = {
+          x: projectile.x,
+          y: projectile.y,
+          width: projectile.width,
+          height: projectile.height,
+        };
+
+        const enemyBox = {
+          x: enemy.x,
+          y: enemy.y,
+          width: enemy.width,
+          height: enemy.height,
+        };
+
+        // Check for overlap between bounding boxes
+        if (
+          projectileBox.x < enemyBox.x + enemyBox.width &&
+          projectileBox.x + projectileBox.width > enemyBox.x &&
+          projectileBox.y < enemyBox.y + enemyBox.height &&
+          projectileBox.y + projectileBox.height > enemyBox.y
+        ) {
+          // Remove the enemy from the array when hit by the projectile
+          this.enemies.splice(j, 1);
+          // Decrement j to account for the removed enemy
+          j--;
+        }
+      }
+    }
+  }
+
+  // Function to spawn enemies from the spawn point
+  public spawnEnemiesFromSpawnPoint(numberOfEnemies: number, spawnX: number, spawnY: number, spawnInterval: number): void {
+    const enemyImagePath = "./assets/enemy-red.png";
+    let enemyCount = 0;
+
+    // Spawn an enemy every spawnInterval milliseconds
+    const spawnTimer = setInterval(() => {
+      if (enemyCount >= numberOfEnemies) {
+        clearInterval(spawnTimer);
+        return;
+      }
+
+      // Create a new enemy at the spawn point
+      const newEnemy = new Enemy(spawnX, spawnY, 70, 70, enemyImagePath);
+
+      // Add the new enemy to the enemies array
+      this.enemies.push(newEnemy);
+
+      enemyCount++;
+    }, spawnInterval);
   }
 
   /**
@@ -159,13 +243,30 @@ export default class DefenderScene extends Scene {
     document.body.style.backgroundImage = `url(${this.DefenderBackground.src})`;
     const ctx = canvas.getContext("2d");
 
+    // Load the spawn point image
+    const spawnPointImage = new Image();
+    spawnPointImage.src = "./assets/portal-gray.png";
+
+    // Calculate the center coordinates of the spawn point
+    const spawnPointCenterX = this.spawnPointX - this.spawnPointWidth / 2;
+    const spawnPointCenterY = this.spawnPointY - this.spawnPointHeight / 2;
+    const spawnPointWidth = this.spawnPointWidth;
+    const spawnPointHeight = this.spawnPointHeight;
+
     if (ctx) {
       // Render the player on the canvas
       this.player.render(canvas, ctx);
+      // Render the projectiles on the canvas
       this.projectiles.forEach((projectile) => {
         projectile.render(canvas, ctx);
       });
-      // Render the time score on the canvas
+      // Render the enemies on the canvas
+      this.enemies.forEach((enemy) => {
+        enemy.render(canvas, ctx); // Implement a render method in the Enemy class
+      });
+      // Render the spawn point image at the spawn coordinates
+      ctx.drawImage(spawnPointImage, spawnPointCenterX, spawnPointCenterY, spawnPointWidth, spawnPointHeight);
+      // Render the time, score and lives on the canvas
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.05, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, "Score: 24", canvas.width * 0.15, canvas.height * 0.05, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, "Lives: X X X", canvas.width * 0.85, canvas.height * 0.05, "center", "Pixelated", 75, "White");
