@@ -1,14 +1,13 @@
-import CanvasRenderer from "./CanvasRenderer.js";
-import MouseListener from "./MouseListener.js";
-import Scene from "./Scene.js";
+import CanvasRenderer from "../canvasRenderer.js";
+import MouseListener from "../mouseListener.js";
+import Scene from "../scene.js";
 import homeScene from "./homeScene.js";
 import winScene from "./winScene.js";
-import Player from "./Player.js";
-import Projectile from "./attributes/projectiles.js";
-import Enemy from "./Enemies.js";
+import Player from "../attributes/player.js";
+import Projectile from "../attributes/projectiles.js";
+import Enemy from "../attributes/enemies.js";
 
 export default class DefenderScene extends Scene {
-
   private keyMap: { [key: string]: boolean };
   private currentDirection: string | null;
   private DefenderBackground: HTMLImageElement;
@@ -194,12 +193,7 @@ export default class DefenderScene extends Scene {
         };
 
         // Check for overlap between bounding boxes
-        if (
-          projectileBox.x < enemyBox.x + enemyBox.width &&
-          projectileBox.x + projectileBox.width > enemyBox.x &&
-          projectileBox.y < enemyBox.y + enemyBox.height &&
-          projectileBox.y + projectileBox.height > enemyBox.y
-        ) {
+        if (projectileBox.x < enemyBox.x + enemyBox.width && projectileBox.x + projectileBox.width > enemyBox.x && projectileBox.y < enemyBox.y + enemyBox.height && projectileBox.y + projectileBox.height > enemyBox.y) {
           // Remove the enemy from the array when hit by the projectile
           this.enemies.splice(j, 1);
           this.projectiles.splice(i, 1);

@@ -1,6 +1,6 @@
-import CanvasRenderer from "./CanvasRenderer.js";
-import MouseListener from "./MouseListener.js";
-import Scene from "./Scene.js";
+import CanvasRenderer from "../canvasRenderer.js";
+import MouseListener from "../mouseListener.js";
+import Scene from "../scene.js";
 import homeScene from "./homeScene.js";
 
 export default class mailScene extends Scene {
@@ -13,7 +13,6 @@ export default class mailScene extends Scene {
   private nextScene: boolean = false;
   public MailSceneUsed: boolean = false;
   private homeSceneInstance: homeScene;
-  
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -22,7 +21,6 @@ export default class mailScene extends Scene {
     this.pcBackgroundDarkened = CanvasRenderer.loadNewImage("./assets/pcbackgrounddarkend.png");
     this.MailSceneUsed = false;
     this.homeSceneInstance = new homeScene(maxX, maxY);
-
   }
 
   /**
@@ -42,7 +40,6 @@ export default class mailScene extends Scene {
       return null;
     }
   }
-  
 
   /**
    *
@@ -58,11 +55,9 @@ export default class mailScene extends Scene {
   public render(canvas: HTMLCanvasElement): void {
     if (this.newsarticleUpdated == false) {
       this.newsarticleUpdated = true;
-      
 
       const image = document.createElement("img");
       setTimeout(() => {
-        
         image.src = this.newsarticle.src;
         document.body.style.backgroundImage = `url(${this.pcBackgroundDarkened.src})`;
         const container = document.createElement("div");
@@ -71,43 +66,38 @@ export default class mailScene extends Scene {
         container.style.height = `${this.newsarticle.height}px`;
         container.style.left = `${canvas.width / 2 - this.newsarticle.width / 2}px`;
         container.style.top = `${canvas.height / 2 - this.newsarticle.height / 2}px`;
-        container.style.transition = "all 0.5s ease-in-out"; 
-        document.body.style.transition = "all 0.5s ease-in-out"; 
-      
+        container.style.transition = "all 0.5s ease-in-out";
+        document.body.style.transition = "all 0.5s ease-in-out";
 
-      image.style.width = "100%";
-      image.style.height = "100%";
-      image.style.objectFit = "cover";
+        image.style.width = "100%";
+        image.style.height = "100%";
+        image.style.objectFit = "cover";
 
-      container.appendChild(image);
-      document.body.appendChild(container); 
+        container.appendChild(image);
+        document.body.appendChild(container);
 
-      container.style.opacity = "0";
-      container.style.transform = "scale(0)";
+        container.style.opacity = "0";
+        container.style.transform = "scale(0)";
 
-      void container.offsetWidth;
+        void container.offsetWidth;
 
-      container.style.opacity = "1";
-      container.style.transform = "scale(1)";
-      this.canClickAway = false;
-      setTimeout(() => {
-        this.canClickAway = true;
-      }, 5000);
+        container.style.opacity = "1";
+        container.style.transform = "scale(1)";
+        this.canClickAway = false;
+        setTimeout(() => {
+          this.canClickAway = true;
+        }, 5000);
 
-      document.addEventListener('click', () => {
-        if (this.canClickAway == true) {
-          container.style.opacity = "0";
-          container.style.transform = "scale(0)";
-          document.body.style.backgroundImage = `url(${this.mailBackground.src})`;
-          this.nextScene = true;
-          this.MailSceneUsed = true;
-        }
-      });
-      
-    }, 50);
-
-      
+        document.addEventListener("click", () => {
+          if (this.canClickAway == true) {
+            container.style.opacity = "0";
+            container.style.transform = "scale(0)";
+            document.body.style.backgroundImage = `url(${this.mailBackground.src})`;
+            this.nextScene = true;
+            this.MailSceneUsed = true;
+          }
+        });
+      }, 50);
     }
-    
   }
 }

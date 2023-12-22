@@ -1,7 +1,7 @@
-import CyberIQ from './CyberIQ.js';
+import CyberIQ from "./cyberIQ.js";
 
-const game: CyberIQ = new CyberIQ(document.getElementById('game') as HTMLCanvasElement);
+const game: CyberIQ = new CyberIQ(document.getElementById("game") as HTMLCanvasElement);
 
-window.addEventListener('load', () => {
+window.addEventListener("load", () => {
   game.start();
 });

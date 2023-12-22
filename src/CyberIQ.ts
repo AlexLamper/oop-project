@@ -1,12 +1,12 @@
-import Game from './Game.js';
+import Game from "./game.js";
 
-import CanvasRenderer from './CanvasRenderer.js';
-import Scene from './Scene.js';
-import StartScene from './startScene.js';
-import MouseListener from './MouseListener.js';
-import Level from './Level.js';
-import mailScene from './mailScene.js';
-import homeScene from './homeScene.js';
+import CanvasRenderer from "./canvasRenderer.js";
+import Scene from "./scene.js";
+import StartScene from "./scenes/startScene.js";
+import MouseListener from "./mouseListener.js";
+import Level from "./level.js";
+import mailScene from "./scenes/mailScene.js";
+import homeScene from "./scenes/homeScene.js";
 
 export default class CyberIQ extends Game {
   private canvas: HTMLCanvasElement;
@@ -43,9 +43,9 @@ export default class CyberIQ extends Game {
     const nextScene: Scene = this.currentScene.getNextScene();
     if (nextScene !== null) {
       if (nextScene instanceof Level) {
-        this.canvas.style.cursor = 'none';
+        this.canvas.style.cursor = "none";
       } else {
-        this.canvas.style.cursor = 'default';
+        this.canvas.style.cursor = "default";
       }
       this.currentScene = nextScene;
     }

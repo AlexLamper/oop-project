@@ -1,14 +1,14 @@
-import CanvasRenderer from "./CanvasRenderer.js";
-import MouseListener from "./MouseListener.js";
-import Scene from "./Scene.js";
+import CanvasRenderer from "../canvasRenderer.js";
+import MouseListener from "../mouseListener.js";
+import Scene from "../scene.js";
 
-export default class ShoppingScene extends Scene {
-  private ShoppingBackground: HTMLImageElement;
+export default class WifiOffScene extends Scene {
+  private DefenderBackground: HTMLImageElement;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
     // Ff tijdelijke achtergrond voor de mail scene, deze moet nog worden aangepast
-    this.ShoppingBackground = CanvasRenderer.loadNewImage("./assets/MainMenuGame.jpg");
+    this.DefenderBackground = CanvasRenderer.loadNewImage("./assets/MainMenuGame.jpg");
   }
 
   /**
@@ -38,8 +38,8 @@ export default class ShoppingScene extends Scene {
   public render(canvas: HTMLCanvasElement): void {
     document.querySelectorAll("button").forEach((button) => {
       button.remove();
-    });   //alle buttons verwijderen van vorige pagina
-    document.body.style.backgroundImage = `url(${this.ShoppingBackground.src})`;
-    CanvasRenderer.writeText(canvas, 'Shopping Scene', canvas.width / 2, canvas.height / 2, 'center', 'Pixelated', 75, 'White');
+    }); //alle buttons verwijderen van vorige pagina
+    document.body.style.backgroundImage = `url(${this.DefenderBackground.src})`;
+    CanvasRenderer.writeText(canvas, "Wifi Off Scene", canvas.width / 2, canvas.height / 2, "center", "Pixelated", 75, "White");
   }
 }

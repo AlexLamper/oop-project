@@ -1,7 +1,7 @@
-import CanvasRenderer from './CanvasRenderer.js';
-import Scene from './Scene.js';
-import MouseListener from './MouseListener.js';
-import homeScene from './homeScene.js';
+import CanvasRenderer from "./canvasRenderer.js";
+import Scene from "./scene.js";
+import MouseListener from "./mouseListener.js";
+import homeScene from "./scenes/homeScene.js";
 
 export default class Level extends Scene {
   private timeToNextItem: number;
@@ -29,7 +29,6 @@ export default class Level extends Scene {
 
   public processInput(mouseListener: MouseListener): void {
     // this.player.move(mouseListener.getMousePosition().x, mouseListener.getMousePosition().y);
-
     // if (mouseListener.buttonPressed(MouseListener.BUTTON_LEFT)) {
     //   this.scoreItems = this.scoreItems.filter((item: ScoreItem) => {
     //     if (this.player.isCollidingWithItem(item)) {
@@ -62,11 +61,11 @@ export default class Level extends Scene {
     }
 
     // this.scoreItems = this.scoreItems.sort(
-      // (a: ScoreItem, b: ScoreItem) => a.getPosY() - b.getPosY(),
+    // (a: ScoreItem, b: ScoreItem) => a.getPosY() - b.getPosY(),
     // );
 
     // this.scoreItems.forEach((item: ScoreItem) => {
-      // item.update(elapsed);
+    // item.update(elapsed);
 
     //   if (item instanceof Kudzu) {
     //     this.scoreItems = this.scoreItems.filter((item2: ScoreItem) => {
@@ -87,7 +86,7 @@ export default class Level extends Scene {
   public override getNextScene(): Scene | null {
     console.log("hi");
     return new homeScene(this.maxX, this.maxY);
-    }
+  }
 
   /**
    * Render the scene to the canvas
@@ -95,8 +94,8 @@ export default class Level extends Scene {
    */
   public render(canvas: HTMLCanvasElement): void {
     // this.scoreItems.forEach((item: ScoreItem) => item.render(canvas));
-    CanvasRenderer.writeText(canvas, `Score ${this.score}`, 40, 50, 'left', 'sans-serif', 30, '#040');
-    CanvasRenderer.writeText(canvas, `Flowers Lost ${this.flowersLost}`, 40, 80, 'left', 'sans-serif', 26, '#040');
+    CanvasRenderer.writeText(canvas, `Score ${this.score}`, 40, 50, "left", "sans-serif", 30, "#040");
+    CanvasRenderer.writeText(canvas, `Flowers Lost ${this.flowersLost}`, 40, 80, "left", "sans-serif", 26, "#040");
     // this.player.render(canvas);
   }
 }
