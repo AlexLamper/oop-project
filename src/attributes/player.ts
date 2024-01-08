@@ -12,11 +12,8 @@ export default class Player {
     this.width = width;
     this.height = height;
     this.image = new Image();
-    this.image.onload = () => {
-      console.log('Player image loaded.');
-    };
     this.image.onerror = (error) => {
-      console.error('Failed to load player image:', error);
+      console.error("Failed to load player image:", error);
     };
     this.image.src = imagePath;
     this.rotation = 0;
@@ -24,22 +21,22 @@ export default class Player {
 
   // Move Functions For The Player
   moveLeft(): void {
-    this.x -= 3;
+    this.x -= 6;
     this.rotation = -90;
   }
 
   moveRight(): void {
-    this.x += 3;
+    this.x += 6;
     this.rotation = 90;
   }
 
   moveUp(): void {
-    this.y -= 3;
+    this.y -= 6;
     this.rotation = 0;
   }
 
   moveDown(): void {
-    this.y += 3;
+    this.y += 6;
     this.rotation = 180;
   }
 

@@ -6,9 +6,13 @@ import winScene from "./winScene.js";
 import Player from "../attributes/player.js";
 import Projectile from "../attributes/projectiles.js";
 import Enemy from "../attributes/enemies.js";
+
 import ScoreManager from "../attributes/totalScore.js";
 
 const scoreManager = ScoreManager.getInstance();
+
+import loseScene from "./loseScene.js";
+
 
 export default class DefenderScene extends Scene {
   private keyMap: { [key: string]: boolean };
@@ -19,6 +23,7 @@ export default class DefenderScene extends Scene {
   private projectile: Projectile;
   private projectiles: Projectile[] = [];
   private enemies: Enemy[] = [];
+  private lifes: number = 3;
 
   // Amount of time the player has to complete the game in milliseconds
   private timeLimit: number = 15000;
@@ -143,8 +148,9 @@ export default class DefenderScene extends Scene {
       const totalScore = scoreManager.getTotalScore();
       console.log(`Total Score: ${totalScore}`);
       return new winScene(this.maxX, this.maxY);
-    }
-    return null;
+    } else if (this.lifes <= 0) {
+      return new loseScene(this.maxX, this.maxY);
+    } else return null;
   }
   
 
@@ -160,11 +166,9 @@ export default class DefenderScene extends Scene {
    */
   public update(elapsed: number): void {
     // Update the time limit
-    if (this.timeLimit > 0) {
+    if (this.timeLimit > 0 || this.lifes > 0) {
       this.timeLimit -= elapsed;
-      console.log(this.timeLimit);
     } else {
-      console.log("Defender scene ended");
       this.getNextScene();
     }
     this.projectiles.forEach((projectile) => {
@@ -182,11 +186,30 @@ export default class DefenderScene extends Scene {
       this.player.moveDown();
     }
 
-    // Update enemies
-    const playerX = this.player.x;
-    const playerY = this.player.y;
-    this.enemies.forEach((enemy) => {
-      enemy.update(playerX, playerY);
+    // Update enemies and check for collision with player
+    const playerBox = {
+      x: this.player.x,
+      y: this.player.y,
+      width: this.player.width,
+      height: this.player.height,
+    };
+
+    this.enemies.forEach((enemy, index) => {
+      enemy.update(playerBox.x, playerBox.y);
+
+      const enemyBox = {
+        x: enemy.x,
+        y: enemy.y,
+        width: enemy.width,
+        height: enemy.height,
+      };
+
+      // Check for overlap between player and enemy bounding boxes
+      if (playerBox.x < enemyBox.x + enemyBox.width && playerBox.x + playerBox.width > enemyBox.x && playerBox.y < enemyBox.y + enemyBox.height && playerBox.y + playerBox.height > enemyBox.y) {
+        // Collision detected, delete the enemy
+        this.enemies.splice(index, 1);
+        this.lifes--;
+      }
     });
 
     // Collision detection between projectiles and enemies
@@ -282,10 +305,9 @@ export default class DefenderScene extends Scene {
       ctx.drawImage(spawnPointImage, spawnPointCenterX, spawnPointCenterY, spawnPointWidth, spawnPointHeight);
       // Render the time, score and lives on the canvas
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.05, "center", "Pixelated", 75, "White");
-      // Display the current defenderScore on the canvas
-      const currentScoreText = `Score: ${this.defenderScore}`;
-      CanvasRenderer.writeText(canvas, currentScoreText, canvas.width * 0.15, canvas.height * 0.05, "center", "Pixelated", 75, "White");
-      CanvasRenderer.writeText(canvas, "Lives: X X X", canvas.width * 0.85, canvas.height * 0.05, "center", "Pixelated", 75, "White");
+      CanvasRenderer.writeText(canvas, `Score: ${this.defenderScore}`, canvas.width * 0.15, canvas.height * 0.05, "center", "Pixelated", 75, "White");
+      CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.85, canvas.height * 0.05, "center", "Pixelated", 75, "White");
+
     }
   }
 }
