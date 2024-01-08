@@ -1,6 +1,6 @@
-import CanvasRenderer from "../canvasRenderer.js";
-import MouseListener from "../mouseListener.js";
-import Scene from "../scene.js";
+import CanvasRenderer from "../CanvasRenderer.js";
+import MouseListener from "../MouseListener.js";
+import Scene from "../Scene.js";
 
 export default class TerminalScene extends Scene {
   private TerminalBackground: HTMLImageElement;

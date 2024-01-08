@@ -1,4 +1,4 @@
-import MouseListener from "./mouseListener.js";
+import MouseListener from "./MouseListener.js";
 
 export default abstract class Scene {
   protected maxX: number;

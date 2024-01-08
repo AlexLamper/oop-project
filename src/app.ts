@@ -1,4 +1,4 @@
-import CyberIQ from "./cyberIQ.js";
+import CyberIQ from "./CyberIQ.js";
 
 const game: CyberIQ = new CyberIQ(document.getElementById("game") as HTMLCanvasElement);
 
