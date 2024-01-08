@@ -12,11 +12,9 @@ export default class Player {
     this.width = width;
     this.height = height;
     this.image = new Image();
-    this.image.onload = () => {
-      console.log('Player image loaded.');
-    };
+    this.image.onload = () => {};
     this.image.onerror = (error) => {
-      console.error('Failed to load player image:', error);
+      console.error("Failed to load player image:", error);
     };
     this.image.src = imagePath;
     this.rotation = 0;
