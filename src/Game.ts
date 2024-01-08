@@ -144,6 +144,9 @@ export default abstract class Game {
    *   starts to execute callback functions
    */
   private step(timestamp: number): void {
+    const targetFPS: number = 60;
+    const targetFrameTime: number = 1000 / targetFPS;
+
     // Handle first animation frame
     if (this.isInState(Game.STATE_STARTING)) {
       this.state = Game.STATE_RUNNING;
@@ -151,38 +154,49 @@ export default abstract class Game {
 
     this.processInput();
 
-    // Let the game update itself
-    let shouldStop: boolean = false;
-    if (this.mode === Game.PLAY_CATCH_UP) {
-      const step: number = 1;
-      while (this.previousElapsed < timestamp && !shouldStop) {
-        shouldStop = !this.update(step);
-        this.previousElapsed += step;
+    // Calculate elapsed time
+    const elapsed: number = timestamp - this.previousElapsed;
+
+    // Check if enough time has passed to update the game
+    if (elapsed >= targetFrameTime) {
+      let shouldStop: boolean = false;
+
+      // Update the game with a fixed time step
+      if (this.mode === Game.PLAY_CATCH_UP) {
+        const step: number = targetFrameTime;
+        while (this.previousElapsed < timestamp && !shouldStop) {
+          shouldStop = !this.update(step);
+          this.previousElapsed += step;
+        }
+      } else {
+        shouldStop = !this.update(elapsed);
+        this.previousElapsed = timestamp;
       }
+
+      // Let the game render itself
+      this.render();
+
+      // Check if a next animation frame needs to be requested
+      if (!shouldStop || this.isInState(Game.STATE_STOPPING)) {
+        requestAnimationFrame(this.step.bind(this));
+      } else {
+        this.state = Game.STATE_IDLE;
+      }
+
+      // Handle time measurement and analysis
+      const now: number = performance.now();
+      const stepTime: number = timestamp - now;
+      const frameTime: number = now - this.frameEnd;
+      this.fps = Math.round(1000 / frameTime);
+      console.log(`FPS: ${this.fps}`);
+      console.log(`targetFrameTime: ${targetFrameTime}`);
+      this.load = stepTime / frameTime;
+      this.frameEnd = now;
+      this.gameTime = now - this.gameStart;
+      this.frameCount += 1;
     } else {
-      const elapsed: number = timestamp - this.previousElapsed;
-      shouldStop = !this.update(elapsed);
-      this.previousElapsed = timestamp;
-    }
-
-    // Let the game render itself
-    this.render();
-
-    // Check if a next animation frame needs to be requested
-    if (!shouldStop || this.isInState(Game.STATE_STOPPING)) {
+      // Wait for the next animation frame if not enough time has passed
       requestAnimationFrame(this.step.bind(this));
-    } else {
-      this.state = Game.STATE_IDLE;
     }
-
-    // Handle time measurement and analysis
-    const now: number = performance.now();
-    const stepTime: number = timestamp - now;
-    const frameTime: number = now - this.frameEnd;
-    this.fps = Math.round(1000 / frameTime);
-    this.load = stepTime / frameTime;
-    this.frameEnd = now;
-    this.gameTime = now - this.gameStart;
-    this.frameCount += 1;
   }
 }
