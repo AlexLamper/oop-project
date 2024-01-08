@@ -6,6 +6,10 @@ import TerminalScene from "./terminalScene.js";
 import DefenderScene from "./defenderScene.js";
 import VPNScene from "./vpnScene.js";
 import ShoppingScene from "./shoppingScene.js";
+import ScoreManager from "../attributes/totalScore.js";
+
+const scoreManager = ScoreManager.getInstance();
+const totalScore = scoreManager.getTotalScore();
 
 export default class homeScene extends Scene {
   private pcBackground: HTMLImageElement;
