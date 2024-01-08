@@ -13,7 +13,6 @@ const scoreManager = ScoreManager.getInstance();
 
 import loseScene from "./loseScene.js";
 
-
 export default class DefenderScene extends Scene {
   private keyMap: { [key: string]: boolean };
   private currentDirection: string | null;
@@ -26,7 +25,7 @@ export default class DefenderScene extends Scene {
   private lifes: number = 3;
 
   // Amount of time the player has to complete the game in milliseconds
-  private timeLimit: number = 15000;
+  private timeLimit: number = 150000;
   private defenderScore = 0;
 
   public getCurrentGameScore(): number {
@@ -152,7 +151,6 @@ export default class DefenderScene extends Scene {
       return new loseScene(this.maxX, this.maxY);
     } else return null;
   }
-  
 
   // Method to end the game
   private endGame(): void {
@@ -307,7 +305,6 @@ export default class DefenderScene extends Scene {
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.05, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, `Score: ${this.defenderScore}`, canvas.width * 0.15, canvas.height * 0.05, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.85, canvas.height * 0.05, "center", "Pixelated", 75, "White");
-
     }
   }
 }
