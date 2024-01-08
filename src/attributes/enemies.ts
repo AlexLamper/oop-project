@@ -35,7 +35,7 @@ export default class Enemy {
     const directionY = dy / distance;
 
     // Enemys moving speed
-    const speed = 1.3;
+    const speed = 2.6;
     this.x += directionX * speed;
     this.y += directionY * speed;
   }
