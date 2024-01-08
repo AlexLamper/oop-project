@@ -12,9 +12,6 @@ export default class Player {
     this.width = width;
     this.height = height;
     this.image = new Image();
-    this.image.onload = () => {
-      console.log("Player image loaded.");
-    };
     this.image.onerror = (error) => {
       console.error("Failed to load player image:", error);
     };
