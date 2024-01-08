@@ -16,6 +16,7 @@ export default class DefenderScene extends Scene {
   private projectile: Projectile;
   private projectiles: Projectile[] = [];
   private enemies: Enemy[] = [];
+  private escapeClicked: boolean = false;
 
   // Amount of time the player has to complete the game in milliseconds
   private timeLimit: number = 150000;
@@ -55,6 +56,7 @@ export default class DefenderScene extends Scene {
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     document.addEventListener("click", this.handleClick.bind(this));
 
+
     // Spawn 10 enemies with a delay of 3 seconds (3000 milliseconds) at the spawn point
     this.spawnEnemiesFromSpawnPoint(10, this.spawnPointX, this.spawnPointY, 3000);
   }
@@ -65,6 +67,9 @@ export default class DefenderScene extends Scene {
       event.preventDefault();
       this.keyMap[event.key] = true;
       this.updateDirection();
+    }
+    else if (event.key === "Escape") {
+      this.escapeClicked = true;
     }
   }
 
@@ -101,6 +106,8 @@ export default class DefenderScene extends Scene {
     return this.player.y;
   }
 
+
+
   // Function to handle the click event
   private handleClick(event: MouseEvent): void {
     this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
@@ -133,6 +140,9 @@ export default class DefenderScene extends Scene {
     if (this.timeLimit <= 0) {
       return new winScene(this.maxX, this.maxY);
     }
+    else if (this.escapeClicked === true) {
+      return new homeScene(this.maxX, this.maxY);
+   }
     return null;
   }
 
@@ -144,7 +154,7 @@ export default class DefenderScene extends Scene {
     // Update the time limit
     if (this.timeLimit > 0) {
       this.timeLimit -= elapsed;
-      console.log(this.timeLimit);
+      // console.log(this.timeLimit);
     } else {
       console.log("Defender scene ended");
       this.getNextScene();
@@ -203,6 +213,7 @@ export default class DefenderScene extends Scene {
       }
     }
   }
+
 
   // Function to spawn enemies from the spawn point
   public spawnEnemiesFromSpawnPoint(numberOfEnemies: number, spawnX: number, spawnY: number, spawnInterval: number): void {
@@ -265,6 +276,6 @@ export default class DefenderScene extends Scene {
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.05, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, "Score: 24", canvas.width * 0.15, canvas.height * 0.05, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, "Lives: X X X", canvas.width * 0.85, canvas.height * 0.05, "center", "Pixelated", 75, "White");
-    }
+    
   }
-}
+  }}
