@@ -1,14 +1,14 @@
-import CanvasRenderer from "./CanvasRenderer.js";
-import MouseListener from "./MouseListener.js";
-import Scene from "./Scene.js";
+import CanvasRenderer from "../CanvasRenderer.js";
+import MouseListener from "../MouseListener.js";
+import Scene from "../Scene.js";
 
-export default class winScene extends Scene {
-  private loseBackground: HTMLImageElement;
+export default class ShoppingScene extends Scene {
+  private ShoppingBackground: HTMLImageElement;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
     // Ff tijdelijke achtergrond voor de mail scene, deze moet nog worden aangepast
-    this.loseBackground = CanvasRenderer.loadNewImage("./assets/MainMenuGame.jpg");
+    this.ShoppingBackground = CanvasRenderer.loadNewImage("./assets/MainMenuGame.jpg");
   }
 
   /**
@@ -39,7 +39,7 @@ export default class winScene extends Scene {
     document.querySelectorAll("button").forEach((button) => {
       button.remove();
     }); //alle buttons verwijderen van vorige pagina
-    document.body.style.backgroundImage = `url(${this.loseBackground.src})`;
-    CanvasRenderer.writeText(canvas, "Win scene", canvas.width / 2, canvas.height / 2, "center", "Pixelated", 75, "White");
+    document.body.style.backgroundImage = `url(${this.ShoppingBackground.src})`;
+    CanvasRenderer.writeText(canvas, "Shopping Scene", canvas.width / 2, canvas.height / 2, "center", "Pixelated", 75, "White");
   }
 }

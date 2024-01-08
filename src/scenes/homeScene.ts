@@ -1,12 +1,11 @@
-import CanvasRenderer from "./CanvasRenderer.js";
-import MouseListener from "./MouseListener.js";
-import Scene from "./Scene.js";
+import CanvasRenderer from "../CanvasRenderer.js";
+import MouseListener from "../MouseListener.js";
+import Scene from "../Scene.js";
 import mailScene from "./mailScene.js";
-import TerminalScene from "./TerminalScene.js";
-import DefenderScene from "./DefenderScene.js";
-import VPNScene from "./VPNScene.js";
-import ShoppingScene from "./ShoppingScene.js";
-
+import TerminalScene from "./terminalScene.js";
+import DefenderScene from "./defenderScene.js";
+import VPNScene from "./vpnScene.js";
+import ShoppingScene from "./shoppingScene.js";
 
 export default class homeScene extends Scene {
   private pcBackground: HTMLImageElement;
@@ -48,68 +47,65 @@ export default class homeScene extends Scene {
     document.body.appendChild(this.vpnButton);
     document.body.appendChild(this.shoppingButton);
     document.body.appendChild(this.mailButtonClicked);
-    this.mailButtonClicked.style.display = 'none'; // Hide the mailButtonClicked
+    this.mailButtonClicked.style.display = "none"; // Hide the mailButtonClicked
 
     // Add click event listeners to buttons
-    this.mailButton.addEventListener('click', this.onMailButtonClick.bind(this));
-    this.defenderButton.addEventListener('click', this.onDefenderButtonClick.bind(this));
-    this.terminalButton.addEventListener('click', this.onTerminalButtonClick.bind(this));
-    this.vpnButton.addEventListener('click', this.onVpnButtonClick.bind(this));
-    this.shoppingButton.addEventListener('click', this.onShoppingButtonClick.bind(this));
+    this.mailButton.addEventListener("click", this.onMailButtonClick.bind(this));
+    this.defenderButton.addEventListener("click", this.onDefenderButtonClick.bind(this));
+    this.terminalButton.addEventListener("click", this.onTerminalButtonClick.bind(this));
+    this.vpnButton.addEventListener("click", this.onVpnButtonClick.bind(this));
+    this.shoppingButton.addEventListener("click", this.onShoppingButtonClick.bind(this));
   }
 
   private createButton(imagePath: string, x: number, y: number): HTMLButtonElement {
     document.querySelectorAll("button").forEach((button) => {
       button.remove();
-    });  
-    const button = document.createElement('button');
-    button.style.width = '100px';
-    button.style.height = '100px';
-    button.style.position = 'absolute';
+    });
+    const button = document.createElement("button");
+    button.style.width = "100px";
+    button.style.height = "100px";
+    button.style.position = "absolute";
     button.style.top = `${y}px`;
     button.style.left = `${x}px`;
     button.style.background = `url('${imagePath}') no-repeat center/cover`;
-    button.style.border = 'none';
-    button.style.backgroundColor = 'transparent'; // Set background color to transparent
+    button.style.border = "none";
+    button.style.backgroundColor = "transparent"; // Set background color to transparent
     return button;
   }
 
   private onMailButtonClick(event: MouseEvent): void {
-    console.log('Mail button clicked!');
+    console.log("Mail button clicked!");
     if (mailScene.usedMailScene == false) {
       mailScene.usedMailScene = true;
       this.nextScene = new mailScene(this.maxX, this.maxY);
       setTimeout(() => {
-        this.mailButton.style.display = 'none'; // Hide the mailButton
-        this.mailButtonClicked.style.display = 'block'; // Show the mailButtonClicked
+        this.mailButton.style.display = "none"; // Hide the mailButton
+        this.mailButtonClicked.style.display = "block"; // Show the mailButtonClicked
       }, 1000);
 
-      console.log('Mail button clicked2222!');
+      console.log("Mail button clicked2222!");
     } else {
       alert("Mail scene already used");
     }
   }
 
   private onDefenderButtonClick(event: MouseEvent): void {
-    console.log('Defender button clicked!');
+    console.log("Defender button clicked!");
     this.nextScene = new DefenderScene(this.maxX, this.maxY);
   }
 
   private onTerminalButtonClick(event: MouseEvent): void {
-    console.log('Terminal button clicked!');
+    console.log("Terminal button clicked!");
     this.nextScene = new TerminalScene(this.maxX, this.maxY);
-
   }
   private onVpnButtonClick(event: MouseEvent): void {
-    console.log('VPN button clicked!');
+    console.log("VPN button clicked!");
     this.nextScene = new VPNScene(this.maxX, this.maxY);
-
   }
   private onShoppingButtonClick(event: MouseEvent): void {
-    console.log('Shopping button clicked!');
+    console.log("Shopping button clicked!");
     this.nextScene = new ShoppingScene(this.maxX, this.maxY);
   }
-
 
   /**
    * Process input from the mouse
@@ -121,25 +117,25 @@ export default class homeScene extends Scene {
     }
   }
 
-    /**
+  /**
    *
    * @returns the next scene to be rendered. null if no change
    */
-    public getNextScene(): Scene | null {
-      if (this.nextScene instanceof mailScene) {
-        return this.nextScene;
-      } else if (this.nextScene instanceof DefenderScene) {
-        return new DefenderScene(this.maxX, this.maxY);
-      } else if (this.nextScene instanceof TerminalScene) {
-        return new TerminalScene(this.maxX, this.maxY);
-      } else if (this.nextScene instanceof VPNScene) {
-        return new VPNScene(this.maxX, this.maxY);
-      } else if (this.nextScene instanceof ShoppingScene) {
-        return new ShoppingScene(this.maxX, this.maxY);
-      } else {
-        return null;
-      }
+  public getNextScene(): Scene | null {
+    if (this.nextScene instanceof mailScene) {
+      return this.nextScene;
+    } else if (this.nextScene instanceof DefenderScene) {
+      return new DefenderScene(this.maxX, this.maxY);
+    } else if (this.nextScene instanceof TerminalScene) {
+      return new TerminalScene(this.maxX, this.maxY);
+    } else if (this.nextScene instanceof VPNScene) {
+      return new VPNScene(this.maxX, this.maxY);
+    } else if (this.nextScene instanceof ShoppingScene) {
+      return new ShoppingScene(this.maxX, this.maxY);
+    } else {
+      return null;
     }
+  }
 
   /**
    *
@@ -150,7 +146,7 @@ export default class homeScene extends Scene {
   /**
    * Render the scene to the canvas
    * @param canvas canvas to render to
-  */
+   */
   public render(canvas: HTMLCanvasElement): void {
     document.body.style.backgroundImage = `url(${this.pcBackground.src})`;
   }

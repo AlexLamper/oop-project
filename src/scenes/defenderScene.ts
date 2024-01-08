@@ -1,14 +1,13 @@
-import CanvasRenderer from "./CanvasRenderer.js";
-import MouseListener from "./MouseListener.js";
-import Scene from "./Scene.js";
+import CanvasRenderer from "../CanvasRenderer.js";
+import MouseListener from "../MouseListener.js";
+import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
 import winScene from "./winScene.js";
-import Player from "./Player.js";
-import Projectile from "./attributes/projectiles.js";
-import Enemy from "./Enemies.js";
+import Player from "../attributes/player.js";
+import Projectile from "../attributes/projectiles.js";
+import Enemy from "../attributes/enemies.js";
 
 export default class DefenderScene extends Scene {
-
   private keyMap: { [key: string]: boolean };
   private currentDirection: string | null;
   private DefenderBackground: HTMLImageElement;
@@ -19,7 +18,7 @@ export default class DefenderScene extends Scene {
   private enemies: Enemy[] = [];
 
   // Amount of time the player has to complete the game in milliseconds
-  private timeLimit: number = 300000;
+  private timeLimit: number = 150000;
 
   // Create spawn point coordinates, width and height for the enemies
   private spawnPointX = 100;
@@ -194,12 +193,7 @@ export default class DefenderScene extends Scene {
         };
 
         // Check for overlap between bounding boxes
-        if (
-          projectileBox.x < enemyBox.x + enemyBox.width &&
-          projectileBox.x + projectileBox.width > enemyBox.x &&
-          projectileBox.y < enemyBox.y + enemyBox.height &&
-          projectileBox.y + projectileBox.height > enemyBox.y
-        ) {
+        if (projectileBox.x < enemyBox.x + enemyBox.width && projectileBox.x + projectileBox.width > enemyBox.x && projectileBox.y < enemyBox.y + enemyBox.height && projectileBox.y + projectileBox.height > enemyBox.y) {
           // Remove the enemy from the array when hit by the projectile
           this.enemies.splice(j, 1);
           this.projectiles.splice(i, 1);
