@@ -18,7 +18,7 @@ export default class DefenderScene extends Scene {
   private enemies: Enemy[] = [];
 
   // Amount of time the player has to complete the game in milliseconds
-  private timeLimit: number = 300000;
+  private timeLimit: number = 150000;
 
   // Create spawn point coordinates, width and height for the enemies
   private spawnPointX = 100;
