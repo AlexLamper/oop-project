@@ -22,6 +22,7 @@ export default class DefenderScene extends Scene {
   private projectile: Projectile;
   private projectiles: Projectile[] = [];
   private enemies: Enemy[] = [];
+  private escapeClicked: boolean = false;
   private lifes: number = 3;
 
   // Amount of time the player has to complete the game in milliseconds
@@ -67,6 +68,7 @@ export default class DefenderScene extends Scene {
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     document.addEventListener("click", this.handleClick.bind(this));
 
+
     // Spawn 10 enemies with a delay of 3 seconds (3000 milliseconds) at the spawn point
     this.spawnEnemiesFromSpawnPoint(30, this.spawnPointX, this.spawnPointY, 3000);
   }
@@ -77,6 +79,9 @@ export default class DefenderScene extends Scene {
       event.preventDefault();
       this.keyMap[event.key] = true;
       this.updateDirection();
+    }
+    else if (event.key === "Escape") {
+      this.escapeClicked = true;
     }
   }
 
@@ -113,6 +118,8 @@ export default class DefenderScene extends Scene {
     return this.player.y;
   }
 
+
+
   // Function to handle the click event
   private handleClick(event: MouseEvent): void {
     this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
@@ -147,7 +154,11 @@ export default class DefenderScene extends Scene {
       const totalScore = scoreManager.getTotalScore();
       console.log(`Total Score: ${totalScore}`);
       return new winScene(this.maxX, this.maxY);
-    } else if (this.lifes <= 0) {
+    }
+    else if (this.escapeClicked === true) {
+      return new homeScene(this.maxX, this.maxY);
+   }
+    else if (this.lifes <= 0) {
       return new loseScene(this.maxX, this.maxY);
     } else return null;
   }
@@ -244,6 +255,7 @@ export default class DefenderScene extends Scene {
     }
   }
 
+
   // Function to spawn enemies from the spawn point
   public spawnEnemiesFromSpawnPoint(numberOfEnemies: number, spawnX: number, spawnY: number, spawnInterval: number): void {
     const enemyImagePath = "./assets/enemy-red.png";
@@ -307,4 +319,4 @@ export default class DefenderScene extends Scene {
       CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.85, canvas.height * 0.05, "center", "Pixelated", 75, "White");
     }
   }
-}
+  }}
