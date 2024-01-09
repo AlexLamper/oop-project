@@ -47,9 +47,9 @@ export default class homeScene extends Scene {
     // Append the buttons to the document body or a container element
     document.body.appendChild(this.mailButton);
     document.body.appendChild(this.defenderButton);
-    document.body.appendChild(this.terminalButton);
-    document.body.appendChild(this.vpnButton);
-    document.body.appendChild(this.shoppingButton);
+    // document.body.appendChild(this.terminalButton);
+    // document.body.appendChild(this.vpnButton);
+    // document.body.appendChild(this.shoppingButton);
     // document.body.appendChild(this.mailButtonClicked);
     // this.mailButtonClicked.style.display = "none"; // Hide the mailButtonClicked
 
