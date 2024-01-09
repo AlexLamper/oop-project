@@ -16,16 +16,16 @@ export default class Projectile {
     this.rotation = rotation;
   }
   bulletLeft(): void {
-    this.x -= 5;
+    this.x -= 10;
   }
   bulletRight(): void {
-    this.x += 5;
+    this.x += 10;
   }
   bulletUp(): void {
-    this.y -= 5;
+    this.y -= 10;
   }
   bulletDown(): void {
-    this.y += 5;
+    this.y += 10;
   }
 
   update(): void {

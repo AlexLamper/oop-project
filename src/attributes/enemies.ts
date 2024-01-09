@@ -12,9 +12,7 @@ export default class Enemy {
     this.width = width;
     this.height = height;
     this.image = new Image();
-    this.image.onload = () => {
-      console.log("Enemy image loaded.");
-    };
+    this.image.onload = () => {};
     this.image.onerror = (error) => {
       console.error("Failed to load enemy image:", error);
     };
@@ -35,7 +33,7 @@ export default class Enemy {
     const directionY = dy / distance;
 
     // Enemys moving speed
-    const speed = 1.3;
+    const speed = 2.6;
     this.x += directionX * speed;
     this.y += directionY * speed;
   }
