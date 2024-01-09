@@ -27,6 +27,7 @@ export default class homeScene extends Scene {
   private shoppingButton: HTMLButtonElement;
   private nextScene: Scene | null;
   // private usedMailScene: boolean = false;
+  private crossButton: HTMLButtonElement;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -42,6 +43,7 @@ export default class homeScene extends Scene {
     this.terminalButton = this.createButton("./assets/terminal.png", 20, 140, "terminalButton");
     this.vpnButton = this.createButton("./assets/vpn.png", 140, 140, "vpnButton");
     this.shoppingButton = this.createButton("./assets/shopping-cart.png", 20, 260, "shoppingButton");
+    this.crossButton = this.createButton("./assets/cross.png", 140, 260, "crossButton");
     // this.mailButtonClicked = this.createButton("./assets/mail-no-notification.png", 20, 20);
 
     // Append the buttons to the document body or a container element
@@ -50,6 +52,7 @@ export default class homeScene extends Scene {
     document.body.appendChild(this.terminalButton);
     document.body.appendChild(this.vpnButton);
     document.body.appendChild(this.shoppingButton);
+    document.body.appendChild(this.crossButton);
     // document.body.appendChild(this.mailButtonClicked);
     // this.mailButtonClicked.style.display = "none"; // Hide the mailButtonClicked
 
