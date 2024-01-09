@@ -6,6 +6,7 @@ import winScene from "./winScene.js";
 import Player from "../attributes/player.js";
 import Projectile from "../attributes/projectiles.js";
 import Enemy from "../attributes/enemies.js";
+import homeScene2 from "./homeScene2.js";
 import portal from "../attributes/portals.js";
 
 import ScoreManager from "../attributes/totalScore.js";
@@ -29,7 +30,7 @@ export default class DefenderScene extends Scene {
   private lifes: number = 5;
 
   // Amount of time the player has to complete the game in milliseconds
-  private timeLimit: number = 150000;
+  private timeLimit: number = 60000;
   private defenderScore = 0;
 
   public getCurrentGameScore(): number {
@@ -100,7 +101,12 @@ export default class DefenderScene extends Scene {
     else if (event.key === "Escape") {
       this.escapeClicked = true;
     }
+   else if (event.key === " ") {
+    this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
   }
+  }
+
+
 
   // Handle keyup events
   private handleKeyUp(event: KeyboardEvent): void {
@@ -173,7 +179,7 @@ export default class DefenderScene extends Scene {
       return new winScene(this.maxX, this.maxY);
     }
     else if (this.escapeClicked === true) {
-      return new homeScene(this.maxX, this.maxY);
+      return new homeScene2(this.maxX, this.maxY);
    }
     else if (this.lifes <= 0) {
       return new loseScene(this.maxX, this.maxY);

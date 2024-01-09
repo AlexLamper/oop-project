@@ -27,7 +27,6 @@ export default class homeScene extends Scene {
   private shoppingButton: HTMLButtonElement;
   private nextScene: Scene | null;
   // private usedMailScene: boolean = false;
-  private crossButton: HTMLButtonElement;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -35,15 +34,14 @@ export default class homeScene extends Scene {
     this.shoppingCart = CanvasRenderer.loadNewImage("./assets/shopping-cart.png");
     this.defender = CanvasRenderer.loadNewImage("./assets/defender.png");
     this.terminal = CanvasRenderer.loadNewImage("./assets/terminal.png");
-    this.mail = CanvasRenderer.loadNewImage("./assets/mail.png");
+    this.mail = CanvasRenderer.loadNewImage("./assets/mail-no-notification.png");
     this.vpn = CanvasRenderer.loadNewImage("./assets/vpn.png");
 
-    this.mailButton = this.createButton("./assets/mail.png", 20, 20, "mailButton");
-    this.defenderButton = this.createButton("./assets/defender.png", 140, 20, "defenderButton");
-    this.terminalButton = this.createButton("./assets/terminal.png", 20, 140, "terminalButton");
-    this.vpnButton = this.createButton("./assets/vpn.png", 140, 140, "vpnButton");
-    this.shoppingButton = this.createButton("./assets/shopping-cart.png", 20, 260, "shoppingButton");
-    this.crossButton = this.createButton("./assets/cross.png", 140, 20, "crossButton");
+    this.mailButton = this.createButton("./assets/mail-no-notification.png", 20, 20);
+    this.defenderButton = this.createButton("./assets/defender.png", 140, 20);
+    this.terminalButton = this.createButton("./assets/terminal.png", 20, 140);
+    this.vpnButton = this.createButton("./assets/vpn.png", 140, 140);
+    this.shoppingButton = this.createButton("./assets/shopping-cart.png", 20, 260);
     // this.mailButtonClicked = this.createButton("./assets/mail-no-notification.png", 20, 20);
 
     // Append the buttons to the document body or a container element
@@ -52,22 +50,21 @@ export default class homeScene extends Scene {
     // document.body.appendChild(this.terminalButton);
     // document.body.appendChild(this.vpnButton);
     // document.body.appendChild(this.shoppingButton);
-    document.body.appendChild(this.crossButton);
     // document.body.appendChild(this.mailButtonClicked);
     // this.mailButtonClicked.style.display = "none"; // Hide the mailButtonClicked
 
     // Add click event listeners to buttons
     this.mailButton.addEventListener("click", this.onMailButtonClick.bind(this));
-    // this.defenderButton.addEventListener("click", this.onDefenderButtonClick.bind(this));
-    // this.terminalButton.addEventListener("click", this.onTerminalButtonClick.bind(this));
-    // this.vpnButton.addEventListener("click", this.onVpnButtonClick.bind(this));
-    // this.shoppingButton.addEventListener("click", this.onShoppingButtonClick.bind(this));
+    this.defenderButton.addEventListener("click", this.onDefenderButtonClick.bind(this));
+    this.terminalButton.addEventListener("click", this.onTerminalButtonClick.bind(this));
+    this.vpnButton.addEventListener("click", this.onVpnButtonClick.bind(this));
+    this.shoppingButton.addEventListener("click", this.onShoppingButtonClick.bind(this));
   }
 
-  private createButton(imagePath: string, x: number, y: number, id: string): HTMLButtonElement {
-    document.querySelectorAll(`button#${id}`).forEach((button) => {
-      button.remove();
-    });
+  private createButton(imagePath: string, x: number, y: number): HTMLButtonElement {
+    // document.querySelectorAll("button").forEach((button) => {
+    //   button.remove();
+    // });
     const button = document.createElement("button");
     button.style.width = "100px";
     button.style.height = "100px";
@@ -77,7 +74,6 @@ export default class homeScene extends Scene {
     button.style.background = `url('${imagePath}') no-repeat center/cover`;
     button.style.border = "none";
     button.style.backgroundColor = "transparent"; // Set background color to transparent
-    button.id = id;
     return button;
   }
 
@@ -85,11 +81,10 @@ export default class homeScene extends Scene {
     if (mailScene.usedMailScene == false) {
       mailScene.usedMailScene = true;
       this.nextScene = new mailScene(this.maxX, this.maxY);
-      this.crossButton.remove();
-      // setTimeout(() => {
-      //   this.mailButton.style.display = "none"; // Hide the mailButton
-      //   this.mailButtonClicked.style.display = "block"; // Show the mailButtonClicked
-      // }, 1000);
+      setTimeout(() => {
+        this.mailButton.style.display = "none"; // Hide the mailButton
+        this.mailButtonClicked.style.display = "block"; // Show the mailButtonClicked
+      }, 1000);
     } else {
       alert("Mail scene already used");
     }
@@ -150,6 +145,7 @@ export default class homeScene extends Scene {
    * @param canvas canvas to render to
    */
   public render(canvas: HTMLCanvasElement): void {
+    // console.log("test")
     document.body.style.backgroundImage = `url(${this.pcBackground.src})`;
   }
 }
