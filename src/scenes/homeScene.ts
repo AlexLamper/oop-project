@@ -85,6 +85,7 @@ export default class homeScene extends Scene {
     if (mailScene.usedMailScene == false) {
       mailScene.usedMailScene = true;
       this.nextScene = new mailScene(this.maxX, this.maxY);
+      this.crossButton.remove();
       // setTimeout(() => {
       //   this.mailButton.style.display = "none"; // Hide the mailButton
       //   this.mailButtonClicked.style.display = "block"; // Show the mailButtonClicked
