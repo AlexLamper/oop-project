@@ -140,7 +140,7 @@ export default class DefenderScene extends Scene {
   }
 
   public portalsSpawn(): void {
-    const maxPortals = 3; // Maximum number of portals allowed
+    const maxPortals = 4; // Maximum number of portals allowed
     const portalCount = this.portals.length;
 
     // Initial spawn of one portal
@@ -170,8 +170,13 @@ export default class DefenderScene extends Scene {
 
   private spawnPortal(): void {
     // Calculate random coordinates within the specified range
-    const randomX = Math.floor(Math.random() * (1800 - 50 + 1)) + 50;
-    const randomY = Math.floor(Math.random() * (900 - 50 + 1)) + 50;
+    const minX = 50; // Minimum X coordinate
+    const minY = 50; // Minimum Y coordinate
+    const maxX = screen.width - 130; // Maximum X coordinate (screen width - portal width)
+    const maxY = screen.height - 130; // Maximum Y coordinate (screen height - portal height)
+
+    const randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+    const randomY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
 
     const newPortal = new portal(randomX, randomY, 100, 100, "./assets/portal-gray.png");
     this.portals.push(newPortal);
