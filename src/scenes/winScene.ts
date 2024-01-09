@@ -10,7 +10,7 @@ export default class winScene extends Scene {
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
     // Ff tijdelijke achtergrond voor de mail scene, deze moet nog worden aangepast
-    this.winBackground = CanvasRenderer.loadNewImage("./assets/win_background.jpg");
+    this.winBackground = CanvasRenderer.loadNewImage("./assets/win_background.png");
   }
 
   /**
@@ -37,7 +37,6 @@ export default class winScene extends Scene {
    */
   public update(elapsed: number): void {
     if (this.clickNext) {
-      console.log("Win scene ended");
       this.getNextScene();
     }
   }
@@ -51,7 +50,6 @@ export default class winScene extends Scene {
       button.remove();
     }); //alle buttons verwijderen van vorige pagina
     document.body.style.backgroundImage = `url(${this.winBackground.src})`;
-    CanvasRenderer.writeText(canvas, "Win scene", canvas.width / 2, canvas.height / 2, "center", "Pixelated", 75, "White");
-    CanvasRenderer.writeText(canvas, "Click to continu", canvas.width / 2, canvas.height / 1.5, "center", "Pixelated", 75, "White");
+    CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height / 1.5, "center", "Pixelated", 75, "White");
   }
 }

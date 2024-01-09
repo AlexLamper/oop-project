@@ -12,9 +12,7 @@ export default class Enemy {
     this.width = width;
     this.height = height;
     this.image = new Image();
-    this.image.onload = () => {
-      console.log("Enemy image loaded.");
-    };
+    this.image.onload = () => {};
     this.image.onerror = (error) => {
       console.error("Failed to load enemy image:", error);
     };

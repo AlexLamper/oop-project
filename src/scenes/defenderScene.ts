@@ -8,6 +8,12 @@ import Projectile from "../attributes/projectiles.js";
 import Enemy from "../attributes/enemies.js";
 import portal from "../attributes/portals.js";
 
+import ScoreManager from "../attributes/totalScore.js";
+
+const scoreManager = ScoreManager.getInstance();
+
+import loseScene from "./loseScene.js";
+
 export default class DefenderScene extends Scene {
   private keyMap: { [key: string]: boolean };
   private currentDirection: string | null;
@@ -17,10 +23,18 @@ export default class DefenderScene extends Scene {
   private projectile: Projectile;
   private projectiles: Projectile[] = [];
   private enemies: Enemy[] = [];
+
   private portals: portal[] = [];
+  private escapeClicked: boolean = false;
+  private lifes: number = 3;
 
   // Amount of time the player has to complete the game in milliseconds
   private timeLimit: number = 150000;
+  private defenderScore = 0;
+
+  public getCurrentGameScore(): number {
+    return this.defenderScore;
+  }
 
   private portalSpawnTimer: number = 0;
   private portalSpawnInterval: number = 6000;
@@ -69,6 +83,9 @@ export default class DefenderScene extends Scene {
       this.keyMap[event.key] = true;
       this.updateDirection();
     }
+    else if (event.key === "Escape") {
+      this.escapeClicked = true;
+    }
   }
 
   // Handle keyup events
@@ -104,6 +121,8 @@ export default class DefenderScene extends Scene {
     return this.player.y;
   }
 
+
+
   // Function to handle the click event
   private handleClick(event: MouseEvent): void {
     this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
@@ -134,9 +153,23 @@ export default class DefenderScene extends Scene {
    */
   public getNextScene(): Scene | null {
     if (this.timeLimit <= 0) {
+      this.endGame();
+      const totalScore = scoreManager.getTotalScore();
+      console.log(`Total Score: ${totalScore}`);
       return new winScene(this.maxX, this.maxY);
     }
-    return null;
+    else if (this.escapeClicked === true) {
+      return new homeScene(this.maxX, this.maxY);
+   }
+    else if (this.lifes <= 0) {
+      return new loseScene(this.maxX, this.maxY);
+    } else return null;
+  }
+
+  // Method to end the game
+  private endGame(): void {
+    // Add defenderScore to the totalScore when the game ends
+    scoreManager.updateTotalScore(this.getCurrentGameScore());
   }
 
   public portalsSpawn(): void {
@@ -190,11 +223,9 @@ export default class DefenderScene extends Scene {
 
   public update(elapsed: number): void {
     // Update the time limit
-    if (this.timeLimit > 0) {
+    if (this.timeLimit > 0 || this.lifes > 0) {
       this.timeLimit -= elapsed;
-      console.log(this.timeLimit);
     } else {
-      console.log("Defender scene ended");
       this.getNextScene();
     }
 
@@ -213,11 +244,30 @@ export default class DefenderScene extends Scene {
       this.player.moveDown();
     }
 
-    // Update enemies
-    const playerX = this.player.x;
-    const playerY = this.player.y;
-    this.enemies.forEach((enemy) => {
-      enemy.update(playerX, playerY);
+    // Update enemies and check for collision with player
+    const playerBox = {
+      x: this.player.x,
+      y: this.player.y,
+      width: this.player.width,
+      height: this.player.height,
+    };
+
+    this.enemies.forEach((enemy, index) => {
+      enemy.update(playerBox.x, playerBox.y);
+
+      const enemyBox = {
+        x: enemy.x,
+        y: enemy.y,
+        width: enemy.width,
+        height: enemy.height,
+      };
+
+      // Check for overlap between player and enemy bounding boxes
+      if (playerBox.x < enemyBox.x + enemyBox.width && playerBox.x + playerBox.width > enemyBox.x && playerBox.y < enemyBox.y + enemyBox.height && playerBox.y + playerBox.height > enemyBox.y) {
+        // Collision detected, delete the enemy
+        this.enemies.splice(index, 1);
+        this.lifes--;
+      }
     });
 
     // Collision detection between projectiles and enemies
@@ -244,6 +294,7 @@ export default class DefenderScene extends Scene {
         // Check for overlap between bounding boxes
         if (projectileBox.x < enemyBox.x + enemyBox.width && projectileBox.x + projectileBox.width > enemyBox.x && projectileBox.y < enemyBox.y + enemyBox.height && projectileBox.y + projectileBox.height > enemyBox.y) {
           // Remove the enemy from the array when hit by the projectile
+          this.defenderScore++;
           this.enemies.splice(j, 1);
           this.projectiles.splice(i, 1);
           // Decrement j to account for the removed enemy
@@ -313,6 +364,7 @@ export default class DefenderScene extends Scene {
     });
   }
 
+
   // Function to spawn enemies from the spawn point
   public spawnEnemiesFromSpawnPoint(numberOfEnemies: number, spawnX: number, spawnY: number, spawnInterval: number): void {
     const enemyImagePath = "./assets/enemy-red.png";
@@ -364,8 +416,8 @@ export default class DefenderScene extends Scene {
       });
       // Render the time, score and lives on the canvas
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.05, "center", "Pixelated", 75, "White");
-      CanvasRenderer.writeText(canvas, "Score: 24", canvas.width * 0.15, canvas.height * 0.05, "center", "Pixelated", 75, "White");
-      CanvasRenderer.writeText(canvas, "Lives: X X X", canvas.width * 0.85, canvas.height * 0.05, "center", "Pixelated", 75, "White");
+      CanvasRenderer.writeText(canvas, `Score: ${this.defenderScore}`, canvas.width * 0.15, canvas.height * 0.05, "center", "Pixelated", 75, "White");
+      CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.85, canvas.height * 0.05, "center", "Pixelated", 75, "White");
     }
   }
-}
+  }

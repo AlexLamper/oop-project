@@ -24,7 +24,6 @@ export default class SceneStart extends Scene {
   public processInput(mouseListener: MouseListener): void {
     if (mouseListener.buttonPressed(0)) {
       this.starting = true;
-      console.log("Mouse clicked, starting game...");
     }
   }
 
@@ -40,7 +39,6 @@ export default class SceneStart extends Scene {
    */
   public getNextScene(): Scene | null {
     if (this.starting) {
-      console.log("starting game");
       return new homeScene(this.maxX, this.maxY);
     } else {
       return null;

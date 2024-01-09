@@ -6,6 +6,10 @@ import TerminalScene from "./terminalScene.js";
 import DefenderScene from "./defenderScene.js";
 import VPNScene from "./vpnScene.js";
 import ShoppingScene from "./shoppingScene.js";
+import ScoreManager from "../attributes/totalScore.js";
+
+const scoreManager = ScoreManager.getInstance();
+const totalScore = scoreManager.getTotalScore();
 
 export default class homeScene extends Scene {
   private pcBackground: HTMLImageElement;
@@ -74,7 +78,6 @@ export default class homeScene extends Scene {
   }
 
   private onMailButtonClick(event: MouseEvent): void {
-    console.log("Mail button clicked!");
     if (mailScene.usedMailScene == false) {
       mailScene.usedMailScene = true;
       this.nextScene = new mailScene(this.maxX, this.maxY);
@@ -82,28 +85,22 @@ export default class homeScene extends Scene {
         this.mailButton.style.display = "none"; // Hide the mailButton
         this.mailButtonClicked.style.display = "block"; // Show the mailButtonClicked
       }, 1000);
-
-      console.log("Mail button clicked2222!");
     } else {
       alert("Mail scene already used");
     }
   }
 
   private onDefenderButtonClick(event: MouseEvent): void {
-    console.log("Defender button clicked!");
     this.nextScene = new DefenderScene(this.maxX, this.maxY);
   }
 
   private onTerminalButtonClick(event: MouseEvent): void {
-    console.log("Terminal button clicked!");
     this.nextScene = new TerminalScene(this.maxX, this.maxY);
   }
   private onVpnButtonClick(event: MouseEvent): void {
-    console.log("VPN button clicked!");
     this.nextScene = new VPNScene(this.maxX, this.maxY);
   }
   private onShoppingButtonClick(event: MouseEvent): void {
-    console.log("Shopping button clicked!");
     this.nextScene = new ShoppingScene(this.maxX, this.maxY);
   }
 
