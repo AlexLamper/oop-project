@@ -55,10 +55,10 @@ export default class homeScene extends Scene {
 
     // Add click event listeners to buttons
     this.mailButton.addEventListener("click", this.onMailButtonClick.bind(this));
-    this.defenderButton.addEventListener("click", this.onDefenderButtonClick.bind(this));
-    this.terminalButton.addEventListener("click", this.onTerminalButtonClick.bind(this));
-    this.vpnButton.addEventListener("click", this.onVpnButtonClick.bind(this));
-    this.shoppingButton.addEventListener("click", this.onShoppingButtonClick.bind(this));
+    // this.defenderButton.addEventListener("click", this.onDefenderButtonClick.bind(this));
+    // this.terminalButton.addEventListener("click", this.onTerminalButtonClick.bind(this));
+    // this.vpnButton.addEventListener("click", this.onVpnButtonClick.bind(this));
+    // this.shoppingButton.addEventListener("click", this.onShoppingButtonClick.bind(this));
   }
 
   private createButton(imagePath: string, x: number, y: number, id: string): HTMLButtonElement {

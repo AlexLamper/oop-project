@@ -6,6 +6,7 @@ import winScene from "./winScene.js";
 import Player from "../attributes/player.js";
 import Projectile from "../attributes/projectiles.js";
 import Enemy from "../attributes/enemies.js";
+import homeScene2 from "./homeScene2.js";
 
 import ScoreManager from "../attributes/totalScore.js";
 
@@ -156,7 +157,7 @@ export default class DefenderScene extends Scene {
       return new winScene(this.maxX, this.maxY);
     }
     else if (this.escapeClicked === true) {
-      return new homeScene(this.maxX, this.maxY);
+      return new homeScene2(this.maxX, this.maxY);
    }
     else if (this.lifes <= 0) {
       return new loseScene(this.maxX, this.maxY);
