@@ -74,7 +74,21 @@ export default class DefenderScene extends Scene {
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     document.addEventListener("click", this.handleClick.bind(this));
+    document.addEventListener("keydown", this.handleSpaceKeyDown.bind(this));
+
   }
+
+  // Handle space keydown events
+  private handleSpaceKeyDown(event: KeyboardEvent): void {
+    if (event.key === " ") {
+      event.preventDefault();
+      this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
+      // Add your code here to handle the space keydown event
+    }
+  }
+
+  // Add event listener for space keydown events
+
 
   // Handle keydown events
   private handleKeyDown(event: KeyboardEvent): void {
@@ -235,13 +249,25 @@ export default class DefenderScene extends Scene {
 
     // Update the player's position
     if (this.currentDirection === "ArrowLeft") {
+      if (this.player.x > 0) {
       this.player.moveLeft();
+      }
     } else if (this.currentDirection === "ArrowRight") {
-      this.player.moveRight();
+      if (this.player.x < this.maxX - this.player.width) {
+        this.player.moveRight();
+      }
+
     } else if (this.currentDirection === "ArrowUp") {
-      this.player.moveUp();
-    } else if (this.currentDirection === "ArrowDown") {
-      this.player.moveDown();
+      if (this.player.y > 0) {
+        this.player.moveUp();
+      }
+
+    } else if (this.currentDirection === "ArrowDown") { {
+      if (this.player.y < this.maxY - this.player.height) {
+        this.player.moveDown();
+      }
+    }
+
     }
 
     // Update enemies and check for collision with player
