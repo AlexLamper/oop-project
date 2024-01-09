@@ -26,7 +26,7 @@ export default class DefenderScene extends Scene {
 
   private portals: portal[] = [];
   private escapeClicked: boolean = false;
-  private lifes: number = 3;
+  private lifes: number = 5;
 
   // Amount of time the player has to complete the game in milliseconds
   private timeLimit: number = 150000;
@@ -246,10 +246,10 @@ export default class DefenderScene extends Scene {
 
     // Update enemies and check for collision with player
     const playerBox = {
-      x: this.player.x,
-      y: this.player.y,
-      width: this.player.width,
-      height: this.player.height,
+      x: this.player.x + 12,
+      y: this.player.y + 12,
+      width: this.player.width - 22,
+      height: this.player.height - 22,
     };
 
     this.enemies.forEach((enemy, index) => {
@@ -330,6 +330,7 @@ export default class DefenderScene extends Scene {
           this.portals.splice(j, 1);
           this.projectiles.splice(i, 1);
           // Decrement j to account for the removed portal
+          this.defenderScore += 3;
           j--;
 
           // Handle portal hit logic here (e.g., decrease portal lives)
@@ -415,9 +416,9 @@ export default class DefenderScene extends Scene {
         portal.render(canvas, ctx);
       });
       // Render the time, score and lives on the canvas
-      CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.05, "center", "Pixelated", 75, "White");
-      CanvasRenderer.writeText(canvas, `Score: ${this.defenderScore}`, canvas.width * 0.15, canvas.height * 0.05, "center", "Pixelated", 75, "White");
-      CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.85, canvas.height * 0.05, "center", "Pixelated", 75, "White");
+      CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.07, "center", "Pixelated", 75, "White");
+      CanvasRenderer.writeText(canvas, `Score: ${this.defenderScore}`, canvas.width * 0.15, canvas.height * 0.07, "center", "Pixelated", 75, "White");
+      CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.85, canvas.height * 0.07, "center", "Pixelated", 75, "White");
     }
   }
   }
