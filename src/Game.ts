@@ -188,8 +188,6 @@ export default abstract class Game {
       const stepTime: number = timestamp - now;
       const frameTime: number = now - this.frameEnd;
       this.fps = Math.round(1000 / frameTime);
-      console.log(`FPS: ${this.fps}`);
-      console.log(`targetFrameTime: ${targetFrameTime}`);
       this.load = stepTime / frameTime;
       this.frameEnd = now;
       this.gameTime = now - this.gameStart;
