@@ -319,4 +319,4 @@ export default class DefenderScene extends Scene {
       CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.85, canvas.height * 0.05, "center", "Pixelated", 75, "White");
     }
   }
-  }}
+  }
