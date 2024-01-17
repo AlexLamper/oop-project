@@ -11,6 +11,7 @@ import ScoreManager from "../attributes/totalScore.js";
 const scoreManager = ScoreManager.getInstance();
 const totalScore = scoreManager.getTotalScore();
 
+
 export default class homeScene extends Scene {
   private pcBackground: HTMLImageElement;
   private shoppingCart: HTMLImageElement;
@@ -38,48 +39,22 @@ export default class homeScene extends Scene {
     this.mail = CanvasRenderer.loadNewImage("./assets/mail.png");
     this.vpn = CanvasRenderer.loadNewImage("./assets/vpn.png");
 
-    this.mailButton = this.createButton("./assets/mail.png", 20, 20, "mailButton");
-    this.defenderButton = this.createButton("./assets/defender.png", 140, 20, "defenderButton");
-    this.terminalButton = this.createButton("./assets/terminal.png", 20, 140, "terminalButton");
-    this.vpnButton = this.createButton("./assets/vpn.png", 140, 140, "vpnButton");
-    this.shoppingButton = this.createButton("./assets/shopping-cart.png", 20, 260, "shoppingButton");
-    this.crossButton = this.createButton("./assets/cross.png", 140, 20, "crossButton");
+    // this.mailButton = this.createButton("./assets/mail.png", 20, 20, "mailButton");
+    // this.defenderButton = this.createButton("./assets/defender.png", 140, 20, "defenderButton");
+    // this.terminalButton = this.createButton("./assets/terminal.png", 20, 140, "terminalButton");
+    // this.vpnButton = this.createButton("./assets/vpn.png", 140, 140, "vpnButton");
+    // this.shoppingButton = this.createButton("./assets/shopping-cart.png", 20, 260, "shoppingButton");
+    // this.crossButton = this.createButton("./assets/cross.png", 140, 20, "crossButton");
     // this.mailButtonClicked = this.createButton("./assets/mail-no-notification.png", 20, 20);
 
-    // Append the buttons to the document body or a container element
-    document.body.appendChild(this.mailButton);
-    document.body.appendChild(this.defenderButton);
-    // document.body.appendChild(this.terminalButton);
-    // document.body.appendChild(this.vpnButton);
-    // document.body.appendChild(this.shoppingButton);
-    document.body.appendChild(this.crossButton);
-    // document.body.appendChild(this.mailButtonClicked);
-    // this.mailButtonClicked.style.display = "none"; // Hide the mailButtonClicked
-
     // Add click event listeners to buttons
-    this.mailButton.addEventListener("click", this.onMailButtonClick.bind(this));
+    // this.mailButton.addEventListener("click", this.onMailButtonClick.bind(this));
     // this.defenderButton.addEventListener("click", this.onDefenderButtonClick.bind(this));
     // this.terminalButton.addEventListener("click", this.onTerminalButtonClick.bind(this));
     // this.vpnButton.addEventListener("click", this.onVpnButtonClick.bind(this));
     // this.shoppingButton.addEventListener("click", this.onShoppingButtonClick.bind(this));
   }
 
-  private createButton(imagePath: string, x: number, y: number, id: string): HTMLButtonElement {
-    document.querySelectorAll(`button#${id}`).forEach((button) => {
-      button.remove();
-    });
-    const button = document.createElement("button");
-    button.style.width = "100px";
-    button.style.height = "100px";
-    button.style.position = "absolute";
-    button.style.top = `${y}px`;
-    button.style.left = `${x}px`;
-    button.style.background = `url('${imagePath}') no-repeat center/cover`;
-    button.style.border = "none";
-    button.style.backgroundColor = "transparent"; // Set background color to transparent
-    button.id = id;
-    return button;
-  }
 
   private onMailButtonClick(event: MouseEvent): void {
     if (mailScene.usedMailScene == false) {
@@ -116,6 +91,7 @@ export default class homeScene extends Scene {
    */
   public processInput(mouseListener: MouseListener): void {
     if (mouseListener.buttonPressed(0)) {
+      console.log("Mouse clicked at", mouseListener.getMousePosition());
     }
   }
 
@@ -139,6 +115,32 @@ export default class homeScene extends Scene {
     }
   }
 
+  private renderIcon(
+    canvas: HTMLCanvasElement,
+    icon: HTMLImageElement,
+    x: number,
+    y: number,
+    onClick: () => void
+  ): void {
+    CanvasRenderer.drawImage(canvas, icon, x, y);
+
+    const handleClick = (event: MouseEvent): void => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+      if (
+        mouseX >= x &&
+        mouseX <= x + icon.width &&
+        mouseY >= y &&
+        mouseY <= y + icon.height
+      ) {
+        onClick();
+      }
+    };
+    document.addEventListener("click", handleClick.bind(this));
+  }
+
+  
   /**
    *
    * @param elapsed elapsed ms since last update
@@ -151,5 +153,36 @@ export default class homeScene extends Scene {
    */
   public render(canvas: HTMLCanvasElement): void {
     document.body.style.backgroundImage = `url(${this.pcBackground.src})`;
+
+    this.renderIcon(canvas, this.shoppingCart, 0, 260, () => {
+      console.log("Shopping cart clicked");
+      this.nextScene = new ShoppingScene(this.maxX, this.maxY);
+    });
+    this.renderIcon(canvas, this.defender, 120, 20, () => {
+      console.log("Defender clicked");
+      this.nextScene = new DefenderScene(this.maxX, this.maxY);
+    });
+    this.renderIcon(canvas, this.terminal, 0, 140, () => {
+      console.log("Terminal clicked");
+      return new TerminalScene(this.maxX, this.maxY);
+    });
+    this.renderIcon(canvas, this.mail, 0, 20, () => {
+      console.log("Mail clicked");
+      if (mailScene.usedMailScene == false) {
+        mailScene.usedMailScene = true;
+        this.nextScene = new mailScene(this.maxX, this.maxY);
+        // this.crossButton.remove();
+        // setTimeout(() => {
+        //   this.mailButton.style.display = "none"; // Hide the mailButton
+        //   this.mailButtonClicked.style.display = "block"; // Show the mailButtonClicked
+        // }, 1000);
+      } else {
+        alert("Mail scene already used");
+      }
+    });
+    this.renderIcon(canvas, this.vpn, 120, 140, () => {
+      console.log("VPN clicked");
+      return new VPNScene(this.maxX, this.maxY);
+    });
   }
 }
