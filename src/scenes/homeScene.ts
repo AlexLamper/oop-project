@@ -20,12 +20,14 @@ export default class homeScene extends Scene {
   private mail: HTMLImageElement;
   private vpn: HTMLImageElement;
 
-  private mailButton: HTMLButtonElement;
-  private mailButtonClicked: HTMLButtonElement;
-  private defenderButton: HTMLButtonElement;
-  private terminalButton: HTMLButtonElement;
-  private vpnButton: HTMLButtonElement;
-  private shoppingButton: HTMLButtonElement;
+  private mouseListener: MouseListener;
+
+  // private mailButton: HTMLButtonElement;
+  // private mailButtonClicked: HTMLButtonElement;
+  // private defenderButton: HTMLButtonElement;
+  // private terminalButton: HTMLButtonElement;
+  // private vpnButton: HTMLButtonElement;
+  // private shoppingButton: HTMLButtonElement;
   private nextScene: Scene | null;
   // private usedMailScene: boolean = false;
   private crossButton: HTMLButtonElement;
@@ -90,12 +92,25 @@ export default class homeScene extends Scene {
    * @param mouseListener mouse listener object
    */
   public processInput(mouseListener: MouseListener): void {
-    if (mouseListener.buttonPressed(0)) {
-      console.log("Mouse clicked at", mouseListener.getMousePosition());
+    if (mouseListener.getMousePosition().x > 0 && mouseListener.getMousePosition().x < 100 && mouseListener.getMousePosition().y > 20 && mouseListener.getMousePosition().y < 120) {
+      if (mouseListener.buttonPressed(0)) {
+        if (mailScene.usedMailScene == false) {
+          mailScene.usedMailScene = true;
+          this.nextScene = new mailScene(this.maxX, this.maxY);
+          // this.crossButton.remove();
+          // setTimeout(() => {
+          //   this.mailButton.style.display = "none"; // Hide the mailButton
+          //   this.mailButtonClicked.style.display = "block"; // Show the mailButtonClicked
+          // }, 1000);
+        } else {
+          alert("Mail scene already used");
+        }
+      }
+      console.log("Mouse over mail");
     }
   }
 
-  /**
+  /**5
    *
    * @returns the next scene to be rendered. null if no change
    */
@@ -137,8 +152,10 @@ export default class homeScene extends Scene {
         onClick();
       }
     };
-    document.addEventListener("click", handleClick.bind(this));
+    
+    // document.addEventListener("click", handleClick.bind(this));
   }
+  
 
   
   /**
@@ -168,17 +185,6 @@ export default class homeScene extends Scene {
     });
     this.renderIcon(canvas, this.mail, 0, 20, () => {
       console.log("Mail clicked");
-      if (mailScene.usedMailScene == false) {
-        mailScene.usedMailScene = true;
-        this.nextScene = new mailScene(this.maxX, this.maxY);
-        // this.crossButton.remove();
-        // setTimeout(() => {
-        //   this.mailButton.style.display = "none"; // Hide the mailButton
-        //   this.mailButtonClicked.style.display = "block"; // Show the mailButtonClicked
-        // }, 1000);
-      } else {
-        alert("Mail scene already used");
-      }
     });
     this.renderIcon(canvas, this.vpn, 120, 140, () => {
       console.log("VPN clicked");
