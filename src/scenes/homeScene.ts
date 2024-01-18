@@ -149,10 +149,10 @@ export default class homeScene extends Scene {
   public render(canvas: HTMLCanvasElement): void {
     document.body.style.backgroundImage = `url(${this.pcBackground.src})`;
     CanvasRenderer.clearCanvas(canvas);
-    if (homeScene.shoppingEnabled == true) {
-    this.renderIcon(canvas, this.shoppingCart, 0, 260)
+    if (homeScene.setMailNoNotif) {
+      this.renderIcon(canvas, this.mailNoNotif, 0, 20)
     } else {
-      this.renderIcon(canvas, this.shoppingCartBlocked, 0, 260)
+      this.renderIcon(canvas, this.mail, 0, 20)
     }
     if (homeScene.defenderEnabled == true) {
       this.renderIcon(canvas, this.defender, 120, 20)
@@ -164,15 +164,15 @@ export default class homeScene extends Scene {
     } else {
       this.renderIcon(canvas, this.terminalBlocked, 0, 140)
     }
-    if (homeScene.setMailNoNotif) {
-      this.renderIcon(canvas, this.mailNoNotif, 0, 20)
-    } else {
-      this.renderIcon(canvas, this.mail, 0, 20)
-    }
     if (homeScene.vpnEnabled == true) {
       this.renderIcon(canvas, this.vpn, 120, 140)
     } else {
       this.renderIcon(canvas, this.vpnBlocked, 120, 140)
     }
+    if (homeScene.shoppingEnabled == true) {
+      this.renderIcon(canvas, this.shoppingCart, 0, 260)
+    } else {
+        this.renderIcon(canvas, this.shoppingCartBlocked, 0, 260)
+      }
   }
 }

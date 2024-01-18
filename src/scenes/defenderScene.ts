@@ -175,6 +175,7 @@ export default class DefenderScene extends Scene {
       this.endGame();
       const totalScore = scoreManager.getTotalScore();
       console.log(`Total Score: ${totalScore}`);
+      homeScene.terminalEnabled = true;
       return new winScene(this.maxX, this.maxY);
     }
     else if (this.escapeClicked === true) {
