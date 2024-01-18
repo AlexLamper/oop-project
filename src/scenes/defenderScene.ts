@@ -76,7 +76,6 @@ export default class DefenderScene extends Scene {
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     document.addEventListener("click", this.handleClick.bind(this));
     document.addEventListener("keydown", this.handleSpaceKeyDown.bind(this));
-
   }
 
   // Handle space keydown events
@@ -90,23 +89,18 @@ export default class DefenderScene extends Scene {
 
   // Add event listener for space keydown events
 
-
   // Handle keydown events
   private handleKeyDown(event: KeyboardEvent): void {
     if (this.keyMap.hasOwnProperty(event.key)) {
       event.preventDefault();
       this.keyMap[event.key] = true;
       this.updateDirection();
-    }
-    else if (event.key === "Escape") {
+    } else if (event.key === "Escape") {
       this.escapeClicked = true;
+    } else if (event.key === " ") {
+      this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
     }
-   else if (event.key === " ") {
-    this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
   }
-  }
-
-
 
   // Handle keyup events
   private handleKeyUp(event: KeyboardEvent): void {
@@ -140,8 +134,6 @@ export default class DefenderScene extends Scene {
     }
     return this.player.y;
   }
-
-
 
   // Function to handle the click event
   private handleClick(event: MouseEvent): void {
@@ -177,11 +169,9 @@ export default class DefenderScene extends Scene {
       const totalScore = scoreManager.getTotalScore();
       console.log(`Total Score: ${totalScore}`);
       return new winScene(this.maxX, this.maxY);
-    }
-    else if (this.escapeClicked === true) {
+    } else if (this.escapeClicked === true) {
       return new homeScene2(this.maxX, this.maxY);
-   }
-    else if (this.lifes <= 0) {
+    } else if (this.lifes <= 0) {
       return new loseScene(this.maxX, this.maxY);
     } else return null;
   }
@@ -256,24 +246,22 @@ export default class DefenderScene extends Scene {
     // Update the player's position
     if (this.currentDirection === "ArrowLeft") {
       if (this.player.x > 0) {
-      this.player.moveLeft();
+        this.player.moveLeft();
       }
     } else if (this.currentDirection === "ArrowRight") {
       if (this.player.x < this.maxX - this.player.width) {
         this.player.moveRight();
       }
-
     } else if (this.currentDirection === "ArrowUp") {
       if (this.player.y > 0) {
         this.player.moveUp();
       }
-
-    } else if (this.currentDirection === "ArrowDown") { {
-      if (this.player.y < this.maxY - this.player.height) {
-        this.player.moveDown();
+    } else if (this.currentDirection === "ArrowDown") {
+      {
+        if (this.player.y < this.maxY - this.player.height) {
+          this.player.moveDown();
+        }
       }
-    }
-
     }
 
     // Update enemies and check for collision with player
@@ -286,16 +274,8 @@ export default class DefenderScene extends Scene {
 
     this.enemies.forEach((enemy, index) => {
       enemy.update(playerBox.x, playerBox.y);
-
-      const enemyBox = {
-        x: enemy.x,
-        y: enemy.y,
-        width: enemy.width,
-        height: enemy.height,
-      };
-
       // Check for overlap between player and enemy bounding boxes
-      if (playerBox.x < enemyBox.x + enemyBox.width && playerBox.x + playerBox.width > enemyBox.x && playerBox.y < enemyBox.y + enemyBox.height && playerBox.y + playerBox.height > enemyBox.y) {
+      if (playerBox.x < enemy.x + enemy.width && playerBox.x + playerBox.width > enemy.x && playerBox.y < enemy.y + enemy.height && playerBox.y + playerBox.height > enemy.y) {
         // Collision detected, delete the enemy
         this.enemies.splice(index, 1);
         this.lifes--;
@@ -308,23 +288,8 @@ export default class DefenderScene extends Scene {
       for (let j = 0; j < this.enemies.length; j++) {
         const enemy = this.enemies[j];
 
-        // Calculate bounding box coordinates for projectile and enemy
-        const projectileBox = {
-          x: projectile.x,
-          y: projectile.y,
-          width: projectile.width,
-          height: projectile.height,
-        };
-
-        const enemyBox = {
-          x: enemy.x,
-          y: enemy.y,
-          width: enemy.width,
-          height: enemy.height,
-        };
-
         // Check for overlap between bounding boxes
-        if (projectileBox.x < enemyBox.x + enemyBox.width && projectileBox.x + projectileBox.width > enemyBox.x && projectileBox.y < enemyBox.y + enemyBox.height && projectileBox.y + projectileBox.height > enemyBox.y) {
+        if (projectile.x < enemy.x + enemy.width && projectile.x + projectile.width > enemy.x && projectile.y < enemy.y + enemy.height && projectile.y + projectile.height > enemy.y) {
           // Remove the enemy from the array when hit by the projectile
           this.defenderScore++;
           this.enemies.splice(j, 1);
@@ -341,32 +306,14 @@ export default class DefenderScene extends Scene {
       for (let j = 0; j < this.portals.length; j++) {
         const portal = this.portals[j];
 
-        // Calculate bounding box coordinates for projectile and portal
-        const projectileBox = {
-          x: projectile.x,
-          y: projectile.y,
-          width: projectile.width,
-          height: projectile.height,
-        };
-
-        const portalBox = {
-          x: portal.x,
-          y: portal.y,
-          width: portal.width,
-          height: portal.height,
-        };
-
         // Check for overlap between bounding boxes
-        if (projectileBox.x < portalBox.x + portalBox.width && projectileBox.x + projectileBox.width > portalBox.x && projectileBox.y < portalBox.y + portalBox.height && projectileBox.y + projectileBox.height > portalBox.y) {
+        if (projectile.x < portal.x + portal.width && projectile.x + projectile.width > portal.x && projectile.y < portal.y + portal.height && projectile.y + projectile.height > portal.y) {
           // Remove the portal from the array when hit by the projectile
           this.portals.splice(j, 1);
           this.projectiles.splice(i, 1);
           // Decrement j to account for the removed portal
           this.defenderScore += 3;
           j--;
-
-          // Handle portal hit logic here (e.g., decrease portal lives)
-          portal.hitByProjectile();
         }
       }
     }
@@ -396,7 +343,6 @@ export default class DefenderScene extends Scene {
       this.spawnEnemiesFromSpawnPoint(numberOfEnemies, spawnX, spawnY, 0); // Spawn instantly from portals
     });
   }
-
 
   // Function to spawn enemies from the spawn point
   public spawnEnemiesFromSpawnPoint(numberOfEnemies: number, spawnX: number, spawnY: number, spawnInterval: number): void {
@@ -453,4 +399,4 @@ export default class DefenderScene extends Scene {
       CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.85, canvas.height * 0.07, "center", "Pixelated", 75, "White");
     }
   }
-  }
+}
