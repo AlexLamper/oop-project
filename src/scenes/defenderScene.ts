@@ -8,6 +8,8 @@ import Projectile from "../attributes/projectiles.js";
 import Enemy from "../attributes/enemies.js";
 import homeScene2 from "./homeScene2.js";
 import portal from "../attributes/portals.js";
+import PowerUpItems from "../attributes/PowerUpItems.js";
+import Coin from "../attributes/Coin.js";
 
 import ScoreManager from "../attributes/totalScore.js";
 
@@ -17,35 +19,39 @@ import loseScene from "./loseScene.js";
 
 export default class DefenderScene extends Scene {
   private keyMap: { [key: string]: boolean };
+
   private currentDirection: string | null;
+
   private DefenderBackground: HTMLImageElement;
-  private nextScene: Scene | null;
+
   private player: Player;
-  private projectile: Projectile;
+
   private projectiles: Projectile[] = [];
+
   private enemies: Enemy[] = [];
 
   private portals: portal[] = [];
+
+  private powerUpItems: PowerUpItems[] = [];
+
   private escapeClicked: boolean = false;
+
   private lifes: number = 5;
 
   // Amount of time the player has to complete the game in milliseconds
   private timeLimit: number = 60000;
+
   private defenderScore = 0;
+
+  private timeUntilNextItem: number = 0;
 
   public getCurrentGameScore(): number {
     return this.defenderScore;
   }
 
   private portalSpawnTimer: number = 0;
-  private portalSpawnInterval: number = 6000;
 
   private enemySpawnTimer: number = 0;
-  private enemySpawnInterval: number = 4000;
-
-  // Create spawn point coordinates, width and height for the enemies
-  private spawnPointWidth = 150;
-  private spawnPointHeight = 135;
 
   // Function to calculate the time score
   private timeScoreMinutesandSeconds(): string {
@@ -213,10 +219,10 @@ export default class DefenderScene extends Scene {
 
   private spawnPortal(): void {
     // Calculate random coordinates within the specified range
-    const minX = 50; // Minimum X coordinate
-    const minY = 50; // Minimum Y coordinate
-    const maxX = screen.width - 130; // Maximum X coordinate (screen width - portal width)
-    const maxY = screen.height - 130; // Maximum Y coordinate (screen height - portal height)
+    const minX = 100;
+    const minY = 100;
+    const maxX = window.innerWidth - 100;
+    const maxY = window.innerHeight - 100;
 
     const randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
     const randomY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
@@ -311,6 +317,7 @@ export default class DefenderScene extends Scene {
           // Remove the portal from the array when hit by the projectile
           this.portals.splice(j, 1);
           this.projectiles.splice(i, 1);
+
           // Decrement j to account for the removed portal
           this.defenderScore += 3;
           j--;
@@ -318,29 +325,42 @@ export default class DefenderScene extends Scene {
       }
     }
 
-    // Control portal spawn
+    // Portal spawn
     this.portalSpawnTimer += elapsed;
-    if (this.portalSpawnTimer >= this.portalSpawnInterval + Math.floor(Math.random() * 5000)) {
+    if (this.portalSpawnTimer >= 6000 + Math.floor(Math.random() * 5000)) {
       this.portalSpawnTimer = 0;
       this.portalsSpawn();
     }
 
     this.enemySpawnTimer += elapsed;
-    if (this.enemySpawnTimer >= this.enemySpawnInterval + Math.floor(Math.random() * 3000)) {
+    if (this.enemySpawnTimer >= 4000 + Math.floor(Math.random() * 3000)) {
       this.enemySpawnTimer = 0;
       this.spawnEnemiesFromPortals();
     }
+
+    const randomItemChance = Math.random() * 100;
+    const randomItemInterval = Math.random() * 1000 + 1000;
+    this.timeUntilNextItem += elapsed;
+    if (this.timeUntilNextItem >= randomItemInterval) {
+      this.timeUntilNextItem = 0;
+      if (randomItemChance < 50) {
+        this.powerUpItems.push(new Coin());
+      }
+    }
+    this.powerUpItems.forEach((item) => {
+      if (this.player.collidesWithItem(item) === true) {
+        this.powerUpItems.splice(this.powerUpItems.indexOf(item), 1);
+        this.defenderScore += item.getScore();
+      }
+    });
   }
 
   // Function to spawn enemies from existing portals
   private spawnEnemiesFromPortals(): void {
-    const numberOfEnemies = 1; // Adjust the number of enemies as needed
-
-    // Iterate through each portal and spawn enemies
     this.portals.forEach((portal) => {
       const spawnX = portal.x;
       const spawnY = portal.y;
-      this.spawnEnemiesFromSpawnPoint(numberOfEnemies, spawnX, spawnY, 0); // Spawn instantly from portals
+      this.spawnEnemiesFromSpawnPoint(1, spawnX, spawnY, 0); // Spawn instantly from portals
     });
   }
 
@@ -392,6 +412,10 @@ export default class DefenderScene extends Scene {
 
       this.portals.forEach((portal) => {
         portal.render(canvas, ctx);
+      });
+
+      this.powerUpItems.forEach((powerUpItem) => {
+        powerUpItem.render(canvas);
       });
       // Render the time, score and lives on the canvas
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.07, "center", "Pixelated", 75, "White");

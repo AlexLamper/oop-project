@@ -1,3 +1,5 @@
+import PowerUpItems from "./PowerUpItems.js";
+
 export default class Player {
   x: number;
   y: number;
@@ -38,6 +40,13 @@ export default class Player {
   moveDown(): void {
     this.y += 6;
     this.rotation = 180;
+  }
+
+  public collidesWithItem(item: PowerUpItems): boolean {
+    if (this.y <= item.getPosY() + item.getHeight() && this.y + this.height >= item.getPosY() && this.x + this.width >= item.getPosX() && this.x <= item.getPosX() + item.getWidth()) {
+      return true;
+    }
+    return false;
   }
 
   render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {

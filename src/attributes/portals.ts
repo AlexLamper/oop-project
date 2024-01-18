@@ -14,8 +14,6 @@ export default class Portal {
     this.height = height;
     this.image = new Image();
     this.image.src = imagePath;
-    this.lives = 3;
-    this.isAlive = true;
   }
 
   render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
