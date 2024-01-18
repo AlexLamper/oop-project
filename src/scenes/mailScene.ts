@@ -13,8 +13,12 @@ export default class mailScene extends Scene {
   private canClickAway: boolean = false;
   private nextScene: boolean = false;
   public MailSceneUsed: boolean = false;
-  private homeSceneInstance: homeScene2;
+
+  public static setMailNoNotif: boolean = false;
+
   private HomeScene2Used: boolean = false;
+
+
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -22,7 +26,6 @@ export default class mailScene extends Scene {
     this.newsarticle = CanvasRenderer.loadNewImage("./assets/newsarticle.png");
     this.pcBackgroundDarkened = CanvasRenderer.loadNewImage("./assets/pcbackgrounddarkend.png");
     this.MailSceneUsed = false;
-    this.homeSceneInstance = new homeScene2(maxX, maxY);
   }
 
   /**
@@ -32,15 +35,13 @@ export default class mailScene extends Scene {
    */
   public processInput(mouseListener: MouseListener): void {
     if (mouseListener.buttonPressed(0)) {
+      
     }
   }
 
   public getNextScene(): Scene | null {
     if (this.nextScene) {
-      if (this.HomeScene2Used == false) {
-        this.HomeScene2Used = true;
-      }
-      return this.homeSceneInstance;
+      return new homeScene(this.maxX, this.maxY);
     } else {
       return null;
     }
@@ -58,13 +59,10 @@ export default class mailScene extends Scene {
    */
 
   public render(canvas: HTMLCanvasElement): void {
+    
     if (this.newsarticleUpdated == false) {
-      const mailButton = document.getElementById("mailButton");
-      if (mailButton) {
-        mailButton.remove();
-        console.log("removed");
-      }
       this.newsarticleUpdated = true;
+      mailScene.setMailNoNotif = true;
 
       const image = document.createElement("img");
       setTimeout(() => {
