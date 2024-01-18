@@ -21,7 +21,6 @@ export default class homeScene extends Scene {
   private vpn: HTMLImageElement;
   private nextScene: Scene | null;
   private mailNoNotif: HTMLImageElement;
-  // private usedMailScene: boolean = false;
   public setMailNoNotif: boolean = false;
 
   public constructor(maxX: number, maxY: number) {
