@@ -2,7 +2,6 @@ import CanvasRenderer from "../CanvasRenderer.js";
 import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
-import homeScene2 from "./homeScene2.js";
 
 export default class mailScene extends Scene {
   public static usedMailScene: boolean = false;
@@ -35,7 +34,7 @@ export default class mailScene extends Scene {
    */
   public processInput(mouseListener: MouseListener): void {
     if (mouseListener.buttonPressed(0)) {
-      
+
     }
   }
 
@@ -59,7 +58,7 @@ export default class mailScene extends Scene {
    */
 
   public render(canvas: HTMLCanvasElement): void {
-    
+
     if (this.newsarticleUpdated == false) {
       this.newsarticleUpdated = true;
       mailScene.setMailNoNotif = true;
