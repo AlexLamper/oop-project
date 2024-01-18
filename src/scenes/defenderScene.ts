@@ -9,7 +9,8 @@ import Enemy from "../attributes/enemies.js";
 import homeScene2 from "./homeScene2.js";
 import portal from "../attributes/portals.js";
 import PowerUpItems from "../attributes/PowerUpItems.js";
-import Coin from "../attributes/Coin.js";
+import Coin from "../attributes/powerup/Coin.js";
+import Turbo from "../attributes/powerup/Turbo.js";
 
 import ScoreManager from "../attributes/totalScore.js";
 
@@ -38,10 +39,13 @@ export default class DefenderScene extends Scene {
 
   private lifes: number = 5;
 
-  // Amount of time the player has to complete the game in milliseconds
   private timeLimit: number = 60000;
 
   private defenderScore = 0;
+
+  private turboActive: boolean = false;
+
+  private turboTimer: number = 0;
 
   private timeUntilNextItem: number = 0;
 
@@ -74,7 +78,7 @@ export default class DefenderScene extends Scene {
     };
     this.currentDirection = null;
 
-    this.DefenderBackground = CanvasRenderer.loadNewImage("./assets/test-defender-background.png");
+    this.DefenderBackground = CanvasRenderer.loadNewImage("./assets/background-defender-final.png");
     this.player = new Player(maxX / 2, maxY / 2, 100, 100, "./assets/player.png");
 
     // Add event listener for keydown events
@@ -245,6 +249,7 @@ export default class DefenderScene extends Scene {
       this.getNextScene();
     }
 
+    console.log(this.turboTimer);
     this.projectiles.forEach((projectile) => {
       projectile.update();
     });
@@ -252,20 +257,36 @@ export default class DefenderScene extends Scene {
     // Update the player's position
     if (this.currentDirection === "ArrowLeft") {
       if (this.player.x > 0) {
-        this.player.moveLeft();
+        if (this.turboActive === true) {
+          this.player.turboMoveLeft();
+        } else {
+          this.player.moveLeft();
+        }
       }
     } else if (this.currentDirection === "ArrowRight") {
       if (this.player.x < this.maxX - this.player.width) {
-        this.player.moveRight();
+        if (this.turboActive === true) {
+          this.player.turboMoveRight();
+        } else {
+          this.player.moveRight();
+        }
       }
     } else if (this.currentDirection === "ArrowUp") {
       if (this.player.y > 0) {
-        this.player.moveUp();
+        if (this.turboActive === true) {
+          this.player.turboMoveUp();
+        } else {
+          this.player.moveUp();
+        }
       }
     } else if (this.currentDirection === "ArrowDown") {
       {
         if (this.player.y < this.maxY - this.player.height) {
-          this.player.moveDown();
+          if (this.turboActive === true) {
+            this.player.turboMoveDown();
+          } else {
+            this.player.moveDown();
+          }
         }
       }
     }
@@ -338,6 +359,7 @@ export default class DefenderScene extends Scene {
       this.spawnEnemiesFromPortals();
     }
 
+    // Power up items spawn timer
     const randomItemChance = Math.random() * 100;
     const randomItemInterval = Math.random() * 1000 + 1000;
     this.timeUntilNextItem += elapsed;
@@ -345,14 +367,30 @@ export default class DefenderScene extends Scene {
       this.timeUntilNextItem = 0;
       if (randomItemChance < 50) {
         this.powerUpItems.push(new Coin());
-      }
+      } else this.powerUpItems.push(new Turbo());
     }
+
+    //power up collision detection
     this.powerUpItems.forEach((item) => {
       if (this.player.collidesWithItem(item) === true) {
+        if (item instanceof Coin) {
+          this.defenderScore += item.getScore();
+        }
+        if (item instanceof Turbo) {
+          this.turboActive = true;
+          this.turboTimer += 5000;
+        }
         this.powerUpItems.splice(this.powerUpItems.indexOf(item), 1);
-        this.defenderScore += item.getScore();
       }
     });
+
+    if (this.turboTimer > 0) {
+      this.turboTimer -= elapsed;
+    }
+    if (this.turboTimer <= 0) {
+      this.turboActive = false;
+      this.turboTimer = 0;
+    }
   }
 
   // Function to spawn enemies from existing portals

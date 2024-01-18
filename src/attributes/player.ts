@@ -1,14 +1,16 @@
 import PowerUpItems from "./PowerUpItems.js";
+import Turbo from "./powerup/Turbo.js";
 
 export default class Player {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  image: HTMLImageElement;
-  rotation: number;
+  private turbo: Turbo;
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public image: HTMLImageElement;
+  public rotation: number;
 
-  constructor(x: number, y: number, width: number, height: number, imagePath: string) {
+  public constructor(x: number, y: number, width: number, height: number, imagePath: string) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -22,23 +24,43 @@ export default class Player {
   }
 
   // Move Functions For The Player
-  moveLeft(): void {
+  public moveLeft(): void {
     this.x -= 6;
     this.rotation = -90;
   }
 
-  moveRight(): void {
+  public moveRight(): void {
     this.x += 6;
     this.rotation = 90;
   }
 
-  moveUp(): void {
+  public moveUp(): void {
     this.y -= 6;
     this.rotation = 0;
   }
 
-  moveDown(): void {
+  public moveDown(): void {
     this.y += 6;
+    this.rotation = 180;
+  }
+
+  public turboMoveLeft(): void {
+    this.x -= 12;
+    this.rotation = -90;
+  }
+
+  public turboMoveRight(): void {
+    this.x += 12;
+    this.rotation = 90;
+  }
+
+  public turboMoveUp(): void {
+    this.y -= 12;
+    this.rotation = 0;
+  }
+
+  public turboMoveDown(): void {
+    this.y += 12;
     this.rotation = 180;
   }
 
@@ -49,7 +71,7 @@ export default class Player {
     return false;
   }
 
-  render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
+  public render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
     ctx.save();
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
     ctx.rotate((this.rotation * Math.PI) / 180);

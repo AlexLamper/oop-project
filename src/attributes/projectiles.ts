@@ -1,12 +1,12 @@
 export default class Projectile {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  image: HTMLImageElement;
-  rotation: number;
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public image: HTMLImageElement;
+  public rotation: number;
 
-  constructor(x: number, y: number, width: number, height: number, imagePath: string, rotation: number) {
+  public constructor(x: number, y: number, width: number, height: number, imagePath: string, rotation: number) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -15,20 +15,20 @@ export default class Projectile {
     this.image.src = imagePath;
     this.rotation = rotation;
   }
-  bulletLeft(): void {
+  private bulletLeft(): void {
     this.x -= 10;
   }
-  bulletRight(): void {
+  private bulletRight(): void {
     this.x += 10;
   }
-  bulletUp(): void {
+  private bulletUp(): void {
     this.y -= 10;
   }
-  bulletDown(): void {
+  private bulletDown(): void {
     this.y += 10;
   }
 
-  update(): void {
+  public update(): void {
     if (this.rotation === 90) {
       this.bulletRight();
     } else if (this.rotation === 180) {
@@ -39,7 +39,7 @@ export default class Projectile {
       this.bulletUp();
     }
   }
-  render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
+  public render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
     ctx.save();
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
     ctx.rotate((this.rotation * Math.PI) / 180);

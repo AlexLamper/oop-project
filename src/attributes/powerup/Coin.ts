@@ -1,5 +1,5 @@
-import CanvasRenderer from "../CanvasRenderer.js";
-import PowerUpItems from "./PowerUpItems.js";
+import CanvasRenderer from "../../CanvasRenderer.js";
+import PowerUpItems from "../PowerUpItems.js";
 
 export default class Coin extends PowerUpItems {
   public constructor() {
