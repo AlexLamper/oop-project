@@ -4,7 +4,7 @@ import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
 
 export default class mailScene extends Scene {
-  public static usedMailScene: boolean = false;
+  // public static usedMailScene: boolean = false;
   private mailBackground: HTMLImageElement;
   private newsarticle: HTMLImageElement;
   private newsarticleUpdated: boolean = false;
@@ -13,9 +13,9 @@ export default class mailScene extends Scene {
   private nextScene: boolean = false;
   public MailSceneUsed: boolean = false;
 
-  public static setMailNoNotif: boolean = false;
+  // public static setMailNoNotif: boolean = false;
 
-  private HomeScene2Used: boolean = false;
+  // public static defenderEnabled: boolean =false;
 
 
 
@@ -40,6 +40,7 @@ export default class mailScene extends Scene {
 
   public getNextScene(): Scene | null {
     if (this.nextScene) {
+      homeScene.defenderEnabled = true;
       return new homeScene(this.maxX, this.maxY);
     } else {
       return null;
@@ -61,7 +62,7 @@ export default class mailScene extends Scene {
 
     if (this.newsarticleUpdated == false) {
       this.newsarticleUpdated = true;
-      mailScene.setMailNoNotif = true;
+      homeScene.setMailNoNotif = true;
 
       const image = document.createElement("img");
       setTimeout(() => {
@@ -93,7 +94,7 @@ export default class mailScene extends Scene {
         this.canClickAway = false;
         setTimeout(() => {
           this.canClickAway = true;
-        }, 5000);
+        }, 2000);
 
         document.addEventListener("click", () => {
           if (this.canClickAway == true) {
