@@ -65,6 +65,10 @@ export default class DefenderScene extends Scene {
       ArrowRight: false,
       ArrowUp: false,
       ArrowDown: false,
+      KeyA: false,
+      KeyS: false,
+      KeyD: false,
+      KeyW: false,
     };
     this.currentDirection = null;
 
@@ -90,29 +94,24 @@ export default class DefenderScene extends Scene {
 
   // Add event listener for space keydown events
 
-
   // Handle keydown events
   private handleKeyDown(event: KeyboardEvent): void {
-    if (this.keyMap.hasOwnProperty(event.key)) {
+    if (this.keyMap.hasOwnProperty(event.code)) {
       event.preventDefault();
-      this.keyMap[event.key] = true;
+      this.keyMap[event.code] = true;
       this.updateDirection();
-    }
-    else if (event.key === "Escape") {
+    } else if (event.key === "Escape") {
       this.escapeClicked = true;
+    } else if (event.key === " ") {
+      this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
     }
-   else if (event.key === " ") {
-    this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
   }
-  }
-
-
 
   // Handle keyup events
   private handleKeyUp(event: KeyboardEvent): void {
-    if (this.keyMap.hasOwnProperty(event.key)) {
+    if (this.keyMap.hasOwnProperty(event.code)) {
       event.preventDefault();
-      this.keyMap[event.key] = false;
+      this.keyMap[event.code] = false;
       this.updateDirection();
     }
   }
@@ -149,13 +148,17 @@ export default class DefenderScene extends Scene {
   }
 
   // Function to update the direction of the player
+  // Function to update the direction of the player
   private updateDirection(): void {
+    console.log("Current direction:", this.currentDirection);
     const keys = Object.keys(this.keyMap).filter((key) => this.keyMap[key]);
-    if (keys.length === 0) {
-      this.currentDirection = null;
-    } else {
-      this.currentDirection = keys[0];
-    }
+
+    // Prioritize WASD keys over arrow keys
+    const prioritizedKeys = ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
+
+    const firstMatchingKey = prioritizedKeys.find((key) => keys.includes(key));
+
+    this.currentDirection = firstMatchingKey || null;
   }
 
   /**
@@ -253,27 +256,24 @@ export default class DefenderScene extends Scene {
       projectile.update();
     });
 
+
     // Update the player's position
-    if (this.currentDirection === "ArrowLeft") {
+    if (this.currentDirection === "ArrowLeft" || this.currentDirection === "KeyA") {
       if (this.player.x > 0) {
-      this.player.moveLeft();
+        this.player.moveLeft();
       }
-    } else if (this.currentDirection === "ArrowRight") {
+    } else if (this.currentDirection === "ArrowRight" || this.currentDirection === "KeyD") {
       if (this.player.x < this.maxX - this.player.width) {
         this.player.moveRight();
       }
-
-    } else if (this.currentDirection === "ArrowUp") {
+    } else if (this.currentDirection === "ArrowUp" || this.currentDirection === "KeyW") {
       if (this.player.y > 0) {
         this.player.moveUp();
       }
-
-    } else if (this.currentDirection === "ArrowDown") { {
+    } else if (this.currentDirection === "ArrowDown" || this.currentDirection === "KeyS") {
       if (this.player.y < this.maxY - this.player.height) {
         this.player.moveDown();
       }
-    }
-
     }
 
     // Update enemies and check for collision with player
