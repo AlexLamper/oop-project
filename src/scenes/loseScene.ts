@@ -2,7 +2,6 @@ import CanvasRenderer from "../CanvasRenderer.js";
 import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
-import homeScene2 from "./homeScene2.js";
 
 export default class winScene extends Scene {
   private loseBackground: HTMLImageElement;
@@ -27,7 +26,7 @@ export default class winScene extends Scene {
 
   public getNextScene(): Scene | null {
     if (this.clickNext === true) {
-      return new homeScene2(this.maxX, this.maxY);
+      return new homeScene(this.maxX, this.maxY);
     }
     return null;
   }

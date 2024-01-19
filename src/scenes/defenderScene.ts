@@ -6,7 +6,6 @@ import winScene from "./winScene.js";
 import Player from "../attributes/player.js";
 import Projectile from "../attributes/projectiles.js";
 import Enemy from "../attributes/enemies.js";
-import homeScene2 from "./homeScene2.js";
 import portal from "../attributes/portals.js";
 import PowerUpItems from "../attributes/PowerUpItems.js";
 import Coin from "../attributes/powerup/Coin.js";
@@ -75,6 +74,10 @@ export default class DefenderScene extends Scene {
       ArrowRight: false,
       ArrowUp: false,
       ArrowDown: false,
+      KeyA: false,
+      KeyS: false,
+      KeyD: false,
+      KeyW: false,
     };
     this.currentDirection = null;
 
@@ -101,9 +104,9 @@ export default class DefenderScene extends Scene {
 
   // Handle keydown events
   private handleKeyDown(event: KeyboardEvent): void {
-    if (this.keyMap.hasOwnProperty(event.key)) {
+    if (this.keyMap.hasOwnProperty(event.code)) {
       event.preventDefault();
-      this.keyMap[event.key] = true;
+      this.keyMap[event.code] = true;
       this.updateDirection();
     } else if (event.key === "Escape") {
       this.escapeClicked = true;
@@ -114,9 +117,9 @@ export default class DefenderScene extends Scene {
 
   // Handle keyup events
   private handleKeyUp(event: KeyboardEvent): void {
-    if (this.keyMap.hasOwnProperty(event.key)) {
+    if (this.keyMap.hasOwnProperty(event.code)) {
       event.preventDefault();
-      this.keyMap[event.key] = false;
+      this.keyMap[event.code] = false;
       this.updateDirection();
     }
   }
@@ -151,13 +154,17 @@ export default class DefenderScene extends Scene {
   }
 
   // Function to update the direction of the player
+  // Function to update the direction of the player
   private updateDirection(): void {
+    console.log("Current direction:", this.currentDirection);
     const keys = Object.keys(this.keyMap).filter((key) => this.keyMap[key]);
-    if (keys.length === 0) {
-      this.currentDirection = null;
-    } else {
-      this.currentDirection = keys[0];
-    }
+
+    // Prioritize WASD keys over arrow keys
+    const prioritizedKeys = ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
+
+    const firstMatchingKey = prioritizedKeys.find((key) => keys.includes(key));
+
+    this.currentDirection = firstMatchingKey || null;
   }
 
   /**
@@ -178,10 +185,13 @@ export default class DefenderScene extends Scene {
       this.endGame();
       const totalScore = scoreManager.getTotalScore();
       console.log(`Total Score: ${totalScore}`);
+      homeScene.terminalEnabled = true;
       return new winScene(this.maxX, this.maxY);
-    } else if (this.escapeClicked === true) {
-      return new homeScene2(this.maxX, this.maxY);
-    } else if (this.lifes <= 0) {
+    }
+    else if (this.escapeClicked === true) {
+      return new homeScene(this.maxX, this.maxY);
+   }
+    else if (this.lifes <= 0) {
       return new loseScene(this.maxX, this.maxY);
     } else return null;
   }
@@ -254,16 +264,19 @@ export default class DefenderScene extends Scene {
       projectile.update();
     });
 
+
     // Update the player's position
-    if (this.currentDirection === "ArrowLeft") {
+    if (this.currentDirection === "ArrowLeft" || this.currentDirection === "KeyA") {
       if (this.player.x > 0) {
+
         if (this.turboActive === true) {
           this.player.turboMoveLeft();
         } else {
           this.player.moveLeft();
         }
+
       }
-    } else if (this.currentDirection === "ArrowRight") {
+    } else if (this.currentDirection === "ArrowRight" || this.currentDirection === "KeyD") {
       if (this.player.x < this.maxX - this.player.width) {
         if (this.turboActive === true) {
           this.player.turboMoveRight();
@@ -271,7 +284,7 @@ export default class DefenderScene extends Scene {
           this.player.moveRight();
         }
       }
-    } else if (this.currentDirection === "ArrowUp") {
+    } else if (this.currentDirection === "ArrowUp" || this.currentDirection === "KeyW") {
       if (this.player.y > 0) {
         if (this.turboActive === true) {
           this.player.turboMoveUp();
@@ -279,7 +292,8 @@ export default class DefenderScene extends Scene {
           this.player.moveUp();
         }
       }
-    } else if (this.currentDirection === "ArrowDown") {
+    } else if (this.currentDirection === "ArrowDown" || this.currentDirection === "KeyS") {
+      if (this.player.y < this.maxY - this.player.height) {
       {
         if (this.player.y < this.maxY - this.player.height) {
           if (this.turboActive === true) {
@@ -288,6 +302,7 @@ export default class DefenderScene extends Scene {
             this.player.moveDown();
           }
         }
+
       }
     }
 

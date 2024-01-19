@@ -11,6 +11,7 @@ import ScoreManager from "../attributes/totalScore.js";
 const scoreManager = ScoreManager.getInstance();
 const totalScore = scoreManager.getTotalScore();
 
+
 export default class homeScene extends Scene {
   private pcBackground: HTMLImageElement;
   private shoppingCart: HTMLImageElement;
@@ -18,16 +19,28 @@ export default class homeScene extends Scene {
   private terminal: HTMLImageElement;
   private mail: HTMLImageElement;
   private vpn: HTMLImageElement;
-
-  private mailButton: HTMLButtonElement;
-  private mailButtonClicked: HTMLButtonElement;
-  private defenderButton: HTMLButtonElement;
-  private terminalButton: HTMLButtonElement;
-  private vpnButton: HTMLButtonElement;
-  private shoppingButton: HTMLButtonElement;
   private nextScene: Scene | null;
-  // private usedMailScene: boolean = false;
-  private crossButton: HTMLButtonElement;
+  private mailNoNotif: HTMLImageElement;
+
+  private shoppingCartBlocked: HTMLImageElement;
+  private defenderBlocked: HTMLImageElement;
+  private terminalBlocked: HTMLImageElement;
+  private mailBlocked: HTMLImageElement;
+  private vpnBlocked: HTMLImageElement;
+
+
+  public static setMailNoNotif: boolean = false;
+
+  public static mailSceneEnabled: boolean = true;
+
+  public static defenderEnabled: boolean = false;
+
+  public static terminalEnabled: boolean = false;
+
+  public static vpnEnabled: boolean = false;
+
+  public static shoppingEnabled: boolean = false;
+
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -37,76 +50,13 @@ export default class homeScene extends Scene {
     this.terminal = CanvasRenderer.loadNewImage("./assets/terminal.png");
     this.mail = CanvasRenderer.loadNewImage("./assets/mail.png");
     this.vpn = CanvasRenderer.loadNewImage("./assets/vpn.png");
+    this.mailNoNotif = CanvasRenderer.loadNewImage("./assets/mail-no-notification.png");
 
-    this.mailButton = this.createButton("./assets/mail.png", 20, 20, "mailButton");
-    this.defenderButton = this.createButton("./assets/defender.png", 140, 20, "defenderButton");
-    this.terminalButton = this.createButton("./assets/terminal.png", 20, 140, "terminalButton");
-    this.vpnButton = this.createButton("./assets/vpn.png", 140, 140, "vpnButton");
-    this.shoppingButton = this.createButton("./assets/shopping-cart.png", 20, 260, "shoppingButton");
-    this.crossButton = this.createButton("./assets/cross.png", 140, 20, "crossButton");
-    // this.mailButtonClicked = this.createButton("./assets/mail-no-notification.png", 20, 20);
-
-    // Append the buttons to the document body or a container element
-    document.body.appendChild(this.mailButton);
-    document.body.appendChild(this.defenderButton);
-    // document.body.appendChild(this.terminalButton);
-    // document.body.appendChild(this.vpnButton);
-    // document.body.appendChild(this.shoppingButton);
-    document.body.appendChild(this.crossButton);
-    // document.body.appendChild(this.mailButtonClicked);
-    // this.mailButtonClicked.style.display = "none"; // Hide the mailButtonClicked
-
-    // Add click event listeners to buttons
-    this.mailButton.addEventListener("click", this.onMailButtonClick.bind(this));
-    // this.defenderButton.addEventListener("click", this.onDefenderButtonClick.bind(this));
-    // this.terminalButton.addEventListener("click", this.onTerminalButtonClick.bind(this));
-    // this.vpnButton.addEventListener("click", this.onVpnButtonClick.bind(this));
-    // this.shoppingButton.addEventListener("click", this.onShoppingButtonClick.bind(this));
-  }
-
-  private createButton(imagePath: string, x: number, y: number, id: string): HTMLButtonElement {
-    document.querySelectorAll(`button#${id}`).forEach((button) => {
-      button.remove();
-    });
-    const button = document.createElement("button");
-    button.style.width = "100px";
-    button.style.height = "100px";
-    button.style.position = "absolute";
-    button.style.top = `${y}px`;
-    button.style.left = `${x}px`;
-    button.style.background = `url('${imagePath}') no-repeat center/cover`;
-    button.style.border = "none";
-    button.style.backgroundColor = "transparent"; // Set background color to transparent
-    button.id = id;
-    return button;
-  }
-
-  private onMailButtonClick(event: MouseEvent): void {
-    if (mailScene.usedMailScene == false) {
-      mailScene.usedMailScene = true;
-      this.nextScene = new mailScene(this.maxX, this.maxY);
-      this.crossButton.remove();
-      // setTimeout(() => {
-      //   this.mailButton.style.display = "none"; // Hide the mailButton
-      //   this.mailButtonClicked.style.display = "block"; // Show the mailButtonClicked
-      // }, 1000);
-    } else {
-      alert("Mail scene already used");
-    }
-  }
-
-  private onDefenderButtonClick(event: MouseEvent): void {
-    this.nextScene = new DefenderScene(this.maxX, this.maxY);
-  }
-
-  private onTerminalButtonClick(event: MouseEvent): void {
-    this.nextScene = new TerminalScene(this.maxX, this.maxY);
-  }
-  private onVpnButtonClick(event: MouseEvent): void {
-    this.nextScene = new VPNScene(this.maxX, this.maxY);
-  }
-  private onShoppingButtonClick(event: MouseEvent): void {
-    this.nextScene = new ShoppingScene(this.maxX, this.maxY);
+    this.shoppingCartBlocked = CanvasRenderer.loadNewImage("./assets/blockedIcon/shopping-cart.png");
+    this.defenderBlocked = CanvasRenderer.loadNewImage("./assets/blockedIcon/defender.png");
+    this.terminalBlocked = CanvasRenderer.loadNewImage("./assets/blockedIcon/terminal.png");
+    this.mailBlocked = CanvasRenderer.loadNewImage("./assets/blockedIcon/mail.png");
+    this.vpnBlocked = CanvasRenderer.loadNewImage("./assets/blockedIcon/vpn.png");
   }
 
   /**
@@ -115,11 +65,49 @@ export default class homeScene extends Scene {
    * @param mouseListener mouse listener object
    */
   public processInput(mouseListener: MouseListener): void {
-    if (mouseListener.buttonPressed(0)) {
+    if (mouseListener.getMousePosition().x > 0 && mouseListener.getMousePosition().x < 100 && mouseListener.getMousePosition().y > 20 && mouseListener.getMousePosition().y < 120) {
+      if (mouseListener.buttonPressed(0)) {
+        if (homeScene.mailSceneEnabled == true) {
+          homeScene.mailSceneEnabled = false;
+          this.nextScene = new mailScene(this.maxX, this.maxY);
+        } else {
+          alert("Mail scene already used");
+        }
+      }
+    }
+    if (mouseListener.getMousePosition().x > 120 && mouseListener.getMousePosition().x < 220 && mouseListener.getMousePosition().y > 20 && mouseListener.getMousePosition().y < 120) {
+      if (mouseListener.buttonPressed(0)) {
+      if (homeScene.defenderEnabled == true) {
+          this.nextScene = new DefenderScene(this.maxX, this.maxY);
+        } else {
+        }
+      }
+    }
+    if (mouseListener.getMousePosition().x > 0 && mouseListener.getMousePosition().x < 100 && mouseListener.getMousePosition().y > 140 && mouseListener.getMousePosition().y < 240) {
+      if (mouseListener.buttonPressed(0)) {
+          if (homeScene.terminalEnabled == true) {
+              this.nextScene = new TerminalScene(this.maxX, this.maxY);
+            } else {
+            }
+        }
+    }
+    if (mouseListener.getMousePosition().x > 120 && mouseListener.getMousePosition().x < 220 && mouseListener.getMousePosition().y > 140 && mouseListener.getMousePosition().y < 240) {
+      if (mouseListener.buttonPressed(0)) {
+        if (homeScene.vpnEnabled == true) {
+          this.nextScene = new VPNScene(this.maxX, this.maxY);
+        } else {
+        }      }
+    }
+    if (mouseListener.getMousePosition().x > 0 && mouseListener.getMousePosition().x < 100 && mouseListener.getMousePosition().y > 260 && mouseListener.getMousePosition().y < 360) {
+      if (mouseListener.buttonPressed(0)) {
+        if (homeScene.shoppingEnabled == true) {
+          this.nextScene = new ShoppingScene(this.maxX, this.maxY);
+        } else {
+        }      }
     }
   }
 
-  /**
+  /**5
    *
    * @returns the next scene to be rendered. null if no change
    */
@@ -139,6 +127,15 @@ export default class homeScene extends Scene {
     }
   }
 
+  public renderIcon(
+    canvas: HTMLCanvasElement,
+    icon: HTMLImageElement,
+    x: number,
+    y: number,
+  ): void {
+    CanvasRenderer.drawImage(canvas, icon, x, y);
+    }
+
   /**
    *
    * @param elapsed elapsed ms since last update
@@ -151,5 +148,31 @@ export default class homeScene extends Scene {
    */
   public render(canvas: HTMLCanvasElement): void {
     document.body.style.backgroundImage = `url(${this.pcBackground.src})`;
+    CanvasRenderer.clearCanvas(canvas);
+    if (homeScene.setMailNoNotif) {
+      this.renderIcon(canvas, this.mailNoNotif, 0, 20)
+    } else {
+      this.renderIcon(canvas, this.mail, 0, 20)
+    }
+    if (homeScene.defenderEnabled == true) {
+      this.renderIcon(canvas, this.defender, 120, 20)
+    } else {
+      this.renderIcon(canvas, this.defenderBlocked, 120, 20)
+    }
+    if (homeScene.terminalEnabled == true) {
+      this.renderIcon(canvas, this.terminal, 0, 140)
+    } else {
+      this.renderIcon(canvas, this.terminalBlocked, 0, 140)
+    }
+    if (homeScene.vpnEnabled == true) {
+      this.renderIcon(canvas, this.vpn, 120, 140)
+    } else {
+      this.renderIcon(canvas, this.vpnBlocked, 120, 140)
+    }
+    if (homeScene.shoppingEnabled == true) {
+      this.renderIcon(canvas, this.shoppingCart, 0, 260)
+    } else {
+        this.renderIcon(canvas, this.shoppingCartBlocked, 0, 260)
+      }
   }
 }
