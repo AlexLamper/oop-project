@@ -299,107 +299,106 @@ export default class DefenderScene extends Scene {
           }
         }
       }
+    }
+    // Update enemies and check for collision with player
+    const playerBox = {
+      x: this.player.x + 12,
+      y: this.player.y + 12,
+      width: this.player.width - 22,
+      height: this.player.height - 22,
+    };
 
-      // Update enemies and check for collision with player
-      const playerBox = {
-        x: this.player.x + 12,
-        y: this.player.y + 12,
-        width: this.player.width - 22,
-        height: this.player.height - 22,
-      };
-
-      this.enemies.forEach((enemy, index) => {
-        enemy.update(playerBox.x, playerBox.y);
-        // Check for overlap between player and enemy bounding boxes
-        if (playerBox.x < enemy.x + enemy.width && playerBox.x + playerBox.width > enemy.x && playerBox.y < enemy.y + enemy.height && playerBox.y + playerBox.height > enemy.y) {
-          // Collision detected, delete the enemy
-          this.enemies.splice(index, 1);
-          this.lifes--;
-        }
-      });
-
-      // Collision detection between projectiles and enemies
-      for (let i = 0; i < this.projectiles.length; i++) {
-        const projectile = this.projectiles[i];
-        for (let j = 0; j < this.enemies.length; j++) {
-          const enemy = this.enemies[j];
-
-          // Check for overlap between bounding boxes
-          if (projectile.x < enemy.x + enemy.width && projectile.x + projectile.width > enemy.x && projectile.y < enemy.y + enemy.height && projectile.y + projectile.height > enemy.y) {
-            // Remove the enemy from the array when hit by the projectile
-            this.defenderScore++;
-            this.enemies.splice(j, 1);
-            this.projectiles.splice(i, 1);
-            // Decrement j to account for the removed enemy
-            j--;
-          }
-        }
+    this.enemies.forEach((enemy, index) => {
+      enemy.update(playerBox.x, playerBox.y);
+      // Check for overlap between player and enemy bounding boxes
+      if (playerBox.x < enemy.x + enemy.width && playerBox.x + playerBox.width > enemy.x && playerBox.y < enemy.y + enemy.height && playerBox.y + playerBox.height > enemy.y) {
+        // Collision detected, delete the enemy
+        this.enemies.splice(index, 1);
+        this.lifes--;
       }
+    });
 
-      // Collision detection between projectiles and portals
-      for (let i = 0; i < this.projectiles.length; i++) {
-        const projectile = this.projectiles[i];
-        for (let j = 0; j < this.portals.length; j++) {
-          const portal = this.portals[j];
+    // Collision detection between projectiles and enemies
+    for (let i = 0; i < this.projectiles.length; i++) {
+      const projectile = this.projectiles[i];
+      for (let j = 0; j < this.enemies.length; j++) {
+        const enemy = this.enemies[j];
 
-          // Check for overlap between bounding boxes
-          if (projectile.x < portal.x + portal.width && projectile.x + projectile.width > portal.x && projectile.y < portal.y + portal.height && projectile.y + projectile.height > portal.y) {
-            // Remove the portal from the array when hit by the projectile
-            this.portals.splice(j, 1);
-            this.projectiles.splice(i, 1);
-
-            // Decrement j to account for the removed portal
-            this.defenderScore += 3;
-            j--;
-          }
+        // Check for overlap between bounding boxes
+        if (projectile.x < enemy.x + enemy.width && projectile.x + projectile.width > enemy.x && projectile.y < enemy.y + enemy.height && projectile.y + projectile.height > enemy.y) {
+          // Remove the enemy from the array when hit by the projectile
+          this.defenderScore++;
+          this.enemies.splice(j, 1);
+          this.projectiles.splice(i, 1);
+          // Decrement j to account for the removed enemy
+          j--;
         }
       }
+    }
 
-      // Portal spawn
-      this.portalSpawnTimer += elapsed;
-      if (this.portalSpawnTimer >= 6000 + Math.floor(Math.random() * 5000)) {
-        this.portalSpawnTimer = 0;
-        this.portalsSpawn();
-      }
+    // Collision detection between projectiles and portals
+    for (let i = 0; i < this.projectiles.length; i++) {
+      const projectile = this.projectiles[i];
+      for (let j = 0; j < this.portals.length; j++) {
+        const portal = this.portals[j];
 
-      this.enemySpawnTimer += elapsed;
-      if (this.enemySpawnTimer >= 4000 + Math.floor(Math.random() * 3000)) {
-        this.enemySpawnTimer = 0;
-        this.spawnEnemiesFromPortals();
-      }
+        // Check for overlap between bounding boxes
+        if (projectile.x < portal.x + portal.width && projectile.x + projectile.width > portal.x && projectile.y < portal.y + portal.height && projectile.y + projectile.height > portal.y) {
+          // Remove the portal from the array when hit by the projectile
+          this.portals.splice(j, 1);
+          this.projectiles.splice(i, 1);
 
-      // Power up items spawn timer
-      const randomItemChance = Math.random() * 100;
-      const randomItemInterval = Math.random() * 1000 + 1000;
-      this.timeUntilNextItem += elapsed;
-      if (this.timeUntilNextItem >= randomItemInterval) {
-        this.timeUntilNextItem = 0;
-        if (randomItemChance < 50) {
-          this.powerUpItems.push(new Coin());
-        } else this.powerUpItems.push(new Turbo());
-      }
-
-      //power up collision detection
-      this.powerUpItems.forEach((item) => {
-        if (this.player.collidesWithItem(item) === true) {
-          if (item instanceof Coin) {
-            this.defenderScore += item.getScore();
-          }
-          if (item instanceof Turbo) {
-            this.turboActive = true;
-            this.turboTimer += 5000;
-          }
-          this.powerUpItems.splice(this.powerUpItems.indexOf(item), 1);
+          // Decrement j to account for the removed portal
+          this.defenderScore += 3;
+          j--;
         }
-      });
+      }
+    }
 
-      if (this.turboTimer > 0) {
-        this.turboTimer -= elapsed;
+    // Portal spawn
+    this.portalSpawnTimer += elapsed;
+    if (this.portalSpawnTimer >= 6000 + Math.floor(Math.random() * 5000)) {
+      this.portalSpawnTimer = 0;
+      this.portalsSpawn();
+    }
+
+    this.enemySpawnTimer += elapsed;
+    if (this.enemySpawnTimer >= 4000 + Math.floor(Math.random() * 3000)) {
+      this.enemySpawnTimer = 0;
+      this.spawnEnemiesFromPortals();
+    }
+
+    // Power up items spawn timer
+    const randomItemChance = Math.random() * 100;
+    const randomItemInterval = Math.random() * 1000 + 1000;
+    this.timeUntilNextItem += elapsed;
+    if (this.timeUntilNextItem >= randomItemInterval) {
+      this.timeUntilNextItem = 0;
+      if (randomItemChance < 50) {
+        this.powerUpItems.push(new Coin());
+      } else this.powerUpItems.push(new Turbo());
+    }
+
+    //power up collision detection
+    this.powerUpItems.forEach((item) => {
+      if (this.player.collidesWithItem(item) === true) {
+        if (item instanceof Coin) {
+          this.defenderScore += item.getScore();
+        }
+        if (item instanceof Turbo) {
+          this.turboActive = true;
+          this.turboTimer += 5000;
+        }
+        this.powerUpItems.splice(this.powerUpItems.indexOf(item), 1);
       }
-      if (this.turboTimer <= 0) {
-        this.turboActive = false;
-        this.turboTimer = 0;
-      }
+    });
+
+    if (this.turboTimer > 0) {
+      this.turboTimer -= elapsed;
+    }
+    if (this.turboTimer <= 0) {
+      this.turboActive = false;
+      this.turboTimer = 0;
     }
   }
 
