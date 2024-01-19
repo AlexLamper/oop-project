@@ -10,6 +10,8 @@ import portal from "../attributes/portals.js";
 import PowerUpItems from "../attributes/PowerUpItems.js";
 import Coin from "../attributes/powerup/Coin.js";
 import Turbo from "../attributes/powerup/Turbo.js";
+import Firewall from "../attributes/powerup/Firewall.js";
+import Barrier from "../attributes/powerup/Barrier.js";
 
 import ScoreManager from "../attributes/totalScore.js";
 
@@ -25,6 +27,8 @@ export default class DefenderScene extends Scene {
   private DefenderBackground: HTMLImageElement;
 
   private player: Player;
+
+  private barrier: Barrier;
 
   private projectiles: Projectile[] = [];
 
@@ -45,6 +49,10 @@ export default class DefenderScene extends Scene {
   private turboActive: boolean = false;
 
   private turboTimer: number = 0;
+
+  private firewallActive: boolean = false;
+
+  private barriers: Barrier[] = [];
 
   private timeUntilNextItem: number = 0;
 
@@ -314,7 +322,12 @@ export default class DefenderScene extends Scene {
       if (playerBox.x < enemy.x + enemy.width && playerBox.x + playerBox.width > enemy.x && playerBox.y < enemy.y + enemy.height && playerBox.y + playerBox.height > enemy.y) {
         // Collision detected, delete the enemy
         this.enemies.splice(index, 1);
-        this.lifes--;
+        if (this.firewallActive === true) {
+          this.barriers.splice(0, 1);
+          if (this.barriers.length === 0) {
+            this.firewallActive = false;
+          }
+        } else this.lifes--;
       }
     });
 
@@ -374,9 +387,13 @@ export default class DefenderScene extends Scene {
     this.timeUntilNextItem += elapsed;
     if (this.timeUntilNextItem >= randomItemInterval) {
       this.timeUntilNextItem = 0;
-      if (randomItemChance < 50) {
+      if (randomItemChance <= 33) {
         this.powerUpItems.push(new Coin());
-      } else this.powerUpItems.push(new Turbo());
+      } else if (randomItemChance <= 66) {
+        this.powerUpItems.push(new Turbo());
+      } else {
+        this.powerUpItems.push(new Firewall());
+      }
     }
 
     //power up collision detection
@@ -389,10 +406,19 @@ export default class DefenderScene extends Scene {
           this.turboActive = true;
           this.turboTimer += 5000;
         }
+        if (item instanceof Firewall) {
+          if (this.firewallActive === false) {
+            this.barriers.push(new Barrier(this.player.x, this.player.y));
+            this.firewallActive = true;
+          } else if (this.firewallActive === true) {
+            this.lifes++;
+          }
+        }
         this.powerUpItems.splice(this.powerUpItems.indexOf(item), 1);
       }
     });
 
+    //Turbo Timer
     if (this.turboTimer > 0) {
       this.turboTimer -= elapsed;
     }
@@ -400,6 +426,12 @@ export default class DefenderScene extends Scene {
       this.turboActive = false;
       this.turboTimer = 0;
     }
+
+    // Firewall logic
+
+    this.barriers.forEach((barrier) => {
+      barrier.update(this.player.x, this.player.y);
+    });
   }
 
   // Function to spawn enemies from existing portals
@@ -464,6 +496,11 @@ export default class DefenderScene extends Scene {
       this.powerUpItems.forEach((powerUpItem) => {
         powerUpItem.render(canvas);
       });
+
+      this.barriers.forEach((barrier) => {
+        barrier.render(canvas);
+      });
+
       // Render the time, score and lives on the canvas
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.07, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, `Score: ${this.defenderScore}`, canvas.width * 0.15, canvas.height * 0.07, "center", "Pixelated", 75, "White");
