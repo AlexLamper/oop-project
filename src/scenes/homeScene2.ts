@@ -7,6 +7,7 @@ import DefenderScene from "./defenderScene.js";
 import VPNScene from "./vpnScene.js";
 import ShoppingScene from "./shoppingScene.js";
 import ScoreManager from "../attributes/totalScore.js";
+import InstructionScene from "./instructionScene.js"
 
 const scoreManager = ScoreManager.getInstance();
 const totalScore = scoreManager.getTotalScore();
@@ -91,7 +92,7 @@ export default class homeScene extends Scene {
   }
 
   private onDefenderButtonClick(event: MouseEvent): void {
-    this.nextScene = new DefenderScene(this.maxX, this.maxY);
+    this.nextScene = new InstructionScene(this.maxX, this.maxY);
   }
 
   private onTerminalButtonClick(event: MouseEvent): void {
@@ -121,8 +122,8 @@ export default class homeScene extends Scene {
   public getNextScene(): Scene | null {
     if (this.nextScene instanceof mailScene) {
       return this.nextScene;
-    } else if (this.nextScene instanceof DefenderScene) {
-      return new DefenderScene(this.maxX, this.maxY);
+    } else if (this.nextScene instanceof InstructionScene) {
+      return new InstructionScene(this.maxX, this.maxY);
     } else if (this.nextScene instanceof TerminalScene) {
       return new TerminalScene(this.maxX, this.maxY);
     } else if (this.nextScene instanceof VPNScene) {
