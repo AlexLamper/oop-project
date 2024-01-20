@@ -42,6 +42,9 @@ export default class homeScene extends Scene {
 
   public static shoppingEnabled: boolean = false;
 
+  public instructionSceneShown: boolean = false;
+
+
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -116,7 +119,12 @@ export default class homeScene extends Scene {
     if (this.nextScene instanceof mailScene) {
       return this.nextScene;
     } else if (this.nextScene instanceof instructionscene) {
-      return new instructionscene(this.maxX, this.maxY);
+      if (this.instructionSceneShown) {
+        return new DefenderScene(this.maxX, this.maxY);
+      } else {
+        this.instructionSceneShown = true;
+        return new instructionscene(this.maxX, this.maxY);
+      }
     } else if (this.nextScene instanceof TerminalScene) {
       return new TerminalScene(this.maxX, this.maxY);
     } else if (this.nextScene instanceof VPNScene) {
