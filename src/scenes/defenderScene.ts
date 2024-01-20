@@ -48,6 +48,10 @@ export default class DefenderScene extends Scene {
 
   private timeUntilNextItem: number = 0;
 
+  private showTurboCard: boolean = false;
+
+  private turboCardTimer: number = 0;
+
   public getCurrentGameScore(): number {
     return this.defenderScore;
   }
@@ -382,14 +386,15 @@ export default class DefenderScene extends Scene {
     //power up collision detection
     this.powerUpItems.forEach((item) => {
       if (this.player.collidesWithItem(item) === true) {
-        if (item instanceof Coin) {
-          this.defenderScore += item.getScore();
-        }
-        if (item instanceof Turbo) {
-          this.turboActive = true;
-          this.turboTimer += 5000;
-        }
-        this.powerUpItems.splice(this.powerUpItems.indexOf(item), 1);
+          if (item instanceof Coin) {
+              this.defenderScore += item.getScore();
+          }
+          if (item instanceof Turbo) {
+              this.showTurboCard = true;
+              this.turboActive = true;
+              this.turboTimer += 5000;
+          }
+          this.powerUpItems.splice(this.powerUpItems.indexOf(item), 1);
       }
     });
 
@@ -397,8 +402,17 @@ export default class DefenderScene extends Scene {
       this.turboTimer -= elapsed;
     }
     if (this.turboTimer <= 0) {
-      this.turboActive = false;
-      this.turboTimer = 0;
+        this.turboActive = false;
+        this.turboTimer = 0;
+        this.showTurboCard = false;
+        this.turboCardTimer = 0;
+    }
+    if (this.showTurboCard) {
+      this.turboCardTimer += elapsed;
+      if (this.turboCardTimer >= 10000) {
+          this.showTurboCard = false;
+          this.turboCardTimer = 0;
+      }
     }
   }
 
@@ -464,10 +478,24 @@ export default class DefenderScene extends Scene {
       this.powerUpItems.forEach((powerUpItem) => {
         powerUpItem.render(canvas);
       });
-      // Render the time, score and lives on the canvas
+
+      // Render the time, score, and lives on the canvas
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.07, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, `Score: ${this.defenderScore}`, canvas.width * 0.15, canvas.height * 0.07, "center", "Pixelated", 75, "White");
-      CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.85, canvas.height * 0.07, "center", "Pixelated", 75, "White");
+      CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.8, canvas.height * 0.07, "center", "Pixelated", 75, "White");
+
+      // Render de Turbo card
+      if (this.showTurboCard) {
+        const cardWidth = 340;
+        const cardHeight = 191;
+        const cardPadding = 10;
+        const cardX = canvas.width - cardWidth - cardPadding + 5;
+        const cardY = canvas.height - cardHeight - cardPadding + 5;
+
+        // Draw the card background image
+        const cardImage = CanvasRenderer.loadNewImage("./assets/turboPowerUp.jpg");
+        CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
+      }
     }
   }
 }
