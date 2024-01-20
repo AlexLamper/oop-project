@@ -12,6 +12,7 @@ import Coin from "../attributes/powerup/Coin.js";
 import Turbo from "../attributes/powerup/Turbo.js";
 import Firewall from "../attributes/powerup/Firewall.js";
 import Barrier from "../attributes/powerup/Barrier.js";
+import Scan from "../attributes/powerup/Scan.js";
 
 import ScoreManager from "../attributes/totalScore.js";
 
@@ -391,19 +392,20 @@ export default class DefenderScene extends Scene {
     this.timeUntilNextItem += elapsed;
     if (this.timeUntilNextItem >= randomItemInterval) {
       this.timeUntilNextItem = 0;
-      if (randomItemChance <= 33) {
+      if (randomItemChance <= 10) {
         this.powerUpItems.push(new Coin());
-      } else if (randomItemChance <= 66) {
+      } else if (randomItemChance <= 20) {
         this.powerUpItems.push(new Turbo());
-      } else {
+      } else if (randomItemChance <= 30) {
         this.powerUpItems.push(new Firewall());
+      } else {
+        this.powerUpItems.push(new Scan());
       }
     }
 
     //power up collision detection
     this.powerUpItems.forEach((item) => {
       if (this.player.collidesWithItem(item) === true) {
-
         if (item instanceof Coin) {
           this.defenderScore += item.getScore();
         }
@@ -420,8 +422,13 @@ export default class DefenderScene extends Scene {
             this.lifes++;
           }
         }
+        if (item instanceof Scan) {
+          this.defenderScore += this.enemies.length * 1;
+          this.defenderScore += this.portals.length * 3;
+          this.enemies = [];
+          this.portals = [];
+        }
         this.powerUpItems.splice(this.powerUpItems.indexOf(item), 1);
-
       }
     });
 
@@ -430,16 +437,16 @@ export default class DefenderScene extends Scene {
       this.turboTimer -= elapsed;
     }
     if (this.turboTimer <= 0) {
-        this.turboActive = false;
-        this.turboTimer = 0;
-        this.showTurboCard = false;
-        this.turboCardTimer = 0;
+      this.turboActive = false;
+      this.turboTimer = 0;
+      this.showTurboCard = false;
+      this.turboCardTimer = 0;
     }
     if (this.showTurboCard) {
       this.turboCardTimer += elapsed;
       if (this.turboCardTimer >= 10000) {
-          this.showTurboCard = false;
-          this.turboCardTimer = 0;
+        this.showTurboCard = false;
+        this.turboCardTimer = 0;
       }
     }
 
@@ -512,7 +519,6 @@ export default class DefenderScene extends Scene {
       this.powerUpItems.forEach((powerUpItem) => {
         powerUpItem.render(canvas);
       });
-
 
       this.barriers.forEach((barrier) => {
         barrier.render(canvas);
