@@ -47,10 +47,7 @@ export default class SceneStart extends Scene {
    * Render the scene to the canvas
    * @param canvas canvas to render to
    */
-  public render(canvas: HTMLCanvasElement): void {
-    document.body.style.backgroundImage = `url(${this.background.src})`;
-    document.querySelectorAll("button").forEach((button) => {
-      button.remove();
-    });
+    public render(canvas: HTMLCanvasElement): void {
+      document.body.style.backgroundImage = `url(${this.background.src})`;
+    }
   }
-}
