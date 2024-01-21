@@ -2,6 +2,7 @@ import CanvasRenderer from "../CanvasRenderer.js";
 import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
 import DefenderScene from "./defenderScene.js";
+import homeScene from "./homeScene.js";
 
 export default class SceneStart extends Scene {
   private starting: boolean;
@@ -21,6 +22,7 @@ export default class SceneStart extends Scene {
    */
   public processInput(mouseListener: MouseListener): void {
     if (mouseListener.buttonPressed(0)) {
+      homeScene.instructionSceneShown = true;
       this.starting = true;
     }
   }
@@ -47,10 +49,7 @@ export default class SceneStart extends Scene {
    * Render the scene to the canvas
    * @param canvas canvas to render to
    */
-  public render(canvas: HTMLCanvasElement): void {
-    document.body.style.backgroundImage = `url(${this.background.src})`;
-    document.querySelectorAll("button").forEach((button) => {
-      button.remove();
-    });
+    public render(canvas: HTMLCanvasElement): void {
+      document.body.style.backgroundImage = `url(${this.background.src})`;
+    }
   }
-}
