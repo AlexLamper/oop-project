@@ -42,7 +42,7 @@ export default class homeScene extends Scene {
 
   public static shoppingEnabled: boolean = false;
 
-  public instructionSceneShown: boolean = false;
+  public static instructionSceneShown: boolean = false;
 
 
 
@@ -119,10 +119,9 @@ export default class homeScene extends Scene {
     if (this.nextScene instanceof mailScene) {
       return this.nextScene;
     } else if (this.nextScene instanceof instructionscene) {
-      if (this.instructionSceneShown) {
+      if (homeScene.instructionSceneShown) {
         return new DefenderScene(this.maxX, this.maxY);
       } else {
-        this.instructionSceneShown = true;
         return new instructionscene(this.maxX, this.maxY);
       }
     } else if (this.nextScene instanceof TerminalScene) {
