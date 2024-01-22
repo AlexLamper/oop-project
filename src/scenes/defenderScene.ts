@@ -69,6 +69,13 @@ export default class DefenderScene extends Scene {
 
   private scanCardTimer: number = 0;
 
+  private turboCardShown: boolean = false;
+
+  private firewallCardShown: boolean = false;
+
+  private scanCardShown: boolean = false;
+
+
   public getCurrentGameScore(): number {
     return this.defenderScore;
   }
@@ -418,12 +425,18 @@ export default class DefenderScene extends Scene {
           this.defenderScore += item.getScore();
         }
         if (item instanceof Turbo) {
+          if (this.turboCardShown === false) {
+            this.turboCardShown = true;
           this.showTurboCard = true;
+          }
           this.turboActive = true;
           this.turboTimer += 5000;
         }
         if (item instanceof Firewall) {
-          this.showFirewallCard = true;
+          if (this.firewallCardShown === false) {
+            this.firewallCardShown = true;
+            this.showFirewallCard = true;
+          }
           this.firewallCardTimer += 5000;
           if (this.firewallActive === false) {
             this.barriers.push(new Barrier(this.player.x, this.player.y));
@@ -433,7 +446,10 @@ export default class DefenderScene extends Scene {
           }
         }
         if (item instanceof Scan) {
-          this.showScanCard = true;
+          if (this.scanCardShown === false) {
+            this.scanCardShown = true;
+            this.showScanCard = true;
+          }
           this.scanCardTimer += 5000;
           this.defenderScore += this.enemies.length * 1;
           this.defenderScore += this.portals.length * 3;
