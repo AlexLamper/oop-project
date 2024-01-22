@@ -61,10 +61,24 @@ export default class DefenderScene extends Scene {
 
   private turboCardTimer: number = 0;
 
+  private showFirewallCard: boolean = false;
+
+  private firewallCardTimer: number = 0;
+
+  private showScanCard: boolean = false;
+
+  private scanCardTimer: number = 0;
+
+  private turboCardShown: boolean = false;
+
+  private firewallCardShown: boolean = false;
+
+  private scanCardShown: boolean = false;
+
+
   public getCurrentGameScore(): number {
     return this.defenderScore;
   }
-
   private portalSpawnTimer: number = 0;
 
   private enemySpawnTimer: number = 0;
@@ -101,17 +115,17 @@ export default class DefenderScene extends Scene {
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     document.addEventListener("click", this.handleClick.bind(this));
-    document.addEventListener("keydown", this.handleSpaceKeyDown.bind(this));
+    // document.addEventListener("keydown", this.handleSpaceKeyDown.bind(this));
   }
 
   // Handle space keydown events
-  private handleSpaceKeyDown(event: KeyboardEvent): void {
-    if (event.key === " ") {
-      event.preventDefault();
-      this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
-      // Add your code here to handle the space keydown event
-    }
-  }
+  // private handleSpaceKeyDown(event: KeyboardEvent): void {
+  //   if (event.key === " ") {
+  //     event.preventDefault();
+  //     this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
+  //     // Add your code here to handle the space keydown event
+  //   }
+  // }
 
   // Add event listener for space keydown events
 
@@ -169,7 +183,7 @@ export default class DefenderScene extends Scene {
   // Function to update the direction of the player
   // Function to update the direction of the player
   private updateDirection(): void {
-    console.log("Current direction:", this.currentDirection);
+    // console.log("Current direction:", this.currentDirection);
     const keys = Object.keys(this.keyMap).filter((key) => this.keyMap[key]);
 
     // Prioritize WASD keys over arrow keys
@@ -197,6 +211,7 @@ export default class DefenderScene extends Scene {
     if (this.timeLimit <= 0) {
       this.endGame();
       const totalScore = scoreManager.getTotalScore();
+      ScoreManager.defenderScore = this.defenderScore;
       console.log(`Total Score: ${totalScore}`);
       homeScene.terminalEnabled = true;
       return new winScene(this.maxX, this.maxY);
@@ -210,7 +225,7 @@ export default class DefenderScene extends Scene {
   // Method to end the game
   private endGame(): void {
     // Add defenderScore to the totalScore when the game ends
-    scoreManager.updateTotalScore(this.getCurrentGameScore());
+    // scoreManager.updateTotalScore(this.getCurrentGameScore());
   }
 
   public portalsSpawn(): void {
@@ -373,30 +388,31 @@ export default class DefenderScene extends Scene {
       }
     }
 
-    // Portal spawn
+    // Portal spawn timer
     this.portalSpawnTimer += elapsed;
     if (this.portalSpawnTimer >= 6000 + Math.floor(Math.random() * 5000)) {
       this.portalSpawnTimer = 0;
       this.portalsSpawn();
     }
 
+    // Enemy spawn timer
     this.enemySpawnTimer += elapsed;
-    if (this.enemySpawnTimer >= 4000 + Math.floor(Math.random() * 3000)) {
+    if (this.enemySpawnTimer >= 5000 + Math.floor(Math.random() * 10000)) {
       this.enemySpawnTimer = 0;
       this.spawnEnemiesFromPortals();
     }
 
     // Power up items spawn timer
     const randomItemChance = Math.random() * 100;
-    const randomItemInterval = Math.random() * 1000 + 1000;
+    const randomItemInterval = Math.random() * 2000 + 5000;
     this.timeUntilNextItem += elapsed;
     if (this.timeUntilNextItem >= randomItemInterval) {
       this.timeUntilNextItem = 0;
-      if (randomItemChance <= 10) {
+      if (randomItemChance <= 60) {
         this.powerUpItems.push(new Coin());
-      } else if (randomItemChance <= 20) {
+      } else if (randomItemChance <= 85) {
         this.powerUpItems.push(new Turbo());
-      } else if (randomItemChance <= 30) {
+      } else if (randomItemChance <= 95) {
         this.powerUpItems.push(new Firewall());
       } else {
         this.powerUpItems.push(new Scan());
@@ -410,11 +426,19 @@ export default class DefenderScene extends Scene {
           this.defenderScore += item.getScore();
         }
         if (item instanceof Turbo) {
+          if (this.turboCardShown === false) {
+            this.turboCardShown = true;
           this.showTurboCard = true;
+          }
           this.turboActive = true;
-          this.turboTimer += 5000;
+          this.turboTimer += 3000;
         }
         if (item instanceof Firewall) {
+          if (this.firewallCardShown === false) {
+            this.firewallCardShown = true;
+            this.showFirewallCard = true;
+          }
+          this.firewallCardTimer += 5000;
           if (this.firewallActive === false) {
             this.barriers.push(new Barrier(this.player.x, this.player.y));
             this.firewallActive = true;
@@ -423,6 +447,11 @@ export default class DefenderScene extends Scene {
           }
         }
         if (item instanceof Scan) {
+          if (this.scanCardShown === false) {
+            this.scanCardShown = true;
+            this.showScanCard = true;
+          }
+          this.scanCardTimer += 5000;
           this.defenderScore += this.enemies.length * 1;
           this.defenderScore += this.portals.length * 3;
           this.enemies = [];
@@ -444,10 +473,28 @@ export default class DefenderScene extends Scene {
     }
     if (this.showTurboCard) {
       this.turboCardTimer += elapsed;
-      if (this.turboCardTimer >= 10000) {
+      if (this.turboCardTimer >= 15000) {
         this.showTurboCard = false;
         this.turboCardTimer = 0;
       }
+    }
+
+    // Firewall Timer
+    if (this.firewallCardTimer > 0) {
+      this.firewallCardTimer -= elapsed;
+    }
+    if (this.firewallCardTimer <= 0) {
+      this.showFirewallCard = false;
+      this.firewallCardTimer = 0;
+    }
+
+    // Scan Timer
+    if (this.scanCardTimer > 0) {
+      this.scanCardTimer -= elapsed;
+    }
+    if (this.scanCardTimer <= 0) {
+      this.showScanCard = false;
+      this.scanCardTimer = 0;
     }
 
     // Firewall logic
@@ -493,9 +540,6 @@ export default class DefenderScene extends Scene {
    * @param canvas canvas to render to
    */
   public render(canvas: HTMLCanvasElement): void {
-    document.querySelectorAll("button").forEach((button) => {
-      button.remove();
-    });
     // Render the background image
     document.body.style.backgroundImage = `url(${this.DefenderBackground.src})`;
     const ctx = canvas.getContext("2d");
@@ -540,6 +584,30 @@ export default class DefenderScene extends Scene {
 
         // Draw the card background image
         const cardImage = CanvasRenderer.loadNewImage("./assets/turboPowerUp.jpg");
+        CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
+      }
+      // Render de Firewall card
+      if(this.showFirewallCard){
+        const cardWidth = 340;
+        const cardHeight = 191;
+        const cardPadding = 10;
+        const cardX = canvas.width - cardWidth - cardPadding + 5;
+        const cardY = canvas.height - cardHeight - cardPadding + 5;
+
+        // Draw the card background image
+        const cardImage = CanvasRenderer.loadNewImage("./assets/firewallPowerUp.jpg");
+        CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
+      }
+      // Render de Scan card
+      if(this.showScanCard){
+        const cardWidth = 340;
+        const cardHeight = 191;
+        const cardPadding = 10;
+        const cardX = canvas.width - cardWidth - cardPadding + 5;
+        const cardY = canvas.height - cardHeight - cardPadding + 5;
+
+        // Draw the card background image
+        const cardImage = CanvasRenderer.loadNewImage("./assets/scanPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
     }

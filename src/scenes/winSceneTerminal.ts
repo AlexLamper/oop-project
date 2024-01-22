@@ -4,14 +4,7 @@ import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
 import ScoreManager from "../attributes/totalScore.js";
 
-const facts = [
-  "",
-  "",
-  "Did you know?",
-  "- Defenders almost have 100% real-time protection rates.",
-  "- Firewalls filter incoming and outgoing network traffic",
-  "- Computer viruses date back to the 1970s.",
-];
+const facts = ["", "", "Did you know?", "- Defenders almost have 100% real-time protection rates.", "- Firewalls filter incoming and outgoing network traffic", "- Computer viruses date back to the 1970s."];
 
 const paddingX = 20;
 const paddingY = 40;
@@ -23,7 +16,7 @@ const textStyle = {
   textBaseline: "top",
 };
 
-export default class winScene extends Scene {
+export default class winSceneTerminal extends Scene {
   private winBackground: HTMLImageElement;
   private clickNext: boolean = false;
 
@@ -69,15 +62,15 @@ export default class winScene extends Scene {
       button.remove();
     }); //alle buttons verwijderen van vorige pagina
     document.body.style.backgroundImage = `url(${this.winBackground.src})`;
-    CanvasRenderer.writeText(canvas, "You completed Level 1", canvas.width / 2, canvas.height / 8, "center", "Pixelated", 75, "Green");
+    CanvasRenderer.writeText(canvas, "You completed Level 2", canvas.width / 2, canvas.height / 8, "center", "Pixelated", 75, "Green");
     for (let i = 0; i < facts.length; i++) {
       const x = paddingX;
       const y = paddingY + i * 100; // ruimte/padding tussen de feiten
 
       CanvasRenderer.writeText(canvas, facts[i], x, y, textStyle.textAlign, textStyle.font, null, textStyle.fillStyle);
+    }
+    CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Green");
+    console.log(ScoreManager.defenderScore);
+    CanvasRenderer.writeText(canvas, `Total score:  ${ScoreManager.terminalScore}`, canvas.width / 2, canvas.height - 80, "center", "Pixelated", 75, "Green");
   }
-  CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Green");
-  console.log(ScoreManager.defenderScore);
-  CanvasRenderer.writeText(canvas, `Total score:  ${ScoreManager.defenderScore}`, canvas.width / 2, canvas.height - 80, "center", "Pixelated", 75, "Green");
-}
 }

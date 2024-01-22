@@ -45,22 +45,22 @@ export default class Player {
   }
 
   public turboMoveLeft(): void {
-    this.x -= 12;
+    this.x -= 9;
     this.rotation = -90;
   }
 
   public turboMoveRight(): void {
-    this.x += 12;
+    this.x += 9;
     this.rotation = 90;
   }
 
   public turboMoveUp(): void {
-    this.y -= 12;
+    this.y -= 9;
     this.rotation = 0;
   }
 
   public turboMoveDown(): void {
-    this.y += 12;
+    this.y += 9;
     this.rotation = 180;
   }
 
