@@ -4,12 +4,10 @@ export default class totalScore {
   private static instance: totalScore;
 
   public static VPNScore: number = 0;
-  
+
   public static defenderScore: number = 0;
 
   public static terminalScore: number = 0;
-  
-  private constructor() {}
 
   public static getInstance(): totalScore {
     if (!totalScore.instance) {

@@ -1,6 +1,5 @@
 import CanvasRenderer from "../../CanvasRenderer.js";
 import PowerUpItems from "../PowerUpItems.js";
-import Enemy from "../enemies.js";
 
 export default class Barrier extends PowerUpItems {
   public constructor(x: number, y: number) {

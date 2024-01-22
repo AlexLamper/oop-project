@@ -1,6 +1,6 @@
 import CanvasRenderer from "../CanvasRenderer.js";
 
-export default class CanvasItem {
+export default class PowerUpItems {
   protected image: HTMLImageElement;
 
   protected posX: number;
