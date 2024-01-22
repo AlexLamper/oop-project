@@ -2,7 +2,7 @@ import CanvasRenderer from "../CanvasRenderer.js";
 import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
-import winScene from "./winScene.js";
+import winSceneTerminal from "./winSceneTerminal.js";
 import Player from "../attributes/player.js";
 import Projectile from "../attributes/projectiles.js";
 import Enemy from "../attributes/enemies.js";
@@ -25,7 +25,7 @@ export default class TerminalScene extends Scene {
 
   private currentDirection: string | null;
 
-  private DefenderBackground: HTMLImageElement;
+  private terminalBackground: HTMLImageElement;
 
   private player: Player;
 
@@ -43,7 +43,7 @@ export default class TerminalScene extends Scene {
 
   private lifes: number = 5;
 
-  private timeLimit: number = 60000;
+  private timeLimit: number = 90000;
 
   private terminalScore = 0;
 
@@ -94,25 +94,14 @@ export default class TerminalScene extends Scene {
     };
     this.currentDirection = null;
 
-    this.DefenderBackground = CanvasRenderer.loadNewImage("./assets/background-defender-final.png");
+    this.terminalBackground = CanvasRenderer.loadNewImage("./assets/terminal_background.png");
     this.player = new Player(maxX / 2, maxY / 2, 100, 100, "./assets/player.png");
 
     // Add event listener for keydown events
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     document.addEventListener("click", this.handleClick.bind(this));
-    document.addEventListener("keydown", this.handleSpaceKeyDown.bind(this));
   }
-
-  // Handle space keydown events
-  private handleSpaceKeyDown(event: KeyboardEvent): void {
-    if (event.key === " ") {
-      event.preventDefault();
-      this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
-      // Add your code here to handle the space keydown event
-    }
-  }
-
   // Add event listener for space keydown events
 
   // Handle keydown events
@@ -197,9 +186,10 @@ export default class TerminalScene extends Scene {
     if (this.timeLimit <= 0) {
       this.endGame();
       const totalScore = scoreManager.getTotalScore();
+      ScoreManager.terminalScore = this.terminalScore;
       console.log(`Total Score: ${totalScore}`);
       homeScene.vpnEnabled = true;
-      return new winScene(this.maxX, this.maxY);
+      return new winSceneTerminal(this.maxX, this.maxY);
     } else if (this.escapeClicked === true) {
       return new homeScene(this.maxX, this.maxY);
     } else if (this.lifes <= 0) {
@@ -388,15 +378,15 @@ export default class TerminalScene extends Scene {
 
     // Power up items spawn timer
     const randomItemChance = Math.random() * 100;
-    const randomItemInterval = Math.random() * 1000 + 1000;
+    const randomItemInterval = Math.random() * 2000 + 5000;
     this.timeUntilNextItem += elapsed;
     if (this.timeUntilNextItem >= randomItemInterval) {
       this.timeUntilNextItem = 0;
-      if (randomItemChance <= 10) {
+      if (randomItemChance <= 60) {
         this.powerUpItems.push(new Coin());
-      } else if (randomItemChance <= 20) {
+      } else if (randomItemChance <= 85) {
         this.powerUpItems.push(new Turbo());
-      } else if (randomItemChance <= 30) {
+      } else if (randomItemChance <= 95) {
         this.powerUpItems.push(new Firewall());
       } else {
         this.powerUpItems.push(new Scan());
@@ -494,7 +484,7 @@ export default class TerminalScene extends Scene {
    */
   public render(canvas: HTMLCanvasElement): void {
     // Render the background image
-    document.body.style.backgroundImage = `url(${this.DefenderBackground.src})`;
+    document.body.style.backgroundImage = `url(${this.terminalBackground.src})`;
     const ctx = canvas.getContext("2d");
 
     if (ctx) {
