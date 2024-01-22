@@ -31,11 +31,11 @@ export default class Facts {
 public paddingY = 350;
 
 public textStyle = {
-  font: "joystix monospace",
+  font: "JoystixMonospace-Regular",
   fillStyle: "White",
   textAlign: "left" as CanvasTextAlign,
   textBaseline: "top",
   fontSize: 30
 };
-  
+
 }
