@@ -102,13 +102,6 @@ export default class homeScene extends Scene {
         } else {
         }      }
     }
-    if (mouseListener.getMousePosition().x > 0 && mouseListener.getMousePosition().x < 100 && mouseListener.getMousePosition().y > 260 && mouseListener.getMousePosition().y < 360) {
-      if (mouseListener.buttonPressed(0)) {
-        if (homeScene.shoppingEnabled == true) {
-          this.nextScene = new ShoppingScene(this.maxX, this.maxY);
-        } else {
-        }      }
-    }
   }
 
   /**5
@@ -177,10 +170,5 @@ export default class homeScene extends Scene {
     } else {
       this.renderIcon(canvas, this.vpnBlocked, 120, 140)
     }
-    if (homeScene.shoppingEnabled == true) {
-      this.renderIcon(canvas, this.shoppingCart, 0, 260)
-    } else {
-        this.renderIcon(canvas, this.shoppingCartBlocked, 0, 260)
-      }
   }
 }
