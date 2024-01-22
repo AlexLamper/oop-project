@@ -21,7 +21,10 @@ export default class Facts {
     "Firewalls block specific ports for enhanced security.",
     "VPNs facilitate secure communication between corporate branch offices.",
     "Defenders update virus definitions regularly to counter new threats.",
-    "Computer viruses include types like worms, trojans, and ransomware."
+    "Computer viruses include types like worms, trojans, and ransomware.",
+    "Security cameras can be hacked if not properly secured.",
+    "Phishing emails trick users into sharing info.",
+    "Cybersecurity awareness is key to online safety.",
   ];
 
   public paddingX = 20;

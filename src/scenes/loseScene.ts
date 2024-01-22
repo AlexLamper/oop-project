@@ -2,28 +2,11 @@ import CanvasRenderer from "../CanvasRenderer.js";
 import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
-
-const facts = [
-  "",
-  "",
-  "Did you know?",
-  "- Security cameras can be hacked if not properly secured.",
-  "- Phishing emails trick users into sharing info.",
-  "- Cybersecurity awareness is key to online safety.",
-];
-
-const paddingX = 20;
-const paddingY = 40;
-
-const textStyle = {
-  font: "12px Arial",
-  fillStyle: "White",
-  textAlign: "left" as CanvasTextAlign,
-  textBaseline: "top",
-};
+import facts from "../attributes/facts.js";
 
 
 export default class winScene extends Scene {
+  private Facts = new facts();
   private loseBackground: HTMLImageElement;
   private clickNext: boolean = false;
 
@@ -61,6 +44,17 @@ export default class winScene extends Scene {
     }
   }
 
+  private getRandomFacts(count: number): string[] {
+    const randomFacts: string[] = [];
+    const shuffledFacts = facts.factsList.sort(() => Math.random() - 0.5);
+    for (let i = 0; i < count; i++) {
+      randomFacts.push(shuffledFacts[i]);
+    }
+    return randomFacts;
+  }
+
+  private randomFacts = this.getRandomFacts(3);
+
   /**
    * Render the scene to the canvas
    * @param canvas canvas to render to
@@ -71,12 +65,12 @@ export default class winScene extends Scene {
     }); //alle buttons verwijderen van vorige pagina
     document.body.style.backgroundImage = `url(${this.loseBackground.src})`;
     CanvasRenderer.writeText(canvas, "You Lost!", canvas.width / 2, canvas.height / 8, "center", "Pixelated", 75, "Red");
-    for (let i = 0; i < facts.length; i++) {
-      const x = paddingX;
-      const y = paddingY + i * 100; // ruimte/padding tussen de feiten
+    for (let i = 0; i < this.randomFacts.length; i++) {
+      const x = this.Facts.paddingX;
+      const y = this.Facts.paddingY + i * 100; // ruimte/padding tussen de feiten
 
-      CanvasRenderer.writeText(canvas, facts[i], x, y, textStyle.textAlign, textStyle.font, null, textStyle.fillStyle);
-  }
+      CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.Facts.textStyle.textAlign, this.Facts.textStyle.font, 30, this.Facts.textStyle.fillStyle);
+    }
     CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Green");
   }
 }
