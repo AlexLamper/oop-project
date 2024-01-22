@@ -161,6 +161,6 @@ export default class homeScene extends Scene {
     } else {
       this.renderIcon(canvas, this.vpnBlocked, 120, 140);
     }
-    CanvasRenderer.writeText(canvas, `Score: ${scoreManager.getTotalScore()}`, canvas.width - 100, 100, "center", "sans-serif", 30, "black");
+    CanvasRenderer.writeText(canvas, `Score: ${scoreManager.getTotalScore()}`, canvas.width - 100, 50, "center", "Pixelated", 45, "White");
   }
 }

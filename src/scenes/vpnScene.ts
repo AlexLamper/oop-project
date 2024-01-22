@@ -2,7 +2,7 @@ import CanvasRenderer from "../CanvasRenderer.js";
 import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
-import winSceneVPN from "./winScene-VPN.js";
+import winSceneVPN from "./winSceneVPN.js";
 import Player from "../attributes/player.js";
 import Projectile from "../attributes/projectiles.js";
 import Enemy from "../attributes/enemies.js";
@@ -15,8 +15,6 @@ import Barrier from "../attributes/powerup/Barrier.js";
 import Scan from "../attributes/powerup/Scan.js";
 
 import ScoreManager from "../attributes/totalScore.js";
-
-const scoreManager = ScoreManager.getInstance();
 
 import loseScene from "./loseScene.js";
 
@@ -43,9 +41,9 @@ export default class VPNScene extends Scene {
 
   private lifes: number = 5;
 
-  private timeLimit: number = 120000;
+  private timeLimit: number = 12000;
 
-  private VPNScore = 0;
+  private VPNScore = 25;
 
   private turboActive: boolean = false;
 
@@ -196,7 +194,6 @@ export default class VPNScene extends Scene {
   // Method to end the game
   private endGame(): void {
     // Add defenderScore to the totalScore when the game ends
-    scoreManager.updateTotalScore(this.getCurrentGameScore());
   }
 
   public portalsSpawn(): void {

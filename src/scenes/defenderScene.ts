@@ -2,7 +2,7 @@ import CanvasRenderer from "../CanvasRenderer.js";
 import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
-import winScene from "./winScene.js";
+import winScene from "./winSceneDefender.js";
 import Player from "../attributes/player.js";
 import Projectile from "../attributes/projectiles.js";
 import Enemy from "../attributes/enemies.js";
@@ -43,9 +43,9 @@ export default class DefenderScene extends Scene {
 
   private lifes: number = 5;
 
-  private timeLimit: number = 60000;
+  private timeLimit: number = 6000;
 
-  private defenderScore = 0;
+  private defenderScore = 25;
 
   private turboActive: boolean = false;
 
@@ -210,9 +210,8 @@ export default class DefenderScene extends Scene {
   public getNextScene(): Scene | null {
     if (this.timeLimit <= 0) {
       this.endGame();
-      const totalScore = scoreManager.getTotalScore();
       ScoreManager.defenderScore = this.defenderScore;
-      console.log(`Total Score: ${totalScore}`);
+      console.log(`Total Score: ${ScoreManager.defenderScore}`);
       homeScene.terminalEnabled = true;
       return new winScene(this.maxX, this.maxY);
     } else if (this.escapeClicked === true) {
@@ -285,7 +284,6 @@ export default class DefenderScene extends Scene {
       this.getNextScene();
     }
 
-    console.log(this.turboTimer);
     this.projectiles.forEach((projectile) => {
       projectile.update();
     });
