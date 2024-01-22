@@ -1,8 +1,8 @@
 import CanvasRenderer from "../CanvasRenderer.js";
 import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
-import ScoreManager from "../attributes/totalScore.js";
 import homeScene from "./homeScene.js";
+import ScoreManager from "../attributes/totalScore.js";
 
 const facts = [
   "",
@@ -23,7 +23,7 @@ const textStyle = {
   textBaseline: "top",
 };
 
-export default class winSceneVPN extends Scene {
+export default class winScene extends Scene {
   private winBackground: HTMLImageElement;
   private clickNext: boolean = false;
 
@@ -76,8 +76,7 @@ export default class winSceneVPN extends Scene {
 
       CanvasRenderer.writeText(canvas, facts[i], x, y, textStyle.textAlign, textStyle.font, null, textStyle.fillStyle);
   }
-  CanvasRenderer.writeText(canvas, `VPN Score: ${ScoreManager.VPNScore}`, canvas.width / 2, canvas.height - 150, "center", "Pixelated", 75, "Green");
-  CanvasRenderer.writeText(canvas, `Total Score: ${ScoreManager.VPNScore}`, canvas.width / 2, canvas.height - 90, "center", "Pixelated", 75, "Green");
-    CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Green");
-  }
+  CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Green");
+  CanvasRenderer.writeText(canvas, `Defender score:  ${ScoreManager.defenderScore}`, canvas.width / 2, canvas.height - 90, "center", "Pixelated", 75, "Green");
+}
 }

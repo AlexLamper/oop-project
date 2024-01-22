@@ -1,5 +1,5 @@
 export default class ScoreManager {
-  private totalScore: number = 0;
+  private totalScore: number;
 
   private static instance: ScoreManager;
 
@@ -9,7 +9,6 @@ export default class ScoreManager {
 
   public static terminalScore: number = 0;
   
-
   private constructor() {}
 
   public static getInstance(): ScoreManager {
@@ -24,6 +23,7 @@ export default class ScoreManager {
   }
 
   public getTotalScore(): number {
+    this.totalScore = ScoreManager.VPNScore + ScoreManager.defenderScore + ScoreManager.terminalScore;
     return this.totalScore;
   }
 }
