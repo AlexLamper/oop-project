@@ -61,6 +61,14 @@ export default class DefenderScene extends Scene {
 
   private turboCardTimer: number = 0;
 
+  private showFirewallCard: boolean = false;
+
+  private firewallCardTimer: number = 0;
+
+  private showScanCard: boolean = false;
+
+  private scanCardTimer: number = 0;
+
   public getCurrentGameScore(): number {
     return this.defenderScore;
   }
@@ -415,6 +423,8 @@ export default class DefenderScene extends Scene {
           this.turboTimer += 5000;
         }
         if (item instanceof Firewall) {
+          this.showFirewallCard = true;
+          this.firewallCardTimer += 5000;
           if (this.firewallActive === false) {
             this.barriers.push(new Barrier(this.player.x, this.player.y));
             this.firewallActive = true;
@@ -423,6 +433,8 @@ export default class DefenderScene extends Scene {
           }
         }
         if (item instanceof Scan) {
+          this.showScanCard = true;
+          this.scanCardTimer += 5000;
           this.defenderScore += this.enemies.length * 1;
           this.defenderScore += this.portals.length * 3;
           this.enemies = [];
@@ -444,10 +456,28 @@ export default class DefenderScene extends Scene {
     }
     if (this.showTurboCard) {
       this.turboCardTimer += elapsed;
-      if (this.turboCardTimer >= 10000) {
+      if (this.turboCardTimer >= 15000) {
         this.showTurboCard = false;
         this.turboCardTimer = 0;
       }
+    }
+
+    // Firewall Timer
+    if (this.firewallCardTimer > 0) {
+      this.firewallCardTimer -= elapsed;
+    }
+    if (this.firewallCardTimer <= 0) {
+      this.showFirewallCard = false;
+      this.firewallCardTimer = 0;
+    }
+
+    // Scan Timer
+    if (this.scanCardTimer > 0) {
+      this.scanCardTimer -= elapsed;
+    }
+    if (this.scanCardTimer <= 0) {
+      this.showScanCard = false;
+      this.scanCardTimer = 0;
     }
 
     // Firewall logic
@@ -540,6 +570,30 @@ export default class DefenderScene extends Scene {
 
         // Draw the card background image
         const cardImage = CanvasRenderer.loadNewImage("./assets/turboPowerUp.jpg");
+        CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
+      }
+      // Render de Firewall card
+      if(this.showFirewallCard){
+        const cardWidth = 340;
+        const cardHeight = 191;
+        const cardPadding = 10;
+        const cardX = canvas.width - cardWidth - cardPadding + 5;
+        const cardY = canvas.height - cardHeight - cardPadding + 5;
+
+        // Draw the card background image
+        const cardImage = CanvasRenderer.loadNewImage("./assets/firewallPowerUp.jpg");
+        CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
+      }
+      // Render de Scan card
+      if(this.showScanCard){
+        const cardWidth = 340;
+        const cardHeight = 191;
+        const cardPadding = 10;
+        const cardX = canvas.width - cardWidth - cardPadding + 5;
+        const cardY = canvas.height - cardHeight - cardPadding + 5;
+
+        // Draw the card background image
+        const cardImage = CanvasRenderer.loadNewImage("./assets/scanPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
     }
