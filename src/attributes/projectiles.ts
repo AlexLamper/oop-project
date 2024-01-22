@@ -1,4 +1,4 @@
-export default class Projectile {
+export default class Projectiles {
   public x: number;
   public y: number;
   public width: number;
@@ -43,7 +43,7 @@ export default class Projectile {
     ctx.save();
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
     ctx.rotate((this.rotation * Math.PI) / 180);
-    ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height); // Draw the image
+    ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
     ctx.restore();
   }
 }

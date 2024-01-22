@@ -87,7 +87,6 @@ export default class VPNScene extends Scene {
     return minutesString + ":" + secondsString;
   }
 
-  // Constructor for the Defender Scene
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
 
@@ -106,13 +105,11 @@ export default class VPNScene extends Scene {
     this.VPNBackground = CanvasRenderer.loadNewImage("./assets/vpn_background.png");
     this.player = new Player(maxX / 2, maxY / 2, 100, 100, "./assets/player.png");
 
-    // Add event listener for keydown events
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     document.addEventListener("click", this.handleClick.bind(this));
   }
 
-  // Handle keydown events
   private handleKeyDown(event: KeyboardEvent): void {
     if (this.keyMap.hasOwnProperty(event.code)) {
       event.preventDefault();
@@ -164,11 +161,9 @@ export default class VPNScene extends Scene {
   }
 
   // Function to update the direction of the player
-  // Function to update the direction of the player
   private updateDirection(): void {
     const keys = Object.keys(this.keyMap).filter((key) => this.keyMap[key]);
 
-    // Prioritize WASD keys over arrow keys
     const prioritizedKeys = ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
 
     const firstMatchingKey = prioritizedKeys.find((key) => keys.includes(key));
@@ -191,7 +186,6 @@ export default class VPNScene extends Scene {
    */
   public getNextScene(): Scene | null {
     if (this.timeLimit <= 0) {
-      this.endGame();
       ScoreManager.VPNScore = this.VPNScore;
       homeScene.terminalEnabled = true;
       return new winSceneVPN(this.maxX, this.maxY);
@@ -202,22 +196,15 @@ export default class VPNScene extends Scene {
     } else return null;
   }
 
-  // Method to end the game
-  private endGame(): void {
-    // Add defenderScore to the totalScore when the game ends
-  }
-
   public portalsSpawn(): void {
-    const maxPortals = 6; // Maximum number of portals allowed
+    const maxPortals = 6; 
     const portalCount = this.portals.length;
 
-    // Initial spawn of one portal
     if (portalCount < maxPortals) {
       this.spawnPortal();
     }
 
-    // Use a timeout loop to spawn additional portals at random intervals
-    const spawnInterval = 5000; // Initial spawn interval (between 5 to 15 seconds)
+    const spawnInterval = 5000; // spawn interval
     const minSpawnDelay = 5000; // Minimum time before next spawn
     const maxSpawnDelay = 15000; // Maximum time before next spawn
 
@@ -257,7 +244,6 @@ export default class VPNScene extends Scene {
   // ...
 
   public update(elapsed: number): void {
-    // Update the time limit
     if (this.timeLimit > 0 || this.lifes > 0) {
       this.timeLimit -= elapsed;
     } else {
@@ -318,7 +304,6 @@ export default class VPNScene extends Scene {
       enemy.update(playerBox.x, playerBox.y);
       // Check for overlap between player and enemy bounding boxes
       if (playerBox.x < enemy.x + enemy.width && playerBox.x + playerBox.width > enemy.x && playerBox.y < enemy.y + enemy.height && playerBox.y + playerBox.height > enemy.y) {
-        // Collision detected, delete the enemy
         this.enemies.splice(index, 1);
         if (this.firewallActive === true) {
           this.barriers.splice(0, 1);
@@ -337,11 +322,9 @@ export default class VPNScene extends Scene {
 
         // Check for overlap between bounding boxes
         if (projectile.x < enemy.x + enemy.width && projectile.x + projectile.width > enemy.x && projectile.y < enemy.y + enemy.height && projectile.y + projectile.height > enemy.y) {
-          // Remove the enemy from the array when hit by the projectile
           this.VPNScore++;
           this.enemies.splice(j, 1);
           this.projectiles.splice(i, 1);
-          // Decrement j to account for the removed enemy
           j--;
         }
       }
@@ -355,11 +338,8 @@ export default class VPNScene extends Scene {
 
         // Check for overlap between bounding boxes
         if (projectile.x < portal.x + portal.width && projectile.x + projectile.width > portal.x && projectile.y < portal.y + portal.height && projectile.y + projectile.height > portal.y) {
-          // Remove the portal from the array when hit by the projectile
           this.portals.splice(j, 1);
           this.projectiles.splice(i, 1);
-
-          // Decrement j to account for the removed portal
           this.VPNScore += 3;
           j--;
         }
@@ -445,7 +425,6 @@ export default class VPNScene extends Scene {
       }
     });
 
-    //Turbo Timer
     if (this.turboTimer > 0) {
       this.turboTimer -= elapsed;
     }
@@ -461,7 +440,6 @@ export default class VPNScene extends Scene {
       }
     }
 
-    // Firewall Timer
     if (this.firewallCardTimer > 0) {
       this.firewallCardTimer -= elapsed;
     }
@@ -470,7 +448,6 @@ export default class VPNScene extends Scene {
       this.firewallCardTimer = 0;
     }
 
-    // Scan Timer
     if (this.scanCardTimer > 0) {
       this.scanCardTimer -= elapsed;
     }
@@ -478,8 +455,6 @@ export default class VPNScene extends Scene {
       this.showScanCard = false;
       this.scanCardTimer = 0;
     }
-
-    // Firewall logic
 
     this.barriers.forEach((barrier) => {
       barrier.update(this.player.x, this.player.y);
@@ -500,14 +475,11 @@ export default class VPNScene extends Scene {
     const enemyImagePath = "./assets/enemy-red.png";
     let enemyCount = 0;
 
-    // Spawn an enemy every spawnInterval milliseconds
     const spawnTimer = setInterval(() => {
       if (enemyCount >= numberOfEnemies) {
         clearInterval(spawnTimer);
         return;
       }
-
-      // Create a new enemy at the spawn point
       const newEnemy = new Enemy(spawnX, spawnY, 70, 70, enemyImagePath);
 
       // Add the new enemy to the enemies array
@@ -525,20 +497,16 @@ export default class VPNScene extends Scene {
     document.querySelectorAll("button").forEach((button) => {
       button.remove();
     });
-    // Render the background image
     document.body.style.backgroundImage = `url(${this.VPNBackground.src})`;
     const ctx = canvas.getContext("2d");
 
     if (ctx) {
-      // Render the player on the canvas
       this.player.render(canvas, ctx);
-      // Render the projectiles on the canvas
       this.projectiles.forEach((projectile) => {
         projectile.render(canvas, ctx);
       });
-      // Render the enemies on the canvas
       this.enemies.forEach((enemy) => {
-        enemy.render(canvas, ctx); // Implement a render method in the Enemy class
+        enemy.render(canvas, ctx); 
       });
 
       this.portals.forEach((portal) => {
@@ -553,13 +521,10 @@ export default class VPNScene extends Scene {
         barrier.render(canvas);
       });
 
-      // Render the time, score and lives on the canvas
-
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.07, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, `Score: ${this.VPNScore}`, canvas.width * 0.15, canvas.height * 0.07, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.8, canvas.height * 0.07, "center", "Pixelated", 75, "White");
 
-      // Render de Turbo card
       if (this.showTurboCard) {
         const cardWidth = 340;
         const cardHeight = 191;
@@ -567,11 +532,9 @@ export default class VPNScene extends Scene {
         const cardX = canvas.width - cardWidth - cardPadding + 5;
         const cardY = canvas.height - cardHeight - cardPadding + 5;
 
-        // Draw the card background image
         const cardImage = CanvasRenderer.loadNewImage("./assets/turboPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      // Render de Firewall card
       if(this.showFirewallCard){
         const cardWidth = 340;
         const cardHeight = 191;
@@ -579,11 +542,9 @@ export default class VPNScene extends Scene {
         const cardX = canvas.width - cardWidth - cardPadding + 5;
         const cardY = canvas.height - cardHeight - cardPadding + 5;
 
-        // Draw the card background image
         const cardImage = CanvasRenderer.loadNewImage("./assets/firewallPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      // Render de Scan card
       if(this.showScanCard){
         const cardWidth = 340;
         const cardHeight = 191;
@@ -591,7 +552,6 @@ export default class VPNScene extends Scene {
         const cardX = canvas.width - cardWidth - cardPadding + 5;
         const cardY = canvas.height - cardHeight - cardPadding + 5;
 
-        // Draw the card background image
         const cardImage = CanvasRenderer.loadNewImage("./assets/scanPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }    }

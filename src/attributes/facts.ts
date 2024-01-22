@@ -1,6 +1,6 @@
 export default class Facts {
 
-  public static factsList = [
+  public static factsList : string[] = [
     "Defenders offer nearly 100% real-time protection.",
     "Firewalls filter both incoming and outgoing network traffic.",
     "Computer viruses trace back to the 1970s.",
@@ -27,8 +27,8 @@ export default class Facts {
     "Cybersecurity awareness is key to online safety.",
   ];
 
-  public paddingX = 20;
-public paddingY = 350;
+  public paddingX : number = 20;
+  public paddingY : number = 350;
 
 public textStyle = {
   font: "JoystixMonospace-Regular",

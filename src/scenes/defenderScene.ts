@@ -16,8 +16,6 @@ import Scan from "../attributes/powerup/Scan.js";
 
 import ScoreManager from "../attributes/totalScore.js";
 
-const scoreManager = ScoreManager.getInstance();
-
 import loseScene from "./loseScene.js";
 
 export default class DefenderScene extends Scene {
@@ -75,10 +73,6 @@ export default class DefenderScene extends Scene {
 
   private scanCardShown: boolean = false;
 
-
-  public getCurrentGameScore(): number {
-    return this.defenderScore;
-  }
   private portalSpawnTimer: number = 0;
 
   private enemySpawnTimer: number = 0;
@@ -92,7 +86,6 @@ export default class DefenderScene extends Scene {
     return minutesString + ":" + secondsString;
   }
 
-  // Constructor for the Defender Scene
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
 
@@ -115,19 +108,7 @@ export default class DefenderScene extends Scene {
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     document.addEventListener("click", this.handleClick.bind(this));
-    // document.addEventListener("keydown", this.handleSpaceKeyDown.bind(this));
   }
-
-  // Handle space keydown events
-  // private handleSpaceKeyDown(event: KeyboardEvent): void {
-  //   if (event.key === " ") {
-  //     event.preventDefault();
-  //     this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
-  //     // Add your code here to handle the space keydown event
-  //   }
-  // }
-
-  // Add event listener for space keydown events
 
   // Handle keydown events
   private handleKeyDown(event: KeyboardEvent): void {
@@ -181,9 +162,7 @@ export default class DefenderScene extends Scene {
   }
 
   // Function to update the direction of the player
-  // Function to update the direction of the player
   private updateDirection(): void {
-    // console.log("Current direction:", this.currentDirection);
     const keys = Object.keys(this.keyMap).filter((key) => this.keyMap[key]);
 
     // Prioritize WASD keys over arrow keys
@@ -209,9 +188,7 @@ export default class DefenderScene extends Scene {
    */
   public getNextScene(): Scene | null {
     if (this.timeLimit <= 0) {
-      this.endGame();
       ScoreManager.defenderScore = this.defenderScore;
-      console.log(`Total Score: ${ScoreManager.defenderScore}`);
       homeScene.terminalEnabled = true;
       return new winScene(this.maxX, this.maxY);
     } else if (this.escapeClicked === true) {
@@ -219,12 +196,6 @@ export default class DefenderScene extends Scene {
     } else if (this.lifes <= 0) {
       return new loseScene(this.maxX, this.maxY);
     } else return null;
-  }
-
-  // Method to end the game
-  private endGame(): void {
-    // Add defenderScore to the totalScore when the game ends
-    // scoreManager.updateTotalScore(this.getCurrentGameScore());
   }
 
   public portalsSpawn(): void {
@@ -237,7 +208,7 @@ export default class DefenderScene extends Scene {
     }
 
     // Use a timeout loop to spawn additional portals at random intervals
-    const spawnInterval = 5000; // Initial spawn interval (between 5 to 15 seconds)
+    const spawnInterval = 5000; // spawn interval 
     const minSpawnDelay = 5000; // Minimum time before next spawn
     const maxSpawnDelay = 15000; // Maximum time before next spawn
 
@@ -361,7 +332,6 @@ export default class DefenderScene extends Scene {
           this.defenderScore++;
           this.enemies.splice(j, 1);
           this.projectiles.splice(i, 1);
-          // Decrement j to account for the removed enemy
           j--;
         }
       }
@@ -378,8 +348,6 @@ export default class DefenderScene extends Scene {
           // Remove the portal from the array when hit by the projectile
           this.portals.splice(j, 1);
           this.projectiles.splice(i, 1);
-
-          // Decrement j to account for the removed portal
           this.defenderScore += 3;
           j--;
         }
@@ -499,8 +467,6 @@ export default class DefenderScene extends Scene {
       this.scanCardTimer = 0;
     }
 
-    // Firewall logic
-
     this.barriers.forEach((barrier) => {
       barrier.update(this.player.x, this.player.y);
     });
@@ -542,7 +508,6 @@ export default class DefenderScene extends Scene {
    * @param canvas canvas to render to
    */
   public render(canvas: HTMLCanvasElement): void {
-    // Render the background image
     document.body.style.backgroundImage = `url(${this.DefenderBackground.src})`;
     const ctx = canvas.getContext("2d");
 
@@ -570,13 +535,10 @@ export default class DefenderScene extends Scene {
         barrier.render(canvas);
       });
 
-      // Render the time, score and lives on the canvas
-
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.07, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, `Score: ${this.defenderScore}`, canvas.width * 0.15, canvas.height * 0.07, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.8, canvas.height * 0.07, "center", "Pixelated", 75, "White");
 
-      // Render de Turbo card
       if (this.showTurboCard) {
         const cardWidth = 340;
         const cardHeight = 191;
@@ -584,11 +546,9 @@ export default class DefenderScene extends Scene {
         const cardX = canvas.width - cardWidth - cardPadding + 5;
         const cardY = canvas.height - cardHeight - cardPadding + 5;
 
-        // Draw the card background image
         const cardImage = CanvasRenderer.loadNewImage("./assets/turboPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      // Render de Firewall card
       if(this.showFirewallCard){
         const cardWidth = 340;
         const cardHeight = 191;
@@ -596,11 +556,9 @@ export default class DefenderScene extends Scene {
         const cardX = canvas.width - cardWidth - cardPadding + 5;
         const cardY = canvas.height - cardHeight - cardPadding + 5;
 
-        // Draw the card background image
         const cardImage = CanvasRenderer.loadNewImage("./assets/firewallPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      // Render de Scan card
       if(this.showScanCard){
         const cardWidth = 340;
         const cardHeight = 191;
@@ -608,7 +566,6 @@ export default class DefenderScene extends Scene {
         const cardX = canvas.width - cardWidth - cardPadding + 5;
         const cardY = canvas.height - cardHeight - cardPadding + 5;
 
-        // Draw the card background image
         const cardImage = CanvasRenderer.loadNewImage("./assets/scanPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }

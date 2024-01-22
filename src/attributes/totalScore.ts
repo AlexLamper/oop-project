@@ -1,7 +1,7 @@
-export default class ScoreManager {
+export default class totalScore {
   private totalScore: number;
 
-  private static instance: ScoreManager;
+  private static instance: totalScore;
 
   public static VPNScore: number = 0;
   
@@ -11,11 +11,11 @@ export default class ScoreManager {
   
   private constructor() {}
 
-  public static getInstance(): ScoreManager {
-    if (!ScoreManager.instance) {
-      ScoreManager.instance = new ScoreManager();
+  public static getInstance(): totalScore {
+    if (!totalScore.instance) {
+      totalScore.instance = new totalScore();
     }
-    return ScoreManager.instance;
+    return totalScore.instance;
   }
 
   public updateTotalScore(gameScore: number): void {
@@ -23,7 +23,7 @@ export default class ScoreManager {
   }
 
   public getTotalScore(): number {
-    this.totalScore = ScoreManager.VPNScore + ScoreManager.defenderScore + ScoreManager.terminalScore;
+    this.totalScore = totalScore.VPNScore + totalScore.defenderScore + totalScore.terminalScore;
     return this.totalScore;
   }
 }

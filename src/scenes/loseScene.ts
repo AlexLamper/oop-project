@@ -5,14 +5,13 @@ import homeScene from "./homeScene.js";
 import facts from "../attributes/facts.js";
 
 
-export default class winScene extends Scene {
+export default class loseScene extends Scene {
   private Facts = new facts();
   private loseBackground: HTMLImageElement;
   private clickNext: boolean = false;
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
-    // Ff tijdelijke achtergrond voor de mail scene, deze moet nog worden aangepast
     this.loseBackground = CanvasRenderer.loadNewImage("./assets/black-background.jpg");
   }
 
@@ -60,15 +59,12 @@ export default class winScene extends Scene {
    * @param canvas canvas to render to
    */
   public render(canvas: HTMLCanvasElement): void {
-    document.querySelectorAll("button").forEach((button) => {
-      button.remove();
-    }); //alle buttons verwijderen van vorige pagina
     document.body.style.backgroundImage = `url(${this.loseBackground.src})`;
     CanvasRenderer.writeText(canvas, "Did you know?", canvas.width / 2, canvas.height / 4, "center", "Pixelated", 75, "Red");
     CanvasRenderer.writeText(canvas, "You Lost!", canvas.width / 2, canvas.height / 8, "center", "Pixelated", 75, "Red");
     for (let i = 0; i < this.randomFacts.length; i++) {
       const x = this.Facts.paddingX;
-      const y = this.Facts.paddingY + i * 100; // ruimte/padding tussen de feiten
+      const y = this.Facts.paddingY + i * 100;
 
       CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.Facts.textStyle.textAlign, this.Facts.textStyle.font, this.Facts.textStyle.fontSize, this.Facts.textStyle.fillStyle);
     }
