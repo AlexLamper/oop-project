@@ -61,10 +61,6 @@ export default class DefenderScene extends Scene {
 
   private turboCardTimer: number = 0;
 
-  public getCurrentGameScore(): number {
-    return this.defenderScore;
-  }
-
   private portalSpawnTimer: number = 0;
 
   private enemySpawnTimer: number = 0;
@@ -169,7 +165,7 @@ export default class DefenderScene extends Scene {
   // Function to update the direction of the player
   // Function to update the direction of the player
   private updateDirection(): void {
-    console.log("Current direction:", this.currentDirection);
+    // console.log("Current direction:", this.currentDirection);
     const keys = Object.keys(this.keyMap).filter((key) => this.keyMap[key]);
 
     // Prioritize WASD keys over arrow keys
@@ -197,6 +193,7 @@ export default class DefenderScene extends Scene {
     if (this.timeLimit <= 0) {
       this.endGame();
       const totalScore = scoreManager.getTotalScore();
+      ScoreManager.defenderScore = this.defenderScore;
       console.log(`Total Score: ${totalScore}`);
       homeScene.terminalEnabled = true;
       return new winScene(this.maxX, this.maxY);
@@ -210,7 +207,7 @@ export default class DefenderScene extends Scene {
   // Method to end the game
   private endGame(): void {
     // Add defenderScore to the totalScore when the game ends
-    scoreManager.updateTotalScore(this.getCurrentGameScore());
+    // scoreManager.updateTotalScore(this.getCurrentGameScore());
   }
 
   public portalsSpawn(): void {
