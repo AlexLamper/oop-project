@@ -2,7 +2,7 @@ import CanvasRenderer from "../CanvasRenderer.js";
 import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
-import winScene from "./winScene.js";
+import winSceneVPN from "./winScene-VPN.js";
 import Player from "../attributes/player.js";
 import Projectile from "../attributes/projectiles.js";
 import Enemy from "../attributes/enemies.js";
@@ -43,7 +43,7 @@ export default class VPNScene extends Scene {
 
   private lifes: number = 5;
 
-  private timeLimit: number = 60000;
+  private timeLimit: number = 120000;
 
   private VPNScore = 0;
 
@@ -101,19 +101,7 @@ export default class VPNScene extends Scene {
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     document.addEventListener("click", this.handleClick.bind(this));
-    document.addEventListener("keydown", this.handleSpaceKeyDown.bind(this));
   }
-
-  // Handle space keydown events
-  private handleSpaceKeyDown(event: KeyboardEvent): void {
-    if (event.key === " ") {
-      event.preventDefault();
-      this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
-      // Add your code here to handle the space keydown event
-    }
-  }
-
-  // Add event listener for space keydown events
 
   // Handle keydown events
   private handleKeyDown(event: KeyboardEvent): void {
@@ -169,7 +157,6 @@ export default class VPNScene extends Scene {
   // Function to update the direction of the player
   // Function to update the direction of the player
   private updateDirection(): void {
-    console.log("Current direction:", this.currentDirection);
     const keys = Object.keys(this.keyMap).filter((key) => this.keyMap[key]);
 
     // Prioritize WASD keys over arrow keys
@@ -196,10 +183,9 @@ export default class VPNScene extends Scene {
   public getNextScene(): Scene | null {
     if (this.timeLimit <= 0) {
       this.endGame();
-      const totalScore = scoreManager.getTotalScore();
-      console.log(`Total Score: ${totalScore}`);
+      ScoreManager.VPNScore = this.VPNScore;
       homeScene.terminalEnabled = true;
-      return new winScene(this.maxX, this.maxY);
+      return new winSceneVPN(this.maxX, this.maxY);
     } else if (this.escapeClicked === true) {
       return new homeScene(this.maxX, this.maxY);
     } else if (this.lifes <= 0) {
@@ -214,7 +200,7 @@ export default class VPNScene extends Scene {
   }
 
   public portalsSpawn(): void {
-    const maxPortals = 4; // Maximum number of portals allowed
+    const maxPortals = 6; // Maximum number of portals allowed
     const portalCount = this.portals.length;
 
     // Initial spawn of one portal
@@ -270,7 +256,6 @@ export default class VPNScene extends Scene {
       this.getNextScene();
     }
 
-    console.log(this.turboTimer);
     this.projectiles.forEach((projectile) => {
       projectile.update();
     });
@@ -375,13 +360,13 @@ export default class VPNScene extends Scene {
 
     // Portal spawn
     this.portalSpawnTimer += elapsed;
-    if (this.portalSpawnTimer >= 3000 + Math.floor(Math.random() * 5000)) {
+    if (this.portalSpawnTimer >= 5000 + Math.floor(Math.random() * 5000)) {
       this.portalSpawnTimer = 0;
       this.portalsSpawn();
     }
 
     this.enemySpawnTimer += elapsed;
-    if (this.enemySpawnTimer >= 4000 + Math.floor(Math.random() * 3000)) {
+    if (this.enemySpawnTimer >= 5000 + Math.floor(Math.random() * 3000)) {
       this.enemySpawnTimer = 0;
       this.spawnEnemiesFromPortals();
     }
@@ -392,11 +377,11 @@ export default class VPNScene extends Scene {
     this.timeUntilNextItem += elapsed;
     if (this.timeUntilNextItem >= randomItemInterval) {
       this.timeUntilNextItem = 0;
-      if (randomItemChance <= 10) {
+      if (randomItemChance <= 40) {
         this.powerUpItems.push(new Coin());
-      } else if (randomItemChance <= 20) {
+      } else if (randomItemChance <= 60) {
         this.powerUpItems.push(new Turbo());
-      } else if (randomItemChance <= 30) {
+      } else if (randomItemChance <= 85) {
         this.powerUpItems.push(new Firewall());
       } else {
         this.powerUpItems.push(new Scan());

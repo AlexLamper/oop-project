@@ -2,6 +2,8 @@ export default class ScoreManager {
   private totalScore: number = 0;
   private static instance: ScoreManager;
 
+  public static VPNScore: number = 0;
+  
   private constructor() {}
 
   public static getInstance(): ScoreManager {
