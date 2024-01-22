@@ -2,6 +2,7 @@ import CanvasRenderer from "../CanvasRenderer.js";
 import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
+import ScoreManager from "../attributes/totalScore.js";
 
 const facts = [
   "",
@@ -75,6 +76,8 @@ export default class winScene extends Scene {
 
       CanvasRenderer.writeText(canvas, facts[i], x, y, textStyle.textAlign, textStyle.font, null, textStyle.fillStyle);
   }
-    CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Green");
-  }
+  CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Green");
+  console.log(ScoreManager.defenderScore);
+  CanvasRenderer.writeText(canvas, `Total score:  ${ScoreManager.defenderScore}`, canvas.width / 2, canvas.height - 80, "center", "Pixelated", 75, "Green");
+}
 }
