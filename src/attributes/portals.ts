@@ -1,11 +1,11 @@
-export default class Portal {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  image: HTMLImageElement;
-  lives: number;
-  isAlive: boolean;
+export default class Portals {
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public image: HTMLImageElement;
+  public lives: number;
+  public isAlive: boolean;
 
   constructor(x: number, y: number, width: number, height: number, imagePath: string) {
     this.x = x;

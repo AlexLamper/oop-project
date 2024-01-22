@@ -49,7 +49,7 @@ export default class winSceneTerminal extends Scene {
     for (let i = 0; i < count; i++) {
       randomFacts.push(shuffledFacts[i]);
     }
-    shuffledFacts.splice(0, count); // Remove the used facts from the shuffledFacts array
+    shuffledFacts.splice(0, count);
     return randomFacts;
   }
 
@@ -59,16 +59,13 @@ export default class winSceneTerminal extends Scene {
    * @param canvas canvas to render to
    */
   public render(canvas: HTMLCanvasElement): void {
-    document.querySelectorAll("button").forEach((button) => {
-      button.remove();
-    }); //alle buttons verwijderen van vorige pagina
     document.body.style.backgroundImage = `url(${this.winBackground.src})`;
     CanvasRenderer.writeText(canvas, "You completed Level 2", canvas.width / 2, canvas.height / 8, "center", "Pixelated", 75, "Green");
     CanvasRenderer.writeText(canvas, "Did you know?", canvas.width / 2, canvas.height / 4, "center", "Pixelated", 75, "Green");
 
     for (let i = 0; i < this.randomFacts.length; i++) {
       const x = this.facts.paddingX;
-      const y = this.facts.paddingY + i * 100; // ruimte/padding tussen de feiten
+      const y = this.facts.paddingY + i * 100; 
 
       CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.facts.textStyle.textAlign, this.facts.textStyle.font, this.facts.textStyle.fontSize, this.facts.textStyle.fillStyle);
     }

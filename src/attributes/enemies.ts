@@ -1,10 +1,10 @@
-export default class Enemy {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  image: HTMLImageElement;
-  rotation: number;
+export default class Enemies {
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public image: HTMLImageElement;
+  public rotation: number;
 
   constructor(x: number, y: number, width: number, height: number, imagePath: string) {
     this.x = x;
@@ -13,9 +13,6 @@ export default class Enemy {
     this.height = height;
     this.image = new Image();
     this.image.onload = () => {};
-    this.image.onerror = (error) => {
-      console.error("Failed to load enemy image:", error);
-    };
     this.image.src = imagePath;
     this.rotation = 0;
   }

@@ -88,7 +88,6 @@ export default class TerminalScene extends Scene {
     return minutesString + ":" + secondsString;
   }
 
-  // Constructor for the Defender Scene
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
 
@@ -166,12 +165,9 @@ export default class TerminalScene extends Scene {
   }
 
   // Function to update the direction of the player
-  // Function to update the direction of the player
   private updateDirection(): void {
-    console.log("Current direction:", this.currentDirection);
     const keys = Object.keys(this.keyMap).filter((key) => this.keyMap[key]);
 
-    // Prioritize WASD keys over arrow keys
     const prioritizedKeys = ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
 
     const firstMatchingKey = prioritizedKeys.find((key) => keys.includes(key));
@@ -194,10 +190,7 @@ export default class TerminalScene extends Scene {
    */
   public getNextScene(): Scene | null {
     if (this.timeLimit <= 0) {
-      this.endGame();
-      const totalScore = scoreManager.getTotalScore();
       ScoreManager.terminalScore = this.terminalScore;
-      console.log(`Total Score: ${totalScore}`);
       homeScene.vpnEnabled = true;
       return new winSceneTerminal(this.maxX, this.maxY);
     } else if (this.escapeClicked === true) {
@@ -208,21 +201,16 @@ export default class TerminalScene extends Scene {
   }
 
   // Method to end the game
-  private endGame(): void {
-    // Add the terminal Score to the totalScore when the game ends
-  }
 
   public portalsSpawn(): void {
-    const maxPortals = 4; // Maximum number of portals allowed
+    const maxPortals = 4; 
     const portalCount = this.portals.length;
 
-    // Initial spawn of one portal
     if (portalCount < maxPortals) {
       this.spawnPortal();
     }
 
-    // Use a timeout loop to spawn additional portals at random intervals
-    const spawnInterval = 5000; // Initial spawn interval (between 5 to 15 seconds)
+    const spawnInterval = 5000; // spawn interval
     const minSpawnDelay = 5000; // Minimum time before next spawn
     const maxSpawnDelay = 15000; // Maximum time before next spawn
 
@@ -242,7 +230,6 @@ export default class TerminalScene extends Scene {
   }
 
   private spawnPortal(): void {
-    // Calculate random coordinates within the specified range
     const minX = 100;
     const minY = 100;
     const maxX = window.innerWidth - 100;
@@ -262,19 +249,16 @@ export default class TerminalScene extends Scene {
   // ...
 
   public update(elapsed: number): void {
-    // Update the time limit
     if (this.timeLimit > 0 || this.lifes > 0) {
       this.timeLimit -= elapsed;
     } else {
       this.getNextScene();
     }
 
-    console.log(this.turboTimer);
     this.projectiles.forEach((projectile) => {
       projectile.update();
     });
 
-    // Update the player's position
     if (this.currentDirection === "ArrowLeft" || this.currentDirection === "KeyA") {
       if (this.player.x > 0) {
         if (this.turboActive === true) {
@@ -312,7 +296,6 @@ export default class TerminalScene extends Scene {
         }
       }
     }
-    // Update enemies and check for collision with player
     const playerBox = {
       x: this.player.x + 12,
       y: this.player.y + 12,
@@ -322,9 +305,7 @@ export default class TerminalScene extends Scene {
 
     this.enemies.forEach((enemy, index) => {
       enemy.update(playerBox.x, playerBox.y);
-      // Check for overlap between player and enemy bounding boxes
       if (playerBox.x < enemy.x + enemy.width && playerBox.x + playerBox.width > enemy.x && playerBox.y < enemy.y + enemy.height && playerBox.y + playerBox.height > enemy.y) {
-        // Collision detected, delete the enemy
         this.enemies.splice(index, 1);
         if (this.firewallActive === true) {
           this.barriers.splice(0, 1);
@@ -335,7 +316,6 @@ export default class TerminalScene extends Scene {
       }
     });
 
-    // Collision detection between projectiles and enemies
     for (let i = 0; i < this.projectiles.length; i++) {
       const projectile = this.projectiles[i];
       for (let j = 0; j < this.enemies.length; j++) {
@@ -347,7 +327,6 @@ export default class TerminalScene extends Scene {
           this.terminalScore++;
           this.enemies.splice(j, 1);
           this.projectiles.splice(i, 1);
-          // Decrement j to account for the removed enemy
           j--;
         }
       }
@@ -364,8 +343,6 @@ export default class TerminalScene extends Scene {
           // Remove the portal from the array when hit by the projectile
           this.portals.splice(j, 1);
           this.projectiles.splice(i, 1);
-
-          // Decrement j to account for the removed portal
           this.terminalScore += 3;
           j--;
         }
@@ -379,6 +356,7 @@ export default class TerminalScene extends Scene {
       this.portalsSpawn();
     }
 
+    // Enemy spawn
     this.enemySpawnTimer += elapsed;
     if (this.enemySpawnTimer >= 4000 + Math.floor(Math.random() * 3000)) {
       this.enemySpawnTimer = 0;
@@ -485,8 +463,6 @@ export default class TerminalScene extends Scene {
       this.scanCardTimer = 0;
     }
 
-    // Firewall logic
-
     this.barriers.forEach((barrier) => {
       barrier.update(this.player.x, this.player.y);
     });
@@ -528,20 +504,16 @@ export default class TerminalScene extends Scene {
    * @param canvas canvas to render to
    */
   public render(canvas: HTMLCanvasElement): void {
-    // Render the background image
     document.body.style.backgroundImage = `url(${this.terminalBackground.src})`;
     const ctx = canvas.getContext("2d");
 
     if (ctx) {
-      // Render the player on the canvas
       this.player.render(canvas, ctx);
-      // Render the projectiles on the canvas
       this.projectiles.forEach((projectile) => {
         projectile.render(canvas, ctx);
       });
-      // Render the enemies on the canvas
       this.enemies.forEach((enemy) => {
-        enemy.render(canvas, ctx); // Implement a render method in the Enemy class
+        enemy.render(canvas, ctx); 
       });
 
       this.portals.forEach((portal) => {
@@ -556,13 +528,10 @@ export default class TerminalScene extends Scene {
         barrier.render(canvas);
       });
 
-      // Render the time, score and lives on the canvas
-
       CanvasRenderer.writeText(canvas, this.timeScoreMinutesandSeconds(), canvas.width / 2, canvas.height * 0.07, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, `Score: ${this.terminalScore}`, canvas.width * 0.15, canvas.height * 0.07, "center", "Pixelated", 75, "White");
       CanvasRenderer.writeText(canvas, `Lives: ${this.lifes}`, canvas.width * 0.8, canvas.height * 0.07, "center", "Pixelated", 75, "White");
 
-      // Render de Turbo card
       if (this.showTurboCard) {
         const cardWidth = 340;
         const cardHeight = 191;
@@ -570,11 +539,9 @@ export default class TerminalScene extends Scene {
         const cardX = canvas.width - cardWidth - cardPadding + 5;
         const cardY = canvas.height - cardHeight - cardPadding + 5;
 
-        // Draw the card background image
         const cardImage = CanvasRenderer.loadNewImage("./assets/turboPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      // Render de Firewall card
       if(this.showFirewallCard){
         const cardWidth = 340;
         const cardHeight = 191;
@@ -582,11 +549,9 @@ export default class TerminalScene extends Scene {
         const cardX = canvas.width - cardWidth - cardPadding + 5;
         const cardY = canvas.height - cardHeight - cardPadding + 5;
 
-        // Draw the card background image
         const cardImage = CanvasRenderer.loadNewImage("./assets/firewallPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      // Render de Scan card
       if(this.showScanCard){
         const cardWidth = 340;
         const cardHeight = 191;
@@ -594,7 +559,6 @@ export default class TerminalScene extends Scene {
         const cardX = canvas.width - cardWidth - cardPadding + 5;
         const cardY = canvas.height - cardHeight - cardPadding + 5;
 
-        // Draw the card background image
         const cardImage = CanvasRenderer.loadNewImage("./assets/scanPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }

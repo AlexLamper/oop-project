@@ -5,7 +5,6 @@ import mailScene from "./mailScene.js";
 import TerminalScene from "./terminalScene.js";
 import DefenderScene from "./defenderScene.js";
 import VPNScene from "./vpnScene.js";
-import ShoppingScene from "./shoppingScene.js";
 import ScoreManager from "../attributes/totalScore.js";
 import instructionscene from "./instructionScene.js";
 
@@ -13,7 +12,6 @@ const scoreManager = ScoreManager.getInstance();
 
 export default class homeScene extends Scene {
   private pcBackground: HTMLImageElement;
-  private shoppingCart: HTMLImageElement;
   private defender: HTMLImageElement;
   private terminal: HTMLImageElement;
   private mail: HTMLImageElement;
@@ -21,10 +19,8 @@ export default class homeScene extends Scene {
   private nextScene: Scene | null;
   private mailNoNotif: HTMLImageElement;
 
-  private shoppingCartBlocked: HTMLImageElement;
   private defenderBlocked: HTMLImageElement;
   private terminalBlocked: HTMLImageElement;
-  private mailBlocked: HTMLImageElement;
   private vpnBlocked: HTMLImageElement;
 
   public static setMailNoNotif: boolean = false;
@@ -44,17 +40,14 @@ export default class homeScene extends Scene {
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
     this.pcBackground = CanvasRenderer.loadNewImage("./assets/pcbackground.png");
-    this.shoppingCart = CanvasRenderer.loadNewImage("./assets/shopping-cart.png");
     this.defender = CanvasRenderer.loadNewImage("./assets/defender.png");
     this.terminal = CanvasRenderer.loadNewImage("./assets/terminal.png");
     this.mail = CanvasRenderer.loadNewImage("./assets/mail.png");
     this.vpn = CanvasRenderer.loadNewImage("./assets/vpn.png");
     this.mailNoNotif = CanvasRenderer.loadNewImage("./assets/mail-no-notification.png");
 
-    this.shoppingCartBlocked = CanvasRenderer.loadNewImage("./assets/blockedIcon/shopping-cart.png");
     this.defenderBlocked = CanvasRenderer.loadNewImage("./assets/blockedIcon/defender.png");
     this.terminalBlocked = CanvasRenderer.loadNewImage("./assets/blockedIcon/terminal.png");
-    this.mailBlocked = CanvasRenderer.loadNewImage("./assets/blockedIcon/mail.png");
     this.vpnBlocked = CanvasRenderer.loadNewImage("./assets/blockedIcon/vpn.png");
   }
 
@@ -117,8 +110,6 @@ export default class homeScene extends Scene {
       return new TerminalScene(this.maxX, this.maxY);
     } else if (this.nextScene instanceof VPNScene) {
       return new VPNScene(this.maxX, this.maxY);
-    } else if (this.nextScene instanceof ShoppingScene) {
-      return new ShoppingScene(this.maxX, this.maxY);
     } else {
       return null;
     }

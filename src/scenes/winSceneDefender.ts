@@ -5,8 +5,7 @@ import homeScene from "./homeScene.js";
 import ScoreManager from "../attributes/totalScore.js";
 import Facts from "../attributes/facts.js";
 
-
-export default class winScene extends Scene {
+export default class winSceneDefender extends Scene {
   private winBackground: HTMLImageElement;
   private clickNext: boolean = false;
   private facts = new Facts();
@@ -43,26 +42,24 @@ export default class winScene extends Scene {
       this.getNextScene();
     }
   }
+
   private getRandomFacts(count: number): string[] {
     const randomFacts: string[] = [];
     const shuffledFacts = Facts.factsList.sort(() => Math.random() - 0.5);
     for (let i = 0; i < count; i++) {
       randomFacts.push(shuffledFacts[i]);
     }
-    shuffledFacts.splice(0, count); // Remove the used facts from the shuffledFacts array
+    shuffledFacts.splice(0, count); 
     return randomFacts;
   }
 
-  private randomFacts = this.getRandomFacts(3);
+  private randomFacts : string[] = this.getRandomFacts(3);
 
   /**
    * Render the scene to the canvas
    * @param canvas canvas to render to
    */
   public render(canvas: HTMLCanvasElement): void {
-    document.querySelectorAll("button").forEach((button) => {
-      button.remove();
-    }); //alle buttons verwijderen van vorige pagina
     document.body.style.backgroundImage = `url(${this.winBackground.src})`;
     CanvasRenderer.writeText(canvas, "You completed Level 1", canvas.width / 2, canvas.height / 8, "center", "Pixelated", 75, "Green");
     CanvasRenderer.writeText(canvas, "Did you know?", canvas.width / 2, canvas.height / 4, "center", "Pixelated", 75, "Green");

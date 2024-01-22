@@ -1,8 +1,6 @@
 import PowerUpItems from "./PowerUpItems.js";
-import Turbo from "./powerup/Turbo.js";
 
 export default class Player {
-  private turbo: Turbo;
   public x: number;
   public y: number;
   public width: number;
@@ -16,9 +14,6 @@ export default class Player {
     this.width = width;
     this.height = height;
     this.image = new Image();
-    this.image.onerror = (error) => {
-      console.error("Failed to load player image:", error);
-    };
     this.image.src = imagePath;
     this.rotation = 0;
   }
@@ -75,7 +70,7 @@ export default class Player {
     ctx.save();
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
     ctx.rotate((this.rotation * Math.PI) / 180);
-    ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height); // Draw the image
+    ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
     ctx.restore();
   }
 }

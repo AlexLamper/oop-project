@@ -4,7 +4,6 @@ import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
 
 export default class mailScene extends Scene {
-  // public static usedMailScene: boolean = false;
   private mailBackground: HTMLImageElement;
   private newsarticle: HTMLImageElement;
   private newsarticleUpdated: boolean = false;
@@ -12,12 +11,6 @@ export default class mailScene extends Scene {
   private canClickAway: boolean = false;
   private nextScene: boolean = false;
   public MailSceneUsed: boolean = false;
-
-  // public static setMailNoNotif: boolean = false;
-
-  // public static defenderEnabled: boolean =false;
-
-
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);

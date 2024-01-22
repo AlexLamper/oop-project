@@ -50,7 +50,7 @@ export default class winSceneVPN extends Scene {
     for (let i = 0; i < count; i++) {
       randomFacts.push(shuffledFacts[i]);
     }
-    shuffledFacts.splice(0, count); // Remove the used facts from the shuffledFacts array
+    shuffledFacts.splice(0, count);
     return randomFacts;
   }
 
@@ -68,7 +68,7 @@ export default class winSceneVPN extends Scene {
 
     for (let i = 0; i < this.randomFacts.length; i++) {
       const x = this.facts.paddingX;
-      const y = this.facts.paddingY + i * 100; // ruimte/padding tussen de feiten
+      const y = this.facts.paddingY + i * 100;
 
       CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.facts.textStyle.textAlign, this.facts.textStyle.font, this.facts.textStyle.fontSize, this.facts.textStyle.fillStyle);
     }
