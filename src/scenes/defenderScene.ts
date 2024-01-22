@@ -101,17 +101,17 @@ export default class DefenderScene extends Scene {
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     document.addEventListener("click", this.handleClick.bind(this));
-    document.addEventListener("keydown", this.handleSpaceKeyDown.bind(this));
+    // document.addEventListener("keydown", this.handleSpaceKeyDown.bind(this));
   }
 
   // Handle space keydown events
-  private handleSpaceKeyDown(event: KeyboardEvent): void {
-    if (event.key === " ") {
-      event.preventDefault();
-      this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
-      // Add your code here to handle the space keydown event
-    }
-  }
+  // private handleSpaceKeyDown(event: KeyboardEvent): void {
+  //   if (event.key === " ") {
+  //     event.preventDefault();
+  //     this.projectiles.push(new Projectile(this.fixPositionX(), this.fixPositionY(), 30, 30, "./assets/bullet-green.png", this.player.rotation));
+  //     // Add your code here to handle the space keydown event
+  //   }
+  // }
 
   // Add event listener for space keydown events
 
@@ -373,30 +373,31 @@ export default class DefenderScene extends Scene {
       }
     }
 
-    // Portal spawn
+    // Portal spawn timer
     this.portalSpawnTimer += elapsed;
     if (this.portalSpawnTimer >= 6000 + Math.floor(Math.random() * 5000)) {
       this.portalSpawnTimer = 0;
       this.portalsSpawn();
     }
 
+    // Enemy spawn timer
     this.enemySpawnTimer += elapsed;
-    if (this.enemySpawnTimer >= 4000 + Math.floor(Math.random() * 3000)) {
+    if (this.enemySpawnTimer >= 5000 + Math.floor(Math.random() * 10000)) {
       this.enemySpawnTimer = 0;
       this.spawnEnemiesFromPortals();
     }
 
     // Power up items spawn timer
     const randomItemChance = Math.random() * 100;
-    const randomItemInterval = Math.random() * 1000 + 1000;
+    const randomItemInterval = Math.random() * 2000 + 5000;
     this.timeUntilNextItem += elapsed;
     if (this.timeUntilNextItem >= randomItemInterval) {
       this.timeUntilNextItem = 0;
-      if (randomItemChance <= 10) {
+      if (randomItemChance <= 60) {
         this.powerUpItems.push(new Coin());
-      } else if (randomItemChance <= 20) {
+      } else if (randomItemChance <= 85) {
         this.powerUpItems.push(new Turbo());
-      } else if (randomItemChance <= 30) {
+      } else if (randomItemChance <= 95) {
         this.powerUpItems.push(new Firewall());
       } else {
         this.powerUpItems.push(new Scan());
@@ -412,7 +413,7 @@ export default class DefenderScene extends Scene {
         if (item instanceof Turbo) {
           this.showTurboCard = true;
           this.turboActive = true;
-          this.turboTimer += 5000;
+          this.turboTimer += 3000;
         }
         if (item instanceof Firewall) {
           if (this.firewallActive === false) {
@@ -493,9 +494,6 @@ export default class DefenderScene extends Scene {
    * @param canvas canvas to render to
    */
   public render(canvas: HTMLCanvasElement): void {
-    document.querySelectorAll("button").forEach((button) => {
-      button.remove();
-    });
     // Render the background image
     document.body.style.backgroundImage = `url(${this.DefenderBackground.src})`;
     const ctx = canvas.getContext("2d");

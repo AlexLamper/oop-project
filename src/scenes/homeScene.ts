@@ -10,8 +10,6 @@ import ScoreManager from "../attributes/totalScore.js";
 import instructionscene from "./instructionScene.js";
 
 const scoreManager = ScoreManager.getInstance();
-const totalScore = scoreManager.getTotalScore();
-
 
 export default class homeScene extends Scene {
   private pcBackground: HTMLImageElement;
@@ -29,7 +27,6 @@ export default class homeScene extends Scene {
   private mailBlocked: HTMLImageElement;
   private vpnBlocked: HTMLImageElement;
 
-
   public static setMailNoNotif: boolean = false;
 
   public static mailSceneEnabled: boolean = true;
@@ -43,8 +40,6 @@ export default class homeScene extends Scene {
   public static shoppingEnabled: boolean = false;
 
   public static instructionSceneShown: boolean = false;
-
-
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -81,7 +76,7 @@ export default class homeScene extends Scene {
     }
     if (mouseListener.getMousePosition().x > 120 && mouseListener.getMousePosition().x < 220 && mouseListener.getMousePosition().y > 20 && mouseListener.getMousePosition().y < 120) {
       if (mouseListener.buttonPressed(0)) {
-      if (homeScene.defenderEnabled == true) {
+        if (homeScene.defenderEnabled == true) {
           this.nextScene = new instructionscene(this.maxX, this.maxY);
         } else {
         }
@@ -89,25 +84,27 @@ export default class homeScene extends Scene {
     }
     if (mouseListener.getMousePosition().x > 0 && mouseListener.getMousePosition().x < 100 && mouseListener.getMousePosition().y > 140 && mouseListener.getMousePosition().y < 240) {
       if (mouseListener.buttonPressed(0)) {
-          if (homeScene.terminalEnabled == true) {
-              this.nextScene = new TerminalScene(this.maxX, this.maxY);
-            } else {
-            }
+        if (homeScene.terminalEnabled == true) {
+          this.nextScene = new TerminalScene(this.maxX, this.maxY);
+        } else {
         }
+      }
     }
     if (mouseListener.getMousePosition().x > 120 && mouseListener.getMousePosition().x < 220 && mouseListener.getMousePosition().y > 140 && mouseListener.getMousePosition().y < 240) {
       if (mouseListener.buttonPressed(0)) {
         if (homeScene.vpnEnabled == true) {
           this.nextScene = new VPNScene(this.maxX, this.maxY);
         } else {
-        }      }
+        }
+      }
     }
     if (mouseListener.getMousePosition().x > 0 && mouseListener.getMousePosition().x < 100 && mouseListener.getMousePosition().y > 260 && mouseListener.getMousePosition().y < 360) {
       if (mouseListener.buttonPressed(0)) {
         if (homeScene.shoppingEnabled == true) {
           this.nextScene = new ShoppingScene(this.maxX, this.maxY);
         } else {
-        }      }
+        }
+      }
     }
   }
 
@@ -135,14 +132,9 @@ export default class homeScene extends Scene {
     }
   }
 
-  public renderIcon(
-    canvas: HTMLCanvasElement,
-    icon: HTMLImageElement,
-    x: number,
-    y: number,
-  ): void {
+  public renderIcon(canvas: HTMLCanvasElement, icon: HTMLImageElement, x: number, y: number): void {
     CanvasRenderer.drawImage(canvas, icon, x, y);
-    }
+  }
 
   /**
    *
@@ -158,29 +150,30 @@ export default class homeScene extends Scene {
     document.body.style.backgroundImage = `url(${this.pcBackground.src})`;
     CanvasRenderer.clearCanvas(canvas);
     if (homeScene.setMailNoNotif) {
-      this.renderIcon(canvas, this.mailNoNotif, 0, 20)
+      this.renderIcon(canvas, this.mailNoNotif, 0, 20);
     } else {
-      this.renderIcon(canvas, this.mail, 0, 20)
+      this.renderIcon(canvas, this.mail, 0, 20);
     }
     if (homeScene.defenderEnabled == true) {
-      this.renderIcon(canvas, this.defender, 120, 20)
+      this.renderIcon(canvas, this.defender, 120, 20);
     } else {
-      this.renderIcon(canvas, this.defenderBlocked, 120, 20)
+      this.renderIcon(canvas, this.defenderBlocked, 120, 20);
     }
     if (homeScene.terminalEnabled == true) {
-      this.renderIcon(canvas, this.terminal, 0, 140)
+      this.renderIcon(canvas, this.terminal, 0, 140);
     } else {
-      this.renderIcon(canvas, this.terminalBlocked, 0, 140)
+      this.renderIcon(canvas, this.terminalBlocked, 0, 140);
     }
     if (homeScene.vpnEnabled == true) {
-      this.renderIcon(canvas, this.vpn, 120, 140)
+      this.renderIcon(canvas, this.vpn, 120, 140);
     } else {
-      this.renderIcon(canvas, this.vpnBlocked, 120, 140)
+      this.renderIcon(canvas, this.vpnBlocked, 120, 140);
     }
     if (homeScene.shoppingEnabled == true) {
-      this.renderIcon(canvas, this.shoppingCart, 0, 260)
+      this.renderIcon(canvas, this.shoppingCart, 0, 260);
     } else {
-        this.renderIcon(canvas, this.shoppingCartBlocked, 0, 260)
-      }
+      this.renderIcon(canvas, this.shoppingCartBlocked, 0, 260);
+    }
+    CanvasRenderer.writeText(canvas, `Score: ${scoreManager.getTotalScore()}`, canvas.width - 100, 100, "center", "sans-serif", 30, "black");
   }
 }
