@@ -27,8 +27,6 @@ export default class DefenderScene extends Scene {
 
   private player: Player;
 
-  private barrier: Barrier;
-
   private projectiles: Projectile[] = [];
 
   private enemies: Enemy[] = [];
@@ -208,7 +206,7 @@ export default class DefenderScene extends Scene {
     }
 
     // Use a timeout loop to spawn additional portals at random intervals
-    const spawnInterval = 5000; // spawn interval 
+    const spawnInterval = 5000; // spawn interval
     const minSpawnDelay = 5000; // Minimum time before next spawn
     const maxSpawnDelay = 15000; // Maximum time before next spawn
 
@@ -394,9 +392,9 @@ export default class DefenderScene extends Scene {
         if (item instanceof Turbo) {
           if (this.turboCardShown === false) {
             this.turboCardShown = true;
-          this.showTurboCard = true;
-          this.showFirewallCard = false;
-          this.showScanCard = false;
+            this.showTurboCard = true;
+            this.showFirewallCard = false;
+            this.showScanCard = false;
           }
           this.turboActive = true;
           this.turboTimer += 3000;
@@ -549,7 +547,7 @@ export default class DefenderScene extends Scene {
         const cardImage = CanvasRenderer.loadNewImage("./assets/turboPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      if(this.showFirewallCard){
+      if (this.showFirewallCard) {
         const cardWidth = 340;
         const cardHeight = 191;
         const cardPadding = 10;
@@ -559,7 +557,7 @@ export default class DefenderScene extends Scene {
         const cardImage = CanvasRenderer.loadNewImage("./assets/firewallPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      if(this.showScanCard){
+      if (this.showScanCard) {
         const cardWidth = 340;
         const cardHeight = 191;
         const cardPadding = 10;
