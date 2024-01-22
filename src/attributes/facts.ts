@@ -35,6 +35,7 @@ public textStyle = {
   fillStyle: "White",
   textAlign: "left" as CanvasTextAlign,
   textBaseline: "top",
+  fontSize: 30
 };
   
 }

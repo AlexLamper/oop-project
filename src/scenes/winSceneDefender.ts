@@ -71,7 +71,7 @@ export default class winScene extends Scene {
       const x = this.facts.paddingX;
       const y = this.facts.paddingY + i * 100; // ruimte/padding tussen de feiten
 
-      CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.facts.textStyle.textAlign, this.facts.textStyle.font, 50, this.facts.textStyle.fillStyle);
+      CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.facts.textStyle.textAlign, this.facts.textStyle.font, this.facts.textStyle.fontSize, this.facts.textStyle.fillStyle);
     }
   CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Green");
   CanvasRenderer.writeText(canvas, `Defender score:  ${ScoreManager.defenderScore}`, canvas.width / 2, canvas.height - 90, "center", "Pixelated", 75, "Green");

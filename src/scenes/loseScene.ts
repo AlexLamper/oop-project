@@ -70,7 +70,7 @@ export default class winScene extends Scene {
       const x = this.Facts.paddingX;
       const y = this.Facts.paddingY + i * 100; // ruimte/padding tussen de feiten
 
-      CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.Facts.textStyle.textAlign, this.Facts.textStyle.font, 30, this.Facts.textStyle.fillStyle);
+      CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.Facts.textStyle.textAlign, this.Facts.textStyle.font, this.Facts.textStyle.fontSize, this.Facts.textStyle.fillStyle);
     }
     CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Red");
   }

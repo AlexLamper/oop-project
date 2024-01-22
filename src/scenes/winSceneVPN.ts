@@ -70,7 +70,7 @@ export default class winSceneVPN extends Scene {
       const x = this.facts.paddingX;
       const y = this.facts.paddingY + i * 100; // ruimte/padding tussen de feiten
 
-      CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.facts.textStyle.textAlign, this.facts.textStyle.font, 30, this.facts.textStyle.fillStyle);
+      CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.facts.textStyle.textAlign, this.facts.textStyle.font, this.facts.textStyle.fontSize, this.facts.textStyle.fillStyle);
     }
 
     CanvasRenderer.writeText(canvas, `VPN Score: ${ScoreManager.VPNScore}`, canvas.width / 2, canvas.height - 150, "center", "Pixelated", 75, "Green");
