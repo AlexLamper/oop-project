@@ -3,22 +3,12 @@ import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
 import ScoreManager from "../attributes/totalScore.js";
-
-const facts = ["", "", "Did you know?", "- Defenders almost have 100% real-time protection rates.", "- Firewalls filter incoming and outgoing network traffic", "- Computer viruses date back to the 1970s."];
-
-const paddingX = 20;
-const paddingY = 40;
-
-const textStyle = {
-  font: "12px Arial",
-  fillStyle: "White",
-  textAlign: "left" as CanvasTextAlign,
-  textBaseline: "top",
-};
+import Facts from "../attributes/facts.js";
 
 export default class winSceneTerminal extends Scene {
   private winBackground: HTMLImageElement;
   private clickNext: boolean = false;
+  private facts = new Facts();
 
   public constructor(maxX: number, maxY: number) {
     super(maxX, maxY);
@@ -53,6 +43,17 @@ export default class winSceneTerminal extends Scene {
     }
   }
 
+  private getRandomFacts(count: number): string[] {
+    const randomFacts: string[] = [];
+    const shuffledFacts = Facts.factsList.sort(() => Math.random() - 0.5);
+    for (let i = 0; i < count; i++) {
+      randomFacts.push(shuffledFacts[i]);
+    }
+    shuffledFacts.splice(0, count); // Remove the used facts from the shuffledFacts array
+    return randomFacts;
+  }
+
+  private randomFacts = this.getRandomFacts(3);
   /**
    * Render the scene to the canvas
    * @param canvas canvas to render to
@@ -63,14 +64,16 @@ export default class winSceneTerminal extends Scene {
     }); //alle buttons verwijderen van vorige pagina
     document.body.style.backgroundImage = `url(${this.winBackground.src})`;
     CanvasRenderer.writeText(canvas, "You completed Level 2", canvas.width / 2, canvas.height / 8, "center", "Pixelated", 75, "Green");
-    for (let i = 0; i < facts.length; i++) {
-      const x = paddingX;
-      const y = paddingY + i * 100; // ruimte/padding tussen de feiten
+    CanvasRenderer.writeText(canvas, "Did you know?", canvas.width / 2, canvas.height / 4, "center", "Pixelated", 75, "Green");
 
-      CanvasRenderer.writeText(canvas, facts[i], x, y, textStyle.textAlign, textStyle.font, null, textStyle.fillStyle);
+    for (let i = 0; i < this.randomFacts.length; i++) {
+      const x = this.facts.paddingX;
+      const y = this.facts.paddingY + i * 100; // ruimte/padding tussen de feiten
+
+      CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.facts.textStyle.textAlign, this.facts.textStyle.font, 50, this.facts.textStyle.fillStyle);
     }
     CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Green");
     console.log(ScoreManager.defenderScore);
-    CanvasRenderer.writeText(canvas, `Total score:  ${ScoreManager.terminalScore}`, canvas.width / 2, canvas.height - 80, "center", "Pixelated", 75, "Green");
+    CanvasRenderer.writeText(canvas, `Terminal score:  ${ScoreManager.terminalScore}`, canvas.width / 2, canvas.height - 80, "center", "Pixelated", 75, "Green");
   }
 }
