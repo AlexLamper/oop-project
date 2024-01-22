@@ -63,6 +63,8 @@ export default class winSceneVPN extends Scene {
   public render(canvas: HTMLCanvasElement): void {
     document.body.style.backgroundImage = `url(${this.winBackground.src})`;
     CanvasRenderer.writeText(canvas, "You completed The game!", canvas.width / 2, canvas.height / 8, "center", "Pixelated", 75, "Green");
+    CanvasRenderer.writeText(canvas, "Did you know?", canvas.width / 2, canvas.height / 4, "center", "Pixelated", 75, "Green");
+
 
     for (let i = 0; i < this.randomFacts.length; i++) {
       const x = this.facts.paddingX;

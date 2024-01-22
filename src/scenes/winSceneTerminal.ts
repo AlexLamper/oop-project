@@ -64,6 +64,8 @@ export default class winSceneTerminal extends Scene {
     }); //alle buttons verwijderen van vorige pagina
     document.body.style.backgroundImage = `url(${this.winBackground.src})`;
     CanvasRenderer.writeText(canvas, "You completed Level 2", canvas.width / 2, canvas.height / 8, "center", "Pixelated", 75, "Green");
+    CanvasRenderer.writeText(canvas, "Did you know?", canvas.width / 2, canvas.height / 4, "center", "Pixelated", 75, "Green");
+
     for (let i = 0; i < this.randomFacts.length; i++) {
       const x = this.facts.paddingX;
       const y = this.facts.paddingY + i * 100; // ruimte/padding tussen de feiten

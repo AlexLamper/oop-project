@@ -64,6 +64,7 @@ export default class winScene extends Scene {
       button.remove();
     }); //alle buttons verwijderen van vorige pagina
     document.body.style.backgroundImage = `url(${this.loseBackground.src})`;
+    CanvasRenderer.writeText(canvas, "Did you know?", canvas.width / 2, canvas.height / 4, "center", "Pixelated", 75, "Red");
     CanvasRenderer.writeText(canvas, "You Lost!", canvas.width / 2, canvas.height / 8, "center", "Pixelated", 75, "Red");
     for (let i = 0; i < this.randomFacts.length; i++) {
       const x = this.Facts.paddingX;
@@ -71,6 +72,6 @@ export default class winScene extends Scene {
 
       CanvasRenderer.writeText(canvas, this.randomFacts[i], x, y, this.Facts.textStyle.textAlign, this.Facts.textStyle.font, 30, this.Facts.textStyle.fillStyle);
     }
-    CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Green");
+    CanvasRenderer.writeText(canvas, "Click to continue", canvas.width / 2, canvas.height - 30, "center", "Pixelated", 75, "Red");
   }
 }

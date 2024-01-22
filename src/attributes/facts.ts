@@ -28,7 +28,7 @@ export default class Facts {
   ];
 
   public paddingX = 20;
-public paddingY = 250;
+public paddingY = 350;
 
 public textStyle = {
   font: "joystix monospace",
