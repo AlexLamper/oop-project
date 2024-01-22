@@ -2,6 +2,7 @@ import CanvasRenderer from "../CanvasRenderer.js";
 import MouseListener from "../MouseListener.js";
 import Scene from "../Scene.js";
 import homeScene from "./homeScene.js";
+import TerminalScene from "./terminalScene.js";
 
 export default class SceneStart extends Scene {
   private starting: boolean;
@@ -39,7 +40,7 @@ export default class SceneStart extends Scene {
    */
   public getNextScene(): Scene | null {
     if (this.starting) {
-      return new homeScene(this.maxX, this.maxY);
+      return new TerminalScene(this.maxX, this.maxY);
     } else {
       return null;
     }
