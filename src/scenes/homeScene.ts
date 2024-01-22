@@ -38,7 +38,7 @@ export default class homeScene extends Scene {
 
   public static terminalEnabled: boolean = false;
 
-  public static vpnEnabled: boolean = true;
+  public static vpnEnabled: boolean = false;
 
   public static shoppingEnabled: boolean = false;
 
