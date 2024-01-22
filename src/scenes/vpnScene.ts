@@ -27,8 +27,6 @@ export default class VPNScene extends Scene {
 
   private player: Player;
 
-  private barrier: Barrier;
-
   private projectiles: Projectile[] = [];
 
   private enemies: Enemy[] = [];
@@ -76,7 +74,6 @@ export default class VPNScene extends Scene {
   private firewallCardShown: boolean = false;
 
   private scanCardShown: boolean = false;
-
 
   // Function to calculate the time score
   private timeScoreMinutesandSeconds(): string {
@@ -197,7 +194,7 @@ export default class VPNScene extends Scene {
   }
 
   public portalsSpawn(): void {
-    const maxPortals = 6; 
+    const maxPortals = 6;
     const portalCount = this.portals.length;
 
     if (portalCount < maxPortals) {
@@ -385,9 +382,9 @@ export default class VPNScene extends Scene {
         if (item instanceof Turbo) {
           if (this.turboCardShown === false) {
             this.turboCardShown = true;
-          this.showTurboCard = true;
-          this.showFirewallCard = false;
-          this.showScanCard = false;
+            this.showTurboCard = true;
+            this.showFirewallCard = false;
+            this.showScanCard = false;
           }
           this.turboActive = true;
           this.turboTimer += 3000;
@@ -506,7 +503,7 @@ export default class VPNScene extends Scene {
         projectile.render(canvas, ctx);
       });
       this.enemies.forEach((enemy) => {
-        enemy.render(canvas, ctx); 
+        enemy.render(canvas, ctx);
       });
 
       this.portals.forEach((portal) => {
@@ -535,7 +532,7 @@ export default class VPNScene extends Scene {
         const cardImage = CanvasRenderer.loadNewImage("./assets/turboPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      if(this.showFirewallCard){
+      if (this.showFirewallCard) {
         const cardWidth = 340;
         const cardHeight = 191;
         const cardPadding = 10;
@@ -545,7 +542,7 @@ export default class VPNScene extends Scene {
         const cardImage = CanvasRenderer.loadNewImage("./assets/firewallPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      if(this.showScanCard){
+      if (this.showScanCard) {
         const cardWidth = 340;
         const cardHeight = 191;
         const cardPadding = 10;
@@ -554,6 +551,7 @@ export default class VPNScene extends Scene {
 
         const cardImage = CanvasRenderer.loadNewImage("./assets/scanPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
-      }    }
+      }
+    }
   }
 }

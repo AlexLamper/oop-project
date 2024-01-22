@@ -27,8 +27,6 @@ export default class DefenderScene extends Scene {
 
   private player: Player;
 
-  private barrier: Barrier;
-
   private projectiles: Projectile[] = [];
 
   private enemies: Enemy[] = [];

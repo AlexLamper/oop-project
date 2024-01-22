@@ -16,8 +16,6 @@ import Scan from "../attributes/powerup/Scan.js";
 
 import ScoreManager from "../attributes/totalScore.js";
 
-const scoreManager = ScoreManager.getInstance();
-
 import loseScene from "./loseScene.js";
 
 export default class TerminalScene extends Scene {
@@ -28,8 +26,6 @@ export default class TerminalScene extends Scene {
   private terminalBackground: HTMLImageElement;
 
   private player: Player;
-
-  private barrier: Barrier;
 
   private projectiles: Projectile[] = [];
 
@@ -203,7 +199,7 @@ export default class TerminalScene extends Scene {
   // Method to end the game
 
   public portalsSpawn(): void {
-    const maxPortals = 4; 
+    const maxPortals = 4;
     const portalCount = this.portals.length;
 
     if (portalCount < maxPortals) {
@@ -389,9 +385,9 @@ export default class TerminalScene extends Scene {
         if (item instanceof Turbo) {
           if (this.turboCardShown === false) {
             this.turboCardShown = true;
-          this.showTurboCard = true;
-          this.showFirewallCard = false;
-          this.showScanCard = false;
+            this.showTurboCard = true;
+            this.showFirewallCard = false;
+            this.showScanCard = false;
           }
           this.turboActive = true;
           this.turboTimer += 3000;
@@ -513,7 +509,7 @@ export default class TerminalScene extends Scene {
         projectile.render(canvas, ctx);
       });
       this.enemies.forEach((enemy) => {
-        enemy.render(canvas, ctx); 
+        enemy.render(canvas, ctx);
       });
 
       this.portals.forEach((portal) => {
@@ -542,7 +538,7 @@ export default class TerminalScene extends Scene {
         const cardImage = CanvasRenderer.loadNewImage("./assets/turboPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      if(this.showFirewallCard){
+      if (this.showFirewallCard) {
         const cardWidth = 340;
         const cardHeight = 191;
         const cardPadding = 10;
@@ -552,7 +548,7 @@ export default class TerminalScene extends Scene {
         const cardImage = CanvasRenderer.loadNewImage("./assets/firewallPowerUp.jpg");
         CanvasRenderer.drawImage(canvas, cardImage, cardX, cardY);
       }
-      if(this.showScanCard){
+      if (this.showScanCard) {
         const cardWidth = 340;
         const cardHeight = 191;
         const cardPadding = 10;
