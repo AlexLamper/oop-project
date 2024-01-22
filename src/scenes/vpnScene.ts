@@ -41,9 +41,9 @@ export default class VPNScene extends Scene {
 
   private lifes: number = 5;
 
-  private timeLimit: number = 12000;
+  private timeLimit: number = 120000;
 
-  private VPNScore = 25;
+  private VPNScore = 0;
 
   private turboActive: boolean = false;
 

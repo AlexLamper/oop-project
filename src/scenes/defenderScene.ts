@@ -43,9 +43,9 @@ export default class DefenderScene extends Scene {
 
   private lifes: number = 5;
 
-  private timeLimit: number = 6000;
+  private timeLimit: number = 60000;
 
-  private defenderScore = 25;
+  private defenderScore = 0;
 
   private turboActive: boolean = false;
 
