@@ -94,7 +94,7 @@ export default class VPNScene extends Scene {
     };
     this.currentDirection = null;
 
-    this.VPNBackground = CanvasRenderer.loadNewImage("./assets/background-defender-final.png");
+    this.VPNBackground = CanvasRenderer.loadNewImage("./assets/vpn_background.png");
     this.player = new Player(maxX / 2, maxY / 2, 100, 100, "./assets/player.png");
 
     // Add event listener for keydown events
