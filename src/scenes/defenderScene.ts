@@ -427,6 +427,8 @@ export default class DefenderScene extends Scene {
           if (this.turboCardShown === false) {
             this.turboCardShown = true;
           this.showTurboCard = true;
+          this.showFirewallCard = false;
+          this.showScanCard = false;
           }
           this.turboActive = true;
           this.turboTimer += 3000;
@@ -435,8 +437,10 @@ export default class DefenderScene extends Scene {
           if (this.firewallCardShown === false) {
             this.firewallCardShown = true;
             this.showFirewallCard = true;
+            this.showTurboCard = false;
+            this.showScanCard = false;
           }
-          this.firewallCardTimer += 5000;
+          this.firewallCardTimer += 15000;
           if (this.firewallActive === false) {
             this.barriers.push(new Barrier(this.player.x, this.player.y));
             this.firewallActive = true;
@@ -448,8 +452,10 @@ export default class DefenderScene extends Scene {
           if (this.scanCardShown === false) {
             this.scanCardShown = true;
             this.showScanCard = true;
+            this.showFirewallCard = false;
+            this.showTurboCard = false;
           }
-          this.scanCardTimer += 5000;
+          this.scanCardTimer += 15000;
           this.defenderScore += this.enemies.length * 1;
           this.defenderScore += this.portals.length * 3;
           this.enemies = [];
@@ -466,8 +472,6 @@ export default class DefenderScene extends Scene {
     if (this.turboTimer <= 0) {
       this.turboActive = false;
       this.turboTimer = 0;
-      this.showTurboCard = false;
-      this.turboCardTimer = 0;
     }
     if (this.showTurboCard) {
       this.turboCardTimer += elapsed;
